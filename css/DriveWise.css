@@ -1,0 +1,64 @@
+#map {
+    height: 20rem;
+    width: 40rem;
+}
+
+@media (max-width: 768px) {
+    #map {
+        height: 50vw; /* Adjust as needed */
+        width: 100vw; /* Adjust as needed */
+    }
+}
+
+.logo {
+    width: 6rem;
+    margin: 1rem;
+}
+
+.btn-primary {
+    background-color: #90DFAA;
+    border-color: #90DFAA;
+    color: #324A5E;
+    font-size: 2rem;
+}
+
+.btn-primary:hover {
+    background-color: #7ebe93;
+    border-color: #7ebe93;
+    color: #324A5E;
+}
+
+.btn-primary:active {
+    background-color: #7ebe93;
+    border-color: #7ebe93;
+    color: #324A5E;
+}
+
+.btn-primary:focus {
+    background-color: #7ebe93;
+    border-color: #7ebe93;
+    color: #324A5E;
+}
+
+.btn-secondary {
+    background-color: #E6E9EE;
+    border-color: #E6E9EE;
+    color: #324A5E;
+}
+
+.btn-secondary:hover {
+    background-color: #ccced1;
+    border-color: #ccced1;
+    color: #324A5E;
+}
+
+.btn-secondary:active {
+    background-color: #ccced1;
+    border-color: #ccced1;
+    color: #324A5E;
+}
+
+.spinner-border {
+    width: 3rem;
+    height: 3rem;
+}
