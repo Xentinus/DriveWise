@@ -28,6 +28,8 @@
             });
 
             link.addEventListener('pointerdown', (ev) => {
+                // Don't create ripples inside nav-btn elements to avoid breaking design
+                if (link.classList.contains('nav-btn')) return;
                 const rect = link.getBoundingClientRect();
                 const x = ev.clientX - rect.left;
                 const y = ev.clientY - rect.top;

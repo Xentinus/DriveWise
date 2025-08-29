@@ -30,12 +30,9 @@ document.addEventListener('DOMContentLoaded', function () {
     [vehiclesBtn, planBtn, settingsBtn].forEach(function (btn) {
         if (!btn) return;
         btn.addEventListener('click', function (ev) {
-            uiRipple(this, ev);
+            if (!this.classList.contains('nav-btn')) uiRipple(this, ev);
             setActive(this);
-            // Placeholder actions
-            if (this.id === 'vehiclesBtn') alert('Járművek — itt jeleníthetők meg a járművek.');
-            if (this.id === 'planBtn') alert('Tervezés — indíts tervezési módot.');
-            if (this.id === 'settingsBtn') alert('Beállítások — megnyitja a beállítások panelt.');
+            // Placeholder actions removed - ModalManager handles showing panels/cards.
         });
     });
     

@@ -1,6 +1,10 @@
 {
   "Files": [
     {
+      "Id": "/Users/xentinus/Development/DriveWise/wwwroot/css/modal-manager.css",
+      "PackagePath": "staticwebassets/css/modal-manager.css"
+    },
+    {
       "Id": "/Users/xentinus/Development/DriveWise/wwwroot/css/site.css",
       "PackagePath": "staticwebassets/css/site.css"
     },
@@ -15,6 +19,10 @@
     {
       "Id": "/Users/xentinus/Development/DriveWise/wwwroot/js/map.js",
       "PackagePath": "staticwebassets/js/map.js"
+    },
+    {
+      "Id": "/Users/xentinus/Development/DriveWise/wwwroot/js/modal-manager.js",
+      "PackagePath": "staticwebassets/js/modal-manager.js"
     },
     {
       "Id": "/Users/xentinus/Development/DriveWise/wwwroot/lib/bootstrap/LICENSE",

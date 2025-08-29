@@ -13,6 +13,7 @@
     <!-- Leaflet (OpenStreetMap) CSS from CDN to avoid missing local files -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="" crossorigin="" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/modal-manager.css" asp-append-version="true" />
 </head>
 <body>
     <div id="map"></div>
@@ -51,6 +52,7 @@
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="" crossorigin=""></script>
     <script src="~/js/map.js" asp-append-version="true"></script>
     <script src="~/js/bottom-nav.js" asp-append-version="true"></script>
+    <script src="~/js/modal-manager.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

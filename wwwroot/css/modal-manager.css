@@ -1,0 +1,98 @@
+/* Apple-style Modal Manager
+   - Top sliding card
+   - Title and close button
+   - Subtle shadow, rounded corners, smooth animations
+*/
+.root, :root{
+  --mm-bg: #ffffff;
+  --mm-backdrop: transparent; /* no dimming */
+  --mm-radius: 14px;
+  --mm-shadow: 0 12px 40px rgba(0,0,0,0.25);
+  --mm-accent: #007aff; /* iOS blue */
+  --mm-header-height: 62px;
+}
+
+.mm-backdrop{
+  position:fixed;
+  inset:0;
+  background:var(--mm-backdrop);
+  display:none;
+  z-index:1050;
+  /* backdrop left transparent so page does not darken; keep clickable */
+}
+
+.mm-card{
+  position:fixed;
+  left:50%;
+  transform:translateX(-50%) translateY(-110%);
+  top:0;
+  width:min(720px, calc(100% - 32px));
+  max-height: calc(100% - 48px);
+  background:var(--mm-bg);
+  border-radius:0 0 var(--mm-radius) var(--mm-radius);
+  box-shadow:var(--mm-shadow);
+  overflow:hidden;
+  display:flex;
+  flex-direction:column;
+  transition:transform 420ms cubic-bezier(.2,.9,.3,1), opacity 220ms ease;
+  opacity:0;
+  z-index:1060;
+}
+
+.mm-card.open{
+  transform:translateX(-50%) translateY(0%);
+  opacity:1;
+}
+
+.mm-header{
+  height:var(--mm-header-height);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 16px;
+  border-bottom:1px solid rgba(0,0,0,0.06);
+  font-family: "Nunito", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+}
+
+.mm-title{
+  font-size:18px;
+  font-weight:700;
+  color:#111;
+}
+
+.mm-close{
+  background:transparent;
+  border:0;
+  color:var(--mm-accent);
+  font-size:20px;
+  padding:8px;
+  border-radius:8px;
+  cursor:pointer;
+}
+.mm-close:active{opacity:0.7}
+
+.mm-content{
+  padding:16px;
+  overflow:auto;
+}
+
+/* small handle groove to mimic iOS card */
+.mm-handle{
+  width:54px;
+  height:6px;
+  border-radius:6px;
+  background:rgba(0,0,0,0.12);
+  margin:10px auto 0 auto;
+}
+
+/* Accessible focus states */
+.mm-close:focus{outline:3px solid rgba(0,122,255,0.12);outline-offset:3px}
+
+/* when backdrop visible */
+.mm-backdrop.visible{display:block}
+
+/* responsive adjustments */
+@media (max-width:420px){
+  .mm-card{width:calc(100% - 12px); border-radius:10px;}
+  .mm-header{height:56px}
+}
