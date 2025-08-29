@@ -1,0 +1,215 @@
+:root{
+  --color-primary: #2EA9FF;
+  --color-primary-dark: #1678C2;
+  --color-primary-light: #EAF6FF;
+  --color-page-bg: #F5FBFF;
+  --color-surface: #FFFFFF;
+  --color-text: #102028;
+  --color-muted: #5F6E7C;
+  --color-border: #E6F3FB;
+
+  /* semantic */
+  --bg-body: var(--color-page-bg);
+  --bg-card: var(--color-surface);
+  --text-default: var(--color-text);
+  --text-muted: var(--color-muted);
+  --border-default: var(--color-border);
+
+  /* Bootstrap overrides (basic) */
+  --bs-body-bg: var(--bg-body);
+  --bs-body-color: var(--text-default);
+  --bs-primary: var(--color-primary);
+  --bs-border-color: var(--border-default);
+}
+
+html, body {
+    height: 100%;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Nunito', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    min-height: 100%;
+}
+
+/* Map fills the viewport but leaves space for the fixed bottom nav height */
+/* Map fills the entire viewport and stays fixed so it truly uses full screen on mobile */
+#map {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 0;
+}
+
+/* Bottom navigation styling */
+/* Bottom navigation styling - modern, responsive */
+.bottom-nav {
+    position: fixed;
+    /* respect iPhone safe area inset when present */
+    bottom: calc(env(safe-area-inset-bottom, 0px) + 12px);
+    left: 0;
+    right: 0;
+    z-index: 1300; /* on top of map and Leaflet controls */
+    display: flex;
+    justify-content: center;
+    pointer-events: auto;
+}
+
+/* --- button-nav v2 styles --- */
+.bottom-nav.v2 { left: 0; right: 0; display: flex; justify-content: center; }
+.bottom-nav.v2 .nav-wrap {
+    background: #ffffff;
+    padding: 10px 20px;
+    border-radius: 16px;
+    border: 1px solid rgba(34,44,54,0.06);
+    box-shadow: 0 12px 36px rgba(20,30,40,0.06);
+    display:inline-block;
+}
+.bottom-nav.v2 .nav {
+    gap: 20px;
+    align-items: center;
+}
+.bottom-nav.v2 .nav-btn {
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    padding:10px 12px;
+    color:#1f2933;
+    text-decoration:none;
+    border-radius:10px;
+    background:#ffffff;
+    border: 1px solid rgba(18,25,30,0.04);
+    min-width:72px;
+    box-shadow: 0 6px 18px rgba(10,14,18,0.03);
+    transition: transform 160ms ease, box-shadow 160ms ease, background-color 160ms ease;
+}
+.bottom-nav.v2 .nav-btn i { font-size:1.35rem; line-height:1; }
+.bottom-nav.v2 .nav-btn span { font-size:0.78rem; margin-top:6px; color: #475569; font-weight:600; }
+.bottom-nav.v2 .nav-btn.center {
+    background: linear-gradient(180deg,#1a73e8,#0d6efd);
+    color:#fff;
+    padding:10px 16px;
+    min-width:96px;
+    border: none;
+    box-shadow: 0 10px 30px rgba(13,110,253,0.14);
+}
+.bottom-nav.v2 .nav-btn.center i { color: #fff; }
+.bottom-nav.v2 .nav-btn.center span { color: #fff; }
+.bottom-nav.v2 .nav-btn:hover { transform: translateY(-4px); box-shadow: 0 12px 30px rgba(10,14,18,0.06); }
+.bottom-nav.v2 .nav-btn:focus { outline: none; box-shadow: 0 6px 24px rgba(26,115,232,0.12); }
+.bottom-nav.v2 .nav-btn.center:hover { background: linear-gradient(180deg,#1866d6,#0d6efd); filter:brightness(0.96); color: #fff; transform: translateY(-3px); }
+
+@media (max-width: 480px) {
+    .bottom-nav.v2 .nav-wrap { padding: 8px 10px; min-width: 260px; }
+    .bottom-nav.v2 .nav-btn span { font-size: 0.78rem; }
+    .bottom-nav.v2 .nav-btn.center { min-width: 84px; padding:8px 10px; }
+}
+
+/* Updated layout overrides: center the nav, larger FAB, equal spacing */
+.nav-pills { display: flex; align-items: center; justify-content: center; gap: 20px; }
+
+/* Nav item base */
+.nav-pills .nav-link {
+    border-radius: 8px;
+    padding: 6px 8px;
+    transition: transform 160ms ease, box-shadow 160ms ease, background-color 160ms ease, color 160ms ease;
+    flex: none; /* don't stretch — size to content */
+    text-align: center;
+}
+
+/* Reserve a center slot for the rounded-square FAB */
+.nav-pills .nav-item:nth-child(2) { flex: 0 0 auto; display:flex; align-items:center; justify-content:center; }
+.nav-pills .nav-item:nth-child(1), .nav-pills .nav-item:nth-child(3) { flex: 0 0 auto; }
+
+/* Rounded-square FAB variant with label */
+.fab-square {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: auto;
+    min-width: 96px;
+    height: auto; /* size to content like side buttons */
+    border-radius: 8px; /* restored rounded corners */
+    padding: 8px 10px;
+    font-weight: 600;
+    transform: none; /* don't float - align with nav */
+    box-shadow: 0 4px 14px rgba(11,20,40,0.06); /* subtle shadow to match nav feel */
+}
+
+.fab-square .fab-label { font-size: 0.85rem; margin-top: 6px; }
+
+@media (max-width: 480px) {
+    .nav-pills .nav-item:nth-child(2) { flex: 0 0 112px; }
+    .fab-square { min-width: 96px; height: 48px; padding: 0 10px; }
+    .fab-square .fab-label { display: none; } /* optional: hide text on very small screens */
+}
+
+
+.nav-link-icon i { line-height: 1; }
+
+/* Hide textual labels on very small devices to save space */
+.nav-label { font-size: 0.75rem; margin-top: 4px; display: inline-block; }
+
+/* Floating central action button (FAB) */
+.fab {
+    width: 72px;
+    height: 72px;
+    border-radius: 999px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    border: none;
+    transform: translateY(-36%);
+    box-shadow: 0 22px 54px rgba(11,94,215,0.28);
+}
+
+/* Solid centered pill container (no transparency) */
+.bottom-nav .container {
+    background: #ffffff; /* white pill */
+    color: #222;
+    border-radius: 14px;
+    padding: 10px 18px; /* slightly larger padding for a wider pill */
+    /* shrink to fit the buttons instead of spanning the page */
+    display: inline-block;
+    width: auto;
+    min-width: 360px; /* make the pill a bit wider by default */
+    margin: 0 auto; /* always centered */
+    box-shadow: 0 18px 40px rgba(11,20,40,0.12);
+}
+
+/* Icon color and inactive state */
+.nav-link .bi { color: #6c757d; }
+.nav-link { color: #495057; }
+.nav-link.active, .nav-link.active .bi { color: #0d6efd; }
+.nav-link.active { background: rgba(13,110,253,0.06); }
+
+/* Focus & active states for accessibility */
+.nav-link:focus, .nav-link:active, .btn:focus, .btn:active { outline: none; box-shadow: 0 6px 20px rgba(0,0,0,0.16); }
+
+/* Compact layout for very small screens */
+@media (max-width: 480px) {
+    .nav-label { display: none; }
+    .fab { width: 60px; height: 60px; }
+    .bottom-nav { left: 6px; right: 6px; bottom: calc(env(safe-area-inset-bottom, 0px) + 8px); }
+    /* keep the pill centered and similar to desktop; reduce min-width/padding to fit narrow viewports */
+    .bottom-nav .container { display: inline-block; width: auto; min-width: 260px; padding: 8px 10px; }
+}
+
+/* Larger screens: slightly more padding and label size */
+@media (min-width: 992px) {
+    .bottom-nav .container { padding: 12px; }
+    .nav-pills { gap: 8px; }
+    .nav-label { font-size: 0.9rem; }
+}
+
+/* Ensure leaflet controls sit below the nav so the nav is fully visible */
+.leaflet-control-container { z-index: 1200; }
+
+/* Ensure leaflet controls sit below the nav so the nav is fully visible */
+.leaflet-control-container { z-index: 1200; }
