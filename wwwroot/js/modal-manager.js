@@ -50,7 +50,23 @@
     const cfg = ids.find(x=>x.id===key);
     if(!cfg) return;
     title.textContent = cfg.title;
-    content.innerHTML = renderContent(cfg.id);
+    // show loading state then fetch partial view from server
+    // show spinner and mark busy for accessibility
+    content.setAttribute('aria-busy','true');
+    content.innerHTML = `
+      <div class="mm-loading" role="status" aria-live="polite">
+        <div class="mm-spinner" aria-hidden="true"></div>
+        <div class="mm-loading-text">Töltés…</div>
+      </div>
+    `;
+    fetchPartialFor(cfg.id).then(html=>{
+      content.removeAttribute('aria-busy');
+      content.innerHTML = html;
+    }).catch(err=>{
+      content.removeAttribute('aria-busy');
+      content.innerHTML = '<p style="color:#c00">Hiba a tartalom betöltésekor.</p>';
+      console.error(err);
+    });
     backdrop.classList.add('visible');
     card.classList.add('open');
     card.setAttribute('aria-hidden','false');
@@ -78,6 +94,20 @@
       default:
         return `<p>Nincs tartalom.</p>`;
     }
+  }
+
+  async function fetchPartialFor(id){
+    // map id -> controller endpoint
+    const map = {
+      vehiclesBtn: '/Home/VehiclesCard',
+      planBtn: '/Home/PlanCard',
+      settingsBtn: '/Home/SettingsCard'
+    };
+    const url = map[id];
+    if(!url) return '<p>Nincs tartalom.</p>';
+    const resp = await fetch(url, { headers: { 'X-Requested-With':'XMLHttpRequest' }});
+    if(!resp.ok) throw new Error('fetch failed: '+resp.status);
+    return await resp.text();
   }
 
   // click handlers

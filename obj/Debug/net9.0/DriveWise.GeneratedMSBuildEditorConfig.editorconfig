@@ -32,8 +32,20 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3MvU2hhcmVkL19MYXlvdXQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
+[/Users/xentinus/Development/DriveWise/Views/Shared/_PlanCard.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvU2hhcmVkL19QbGFuQ2FyZC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/xentinus/Development/DriveWise/Views/Shared/_SettingsCard.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvU2hhcmVkL19TZXR0aW5nc0NhcmQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
 [/Users/xentinus/Development/DriveWise/Views/Shared/_ValidationScriptsPartial.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3MvU2hhcmVkL19WYWxpZGF0aW9uU2NyaXB0c1BhcnRpYWwuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/xentinus/Development/DriveWise/Views/Shared/_VehiclesCard.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvU2hhcmVkL19WZWhpY2xlc0NhcmQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
 [/Users/xentinus/Development/DriveWise/Views/_ViewImports.cshtml]

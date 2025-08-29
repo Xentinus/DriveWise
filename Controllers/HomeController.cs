@@ -19,6 +19,22 @@ public class HomeController : Controller
         return View();
     }
 
+    // Partial views for ModalManager cards
+    public PartialViewResult VehiclesCard()
+    {
+        return PartialView("_VehiclesCard");
+    }
+
+    public PartialViewResult PlanCard()
+    {
+        return PartialView("_PlanCard");
+    }
+
+    public PartialViewResult SettingsCard()
+    {
+        return PartialView("_SettingsCard");
+    }
+
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
     public IActionResult Error()
     {
