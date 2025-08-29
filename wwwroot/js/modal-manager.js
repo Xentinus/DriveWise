@@ -59,9 +59,38 @@
         <div class="mm-loading-text">Töltés…</div>
       </div>
     `;
-    fetchPartialFor(cfg.id).then(html=>{
+    fetchPartialFor(cfg.id).then(async html=>{
       content.removeAttribute('aria-busy');
       content.innerHTML = html;
+      // Execute any scripts included in the fetched HTML (preserve order)
+      try {
+        const scripts = Array.from(content.querySelectorAll('script'));
+        for (const old of scripts) {
+          const s = document.createElement('script');
+          // copy attributes
+          for (let i = 0; i < old.attributes.length; i++) {
+            const attr = old.attributes[i];
+            s.setAttribute(attr.name, attr.value);
+          }
+          if (old.src) {
+            // external script: load and await
+            await new Promise((resolve, reject) => {
+              s.onload = resolve;
+              s.onerror = reject;
+              // ensure relative URLs resolve correctly by using same base
+              document.head.appendChild(s);
+            }).catch(e => console.error('Failed to load script', old.src, e));
+          } else {
+            // inline script: set text and append (executes immediately)
+            s.text = old.textContent;
+            document.head.appendChild(s);
+            // remove after execution to keep DOM clean
+            document.head.removeChild(s);
+          }
+        }
+      } catch (ex) {
+        console.error('Error executing inline scripts', ex);
+      }
     }).catch(err=>{
       content.removeAttribute('aria-busy');
       content.innerHTML = '<p style="color:#c00">Hiba a tartalom betöltésekor.</p>';

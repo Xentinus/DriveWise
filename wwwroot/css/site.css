@@ -213,3 +213,75 @@ body {
 
 /* Ensure leaflet controls sit below the nav so the nav is fully visible */
 .leaflet-control-container { z-index: 1200; }
+
+/* Settings card layout */
+.settings-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-default);
+    border-radius: 12px;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    box-shadow: 0 8px 20px rgba(10,20,30,0.04);
+}
+.settings-title {
+    margin: 0 0 8px 0;
+    font-weight: 700;
+    color: var(--text-default);
+}
+
+/* Each row */
+.settings-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 10px 12px;
+    border-top: 1px solid transparent;
+}
+.settings-item + .settings-item { border-top: 1px solid var(--border-default); }
+
+.settings-label {
+    flex: 1 1 auto;
+    text-align: left;
+    color: var(--text-muted);
+    font-weight: 600;
+}
+.settings-value {
+    flex: 0 0 auto;
+    text-align: right;
+    min-width: 120px;
+}
+
+/* Input types styling */
+.settings-value input[type="text"],
+.settings-value input[type="number"],
+.settings-value .form-select {
+    min-width: 120px;
+}
+
+/* Styled switch for checkboxes */
+.switch { position: relative; display: inline-block; width: 44px; height: 26px; }
+.switch input { opacity: 0; width: 0; height: 0; }
+.switch-slider {
+  position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0;
+  background-color: #ccc; transition: .2s; border-radius: 999px; box-shadow: inset 0 -2px 0 rgba(0,0,0,0.06);
+}
+.switch-slider:before {
+  position: absolute; content: ""; height: 20px; width: 20px; left: 3px; bottom: 3px;
+  background-color: white; transition: .2s; border-radius: 50%; box-shadow: 0 2px 6px rgba(10,20,40,0.12);
+}
+.switch input:checked + .switch-slider { background: var(--color-primary); }
+.switch input:checked + .switch-slider:before { transform: translateX(18px); }
+
+/* Button group sizing in settings */
+.settings-value .btn { min-width: 84px; }
+
+/* small form-select tweaks to match design */
+.form-select-sm { height: 34px; padding: 4px 8px; font-size: 0.9rem; }
+
+@media (max-width: 480px) {
+    .settings-card { max-width: 92%; }
+    .settings-value { text-align: right; }
+    .settings-label { font-size: 0.95rem; }
+}

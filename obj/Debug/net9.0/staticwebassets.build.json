@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "eKAzNOnzBiYa3K4UkDUCnvjQvl2uFwx1Q8uWlrh90+Y=",
+  "Hash": "TCLl6nneuPge5gjvdQm5+ia+KSmnxux6vyAh8ml7hBU=",
   "Source": "DriveWise",
   "BasePath": "_content/DriveWise",
   "Mode": "Default",
@@ -836,12 +836,12 @@
       "OriginalItemSpec": "/Users/xentinus/Development/DriveWise/wwwroot/lib/bootstrap/dist/css/bootstrap.rtl.css.map"
     },
     {
-      "Identity": "/Users/xentinus/Development/DriveWise/obj/Debug/net9.0/compressed/kyuhkmpkdx-ul8m61idfd.gz",
+      "Identity": "/Users/xentinus/Development/DriveWise/obj/Debug/net9.0/compressed/kyuhkmpkdx-lnsdfpnq1j.gz",
       "SourceId": "DriveWise",
       "SourceType": "Discovered",
       "ContentRoot": "/Users/xentinus/Development/DriveWise/obj/Debug/net9.0/compressed/",
       "BasePath": "_content/DriveWise",
-      "RelativePath": "css/site#[.{fingerprint=ul8m61idfd}]?.css.gz",
+      "RelativePath": "css/site#[.{fingerprint=lnsdfpnq1j}]?.css.gz",
       "AssetKind": "All",
       "AssetMode": "All",
       "AssetRole": "Alternative",
@@ -850,8 +850,8 @@
       "RelatedAsset": "/Users/xentinus/Development/DriveWise/wwwroot/css/site.css",
       "AssetTraitName": "Content-Encoding",
       "AssetTraitValue": "gzip",
-      "Fingerprint": "2s99q3q95y",
-      "Integrity": "wr8ljukX4op4RcxJD0HqrsqQMYGRR4MUuzTAkbwxej8=",
+      "Fingerprint": "fhj105qfl3",
+      "Integrity": "HVPrjZ7JULGsA6juj6vEs/RjQM5R6pzc55D+jhGBDxw=",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "/Users/xentinus/Development/DriveWise/wwwroot/css/site.css"
@@ -1088,12 +1088,12 @@
       "OriginalItemSpec": "/Users/xentinus/Development/DriveWise/wwwroot/lib/jquery/dist/jquery.slim.min.map"
     },
     {
-      "Identity": "/Users/xentinus/Development/DriveWise/obj/Debug/net9.0/compressed/rg72ym9ten-8jwth1rpaj.gz",
+      "Identity": "/Users/xentinus/Development/DriveWise/obj/Debug/net9.0/compressed/rg72ym9ten-itiutgca8u.gz",
       "SourceId": "DriveWise",
       "SourceType": "Discovered",
       "ContentRoot": "/Users/xentinus/Development/DriveWise/obj/Debug/net9.0/compressed/",
       "BasePath": "_content/DriveWise",
-      "RelativePath": "js/modal-manager#[.{fingerprint=8jwth1rpaj}]?.js.gz",
+      "RelativePath": "js/modal-manager#[.{fingerprint=itiutgca8u}]?.js.gz",
       "AssetKind": "All",
       "AssetMode": "All",
       "AssetRole": "Alternative",
@@ -1102,8 +1102,8 @@
       "RelatedAsset": "/Users/xentinus/Development/DriveWise/wwwroot/js/modal-manager.js",
       "AssetTraitName": "Content-Encoding",
       "AssetTraitValue": "gzip",
-      "Fingerprint": "5nn2usvnkj",
-      "Integrity": "z52IxDXAsI240OA/ptZfaZMy/bYqHPfiYzW5b3ingzI=",
+      "Fingerprint": "foyrea5rwb",
+      "Integrity": "Ty4daM0apVkEoR9H1NBwoVFUwPPc/U8jtyGeb1a9xIs=",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "/Users/xentinus/Development/DriveWise/wwwroot/js/modal-manager.js"
@@ -1417,8 +1417,8 @@
       "RelatedAsset": "",
       "AssetTraitName": "",
       "AssetTraitValue": "",
-      "Fingerprint": "ul8m61idfd",
-      "Integrity": "7mCwrdwNHxO1kdN669hv/y4OuBJ59U5A+4uIQeZI7sQ=",
+      "Fingerprint": "lnsdfpnq1j",
+      "Integrity": "UTVOiq/GtWgPiiObURfV7nDHd80bdBFMNSy808qcSx8=",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot/css/site.css"
@@ -1501,8 +1501,8 @@
       "RelatedAsset": "",
       "AssetTraitName": "",
       "AssetTraitValue": "",
-      "Fingerprint": "8jwth1rpaj",
-      "Integrity": "DHG7Zi4XsG/n6V61ETO+xd7C6mQo9rMBH766PYhXyCM=",
+      "Fingerprint": "itiutgca8u",
+      "Integrity": "xncamstpe8wU+3IQSOpEWXHsSv1P9PYc/NsexUBpnfM=",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot/js/modal-manager.js"
@@ -2794,7 +2794,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Fri, 29 Aug 2025 10:29:21 GMT"
+          "Value": "Fri, 29 Aug 2025 10:51:32 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -2847,7 +2847,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Fri, 29 Aug 2025 10:29:21 GMT"
+          "Value": "Fri, 29 Aug 2025 10:51:32 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -2884,7 +2884,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Fri, 29 Aug 2025 10:29:21 GMT"
+          "Value": "Fri, 29 Aug 2025 10:51:32 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -2931,7 +2931,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Fri, 29 Aug 2025 10:29:21 GMT"
+          "Value": "Fri, 29 Aug 2025 10:51:32 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -2992,7 +2992,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Fri, 29 Aug 2025 10:29:21 GMT"
+          "Value": "Fri, 29 Aug 2025 10:51:32 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -3037,7 +3037,7 @@
         },
         {
           "Name": "Last-Modified",
-          "Value": "Fri, 29 Aug 2025 10:29:21 GMT"
+          "Value": "Fri, 29 Aug 2025 10:51:32 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -3069,12 +3069,12 @@
     },
     {
       "Route": "css/site.css",
-      "AssetFile": "/Users/xentinus/Development/DriveWise/obj/Debug/net9.0/compressed/kyuhkmpkdx-ul8m61idfd.gz",
+      "AssetFile": "/Users/xentinus/Development/DriveWise/obj/Debug/net9.0/compressed/kyuhkmpkdx-lnsdfpnq1j.gz",
       "Selectors": [
         {
           "Name": "Content-Encoding",
           "Value": "gzip",
-          "Quality": "0.000414078675"
+          "Quality": "0.000337952011"
         }
       ],
       "ResponseHeaders": [
@@ -3084,15 +3084,15 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "2414"
+          "Value": "2958"
         },
         {
           "Name": "ETag",
-          "Value": "\"wr8ljukX4op4RcxJD0HqrsqQMYGRR4MUuzTAkbwxej8=\""
+          "Value": "\"HVPrjZ7JULGsA6juj6vEs/RjQM5R6pzc55D+jhGBDxw=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Sat, 23 Aug 2025 10:01:22 GMT"
+          "Value": "Fri, 29 Aug 2025 12:29:07 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -3112,13 +3112,13 @@
         },
         {
           "Name": "ETag",
-          "Value": "W/\"7mCwrdwNHxO1kdN669hv/y4OuBJ59U5A+4uIQeZI7sQ=\""
+          "Value": "W/\"UTVOiq/GtWgPiiObURfV7nDHd80bdBFMNSy808qcSx8=\""
         }
       ],
       "EndpointProperties": [
         {
           "Name": "integrity",
-          "Value": "sha256-7mCwrdwNHxO1kdN669hv/y4OuBJ59U5A+4uIQeZI7sQ="
+          "Value": "sha256-UTVOiq/GtWgPiiObURfV7nDHd80bdBFMNSy808qcSx8="
         }
       ]
     },
@@ -3133,7 +3133,7 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "7458"
+          "Value": "9627"
         },
         {
           "Name": "Content-Type",
@@ -3141,11 +3141,11 @@
         },
         {
           "Name": "ETag",
-          "Value": "\"7mCwrdwNHxO1kdN669hv/y4OuBJ59U5A+4uIQeZI7sQ=\""
+          "Value": "\"UTVOiq/GtWgPiiObURfV7nDHd80bdBFMNSy808qcSx8=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Sat, 23 Aug 2025 10:01:22 GMT"
+          "Value": "Fri, 29 Aug 2025 12:29:07 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -3155,13 +3155,13 @@
       "EndpointProperties": [
         {
           "Name": "integrity",
-          "Value": "sha256-7mCwrdwNHxO1kdN669hv/y4OuBJ59U5A+4uIQeZI7sQ="
+          "Value": "sha256-UTVOiq/GtWgPiiObURfV7nDHd80bdBFMNSy808qcSx8="
         }
       ]
     },
     {
       "Route": "css/site.css.gz",
-      "AssetFile": "/Users/xentinus/Development/DriveWise/obj/Debug/net9.0/compressed/kyuhkmpkdx-ul8m61idfd.gz",
+      "AssetFile": "/Users/xentinus/Development/DriveWise/obj/Debug/net9.0/compressed/kyuhkmpkdx-lnsdfpnq1j.gz",
       "Selectors": [],
       "ResponseHeaders": [
         {
@@ -3170,7 +3170,7 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "2414"
+          "Value": "2958"
         },
         {
           "Name": "Content-Type",
@@ -3178,11 +3178,11 @@
         },
         {
           "Name": "ETag",
-          "Value": "\"wr8ljukX4op4RcxJD0HqrsqQMYGRR4MUuzTAkbwxej8=\""
+          "Value": "\"HVPrjZ7JULGsA6juj6vEs/RjQM5R6pzc55D+jhGBDxw=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Sat, 23 Aug 2025 10:01:22 GMT"
+          "Value": "Fri, 29 Aug 2025 12:29:07 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -3200,18 +3200,18 @@
       "EndpointProperties": [
         {
           "Name": "integrity",
-          "Value": "sha256-wr8ljukX4op4RcxJD0HqrsqQMYGRR4MUuzTAkbwxej8="
+          "Value": "sha256-HVPrjZ7JULGsA6juj6vEs/RjQM5R6pzc55D+jhGBDxw="
         }
       ]
     },
     {
-      "Route": "css/site.ul8m61idfd.css",
-      "AssetFile": "/Users/xentinus/Development/DriveWise/obj/Debug/net9.0/compressed/kyuhkmpkdx-ul8m61idfd.gz",
+      "Route": "css/site.lnsdfpnq1j.css",
+      "AssetFile": "/Users/xentinus/Development/DriveWise/obj/Debug/net9.0/compressed/kyuhkmpkdx-lnsdfpnq1j.gz",
       "Selectors": [
         {
           "Name": "Content-Encoding",
           "Value": "gzip",
-          "Quality": "0.000414078675"
+          "Quality": "0.000337952011"
         }
       ],
       "ResponseHeaders": [
@@ -3221,15 +3221,15 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "2414"
+          "Value": "2958"
         },
         {
           "Name": "ETag",
-          "Value": "\"wr8ljukX4op4RcxJD0HqrsqQMYGRR4MUuzTAkbwxej8=\""
+          "Value": "\"HVPrjZ7JULGsA6juj6vEs/RjQM5R6pzc55D+jhGBDxw=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Sat, 23 Aug 2025 10:01:22 GMT"
+          "Value": "Fri, 29 Aug 2025 12:29:07 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -3249,13 +3249,13 @@
         },
         {
           "Name": "ETag",
-          "Value": "W/\"7mCwrdwNHxO1kdN669hv/y4OuBJ59U5A+4uIQeZI7sQ=\""
+          "Value": "W/\"UTVOiq/GtWgPiiObURfV7nDHd80bdBFMNSy808qcSx8=\""
         }
       ],
       "EndpointProperties": [
         {
           "Name": "fingerprint",
-          "Value": "ul8m61idfd"
+          "Value": "lnsdfpnq1j"
         },
         {
           "Name": "label",
@@ -3263,12 +3263,12 @@
         },
         {
           "Name": "integrity",
-          "Value": "sha256-7mCwrdwNHxO1kdN669hv/y4OuBJ59U5A+4uIQeZI7sQ="
+          "Value": "sha256-UTVOiq/GtWgPiiObURfV7nDHd80bdBFMNSy808qcSx8="
         }
       ]
     },
     {
-      "Route": "css/site.ul8m61idfd.css",
+      "Route": "css/site.lnsdfpnq1j.css",
       "AssetFile": "/Users/xentinus/Development/DriveWise/wwwroot/css/site.css",
       "Selectors": [],
       "ResponseHeaders": [
@@ -3278,7 +3278,7 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "7458"
+          "Value": "9627"
         },
         {
           "Name": "Content-Type",
@@ -3286,11 +3286,11 @@
         },
         {
           "Name": "ETag",
-          "Value": "\"7mCwrdwNHxO1kdN669hv/y4OuBJ59U5A+4uIQeZI7sQ=\""
+          "Value": "\"UTVOiq/GtWgPiiObURfV7nDHd80bdBFMNSy808qcSx8=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Sat, 23 Aug 2025 10:01:22 GMT"
+          "Value": "Fri, 29 Aug 2025 12:29:07 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -3300,7 +3300,7 @@
       "EndpointProperties": [
         {
           "Name": "fingerprint",
-          "Value": "ul8m61idfd"
+          "Value": "lnsdfpnq1j"
         },
         {
           "Name": "label",
@@ -3308,13 +3308,13 @@
         },
         {
           "Name": "integrity",
-          "Value": "sha256-7mCwrdwNHxO1kdN669hv/y4OuBJ59U5A+4uIQeZI7sQ="
+          "Value": "sha256-UTVOiq/GtWgPiiObURfV7nDHd80bdBFMNSy808qcSx8="
         }
       ]
     },
     {
-      "Route": "css/site.ul8m61idfd.css.gz",
-      "AssetFile": "/Users/xentinus/Development/DriveWise/obj/Debug/net9.0/compressed/kyuhkmpkdx-ul8m61idfd.gz",
+      "Route": "css/site.lnsdfpnq1j.css.gz",
+      "AssetFile": "/Users/xentinus/Development/DriveWise/obj/Debug/net9.0/compressed/kyuhkmpkdx-lnsdfpnq1j.gz",
       "Selectors": [],
       "ResponseHeaders": [
         {
@@ -3323,7 +3323,7 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "2414"
+          "Value": "2958"
         },
         {
           "Name": "Content-Type",
@@ -3331,11 +3331,11 @@
         },
         {
           "Name": "ETag",
-          "Value": "\"wr8ljukX4op4RcxJD0HqrsqQMYGRR4MUuzTAkbwxej8=\""
+          "Value": "\"HVPrjZ7JULGsA6juj6vEs/RjQM5R6pzc55D+jhGBDxw=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Sat, 23 Aug 2025 10:01:22 GMT"
+          "Value": "Fri, 29 Aug 2025 12:29:07 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -3353,7 +3353,7 @@
       "EndpointProperties": [
         {
           "Name": "fingerprint",
-          "Value": "ul8m61idfd"
+          "Value": "lnsdfpnq1j"
         },
         {
           "Name": "label",
@@ -3361,7 +3361,7 @@
         },
         {
           "Name": "integrity",
-          "Value": "sha256-wr8ljukX4op4RcxJD0HqrsqQMYGRR4MUuzTAkbwxej8="
+          "Value": "sha256-HVPrjZ7JULGsA6juj6vEs/RjQM5R6pzc55D+jhGBDxw="
         }
       ]
     },
@@ -4260,13 +4260,13 @@
       ]
     },
     {
-      "Route": "js/modal-manager.8jwth1rpaj.js",
-      "AssetFile": "/Users/xentinus/Development/DriveWise/obj/Debug/net9.0/compressed/rg72ym9ten-8jwth1rpaj.gz",
+      "Route": "js/modal-manager.itiutgca8u.js",
+      "AssetFile": "/Users/xentinus/Development/DriveWise/obj/Debug/net9.0/compressed/rg72ym9ten-itiutgca8u.gz",
       "Selectors": [
         {
           "Name": "Content-Encoding",
           "Value": "gzip",
-          "Quality": "0.000552486188"
+          "Quality": "0.000444444444"
         }
       ],
       "ResponseHeaders": [
@@ -4276,15 +4276,15 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "1809"
+          "Value": "2249"
         },
         {
           "Name": "ETag",
-          "Value": "\"z52IxDXAsI240OA/ptZfaZMy/bYqHPfiYzW5b3ingzI=\""
+          "Value": "\"Ty4daM0apVkEoR9H1NBwoVFUwPPc/U8jtyGeb1a9xIs=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Fri, 29 Aug 2025 10:29:30 GMT"
+          "Value": "Fri, 29 Aug 2025 12:52:10 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -4304,13 +4304,13 @@
         },
         {
           "Name": "ETag",
-          "Value": "W/\"DHG7Zi4XsG/n6V61ETO+xd7C6mQo9rMBH766PYhXyCM=\""
+          "Value": "W/\"xncamstpe8wU+3IQSOpEWXHsSv1P9PYc/NsexUBpnfM=\""
         }
       ],
       "EndpointProperties": [
         {
           "Name": "fingerprint",
-          "Value": "8jwth1rpaj"
+          "Value": "itiutgca8u"
         },
         {
           "Name": "label",
@@ -4318,12 +4318,12 @@
         },
         {
           "Name": "integrity",
-          "Value": "sha256-DHG7Zi4XsG/n6V61ETO+xd7C6mQo9rMBH766PYhXyCM="
+          "Value": "sha256-xncamstpe8wU+3IQSOpEWXHsSv1P9PYc/NsexUBpnfM="
         }
       ]
     },
     {
-      "Route": "js/modal-manager.8jwth1rpaj.js",
+      "Route": "js/modal-manager.itiutgca8u.js",
       "AssetFile": "/Users/xentinus/Development/DriveWise/wwwroot/js/modal-manager.js",
       "Selectors": [],
       "ResponseHeaders": [
@@ -4333,7 +4333,7 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "4835"
+          "Value": "6060"
         },
         {
           "Name": "Content-Type",
@@ -4341,11 +4341,11 @@
         },
         {
           "Name": "ETag",
-          "Value": "\"DHG7Zi4XsG/n6V61ETO+xd7C6mQo9rMBH766PYhXyCM=\""
+          "Value": "\"xncamstpe8wU+3IQSOpEWXHsSv1P9PYc/NsexUBpnfM=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Fri, 29 Aug 2025 10:29:30 GMT"
+          "Value": "Fri, 29 Aug 2025 12:52:10 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -4355,7 +4355,7 @@
       "EndpointProperties": [
         {
           "Name": "fingerprint",
-          "Value": "8jwth1rpaj"
+          "Value": "itiutgca8u"
         },
         {
           "Name": "label",
@@ -4363,13 +4363,13 @@
         },
         {
           "Name": "integrity",
-          "Value": "sha256-DHG7Zi4XsG/n6V61ETO+xd7C6mQo9rMBH766PYhXyCM="
+          "Value": "sha256-xncamstpe8wU+3IQSOpEWXHsSv1P9PYc/NsexUBpnfM="
         }
       ]
     },
     {
-      "Route": "js/modal-manager.8jwth1rpaj.js.gz",
-      "AssetFile": "/Users/xentinus/Development/DriveWise/obj/Debug/net9.0/compressed/rg72ym9ten-8jwth1rpaj.gz",
+      "Route": "js/modal-manager.itiutgca8u.js.gz",
+      "AssetFile": "/Users/xentinus/Development/DriveWise/obj/Debug/net9.0/compressed/rg72ym9ten-itiutgca8u.gz",
       "Selectors": [],
       "ResponseHeaders": [
         {
@@ -4378,7 +4378,7 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "1809"
+          "Value": "2249"
         },
         {
           "Name": "Content-Type",
@@ -4386,11 +4386,11 @@
         },
         {
           "Name": "ETag",
-          "Value": "\"z52IxDXAsI240OA/ptZfaZMy/bYqHPfiYzW5b3ingzI=\""
+          "Value": "\"Ty4daM0apVkEoR9H1NBwoVFUwPPc/U8jtyGeb1a9xIs=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Fri, 29 Aug 2025 10:29:30 GMT"
+          "Value": "Fri, 29 Aug 2025 12:52:10 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -4408,7 +4408,7 @@
       "EndpointProperties": [
         {
           "Name": "fingerprint",
-          "Value": "8jwth1rpaj"
+          "Value": "itiutgca8u"
         },
         {
           "Name": "label",
@@ -4416,18 +4416,18 @@
         },
         {
           "Name": "integrity",
-          "Value": "sha256-z52IxDXAsI240OA/ptZfaZMy/bYqHPfiYzW5b3ingzI="
+          "Value": "sha256-Ty4daM0apVkEoR9H1NBwoVFUwPPc/U8jtyGeb1a9xIs="
         }
       ]
     },
     {
       "Route": "js/modal-manager.js",
-      "AssetFile": "/Users/xentinus/Development/DriveWise/obj/Debug/net9.0/compressed/rg72ym9ten-8jwth1rpaj.gz",
+      "AssetFile": "/Users/xentinus/Development/DriveWise/obj/Debug/net9.0/compressed/rg72ym9ten-itiutgca8u.gz",
       "Selectors": [
         {
           "Name": "Content-Encoding",
           "Value": "gzip",
-          "Quality": "0.000552486188"
+          "Quality": "0.000444444444"
         }
       ],
       "ResponseHeaders": [
@@ -4437,15 +4437,15 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "1809"
+          "Value": "2249"
         },
         {
           "Name": "ETag",
-          "Value": "\"z52IxDXAsI240OA/ptZfaZMy/bYqHPfiYzW5b3ingzI=\""
+          "Value": "\"Ty4daM0apVkEoR9H1NBwoVFUwPPc/U8jtyGeb1a9xIs=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Fri, 29 Aug 2025 10:29:30 GMT"
+          "Value": "Fri, 29 Aug 2025 12:52:10 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -4465,13 +4465,13 @@
         },
         {
           "Name": "ETag",
-          "Value": "W/\"DHG7Zi4XsG/n6V61ETO+xd7C6mQo9rMBH766PYhXyCM=\""
+          "Value": "W/\"xncamstpe8wU+3IQSOpEWXHsSv1P9PYc/NsexUBpnfM=\""
         }
       ],
       "EndpointProperties": [
         {
           "Name": "integrity",
-          "Value": "sha256-DHG7Zi4XsG/n6V61ETO+xd7C6mQo9rMBH766PYhXyCM="
+          "Value": "sha256-xncamstpe8wU+3IQSOpEWXHsSv1P9PYc/NsexUBpnfM="
         }
       ]
     },
@@ -4486,7 +4486,7 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "4835"
+          "Value": "6060"
         },
         {
           "Name": "Content-Type",
@@ -4494,11 +4494,11 @@
         },
         {
           "Name": "ETag",
-          "Value": "\"DHG7Zi4XsG/n6V61ETO+xd7C6mQo9rMBH766PYhXyCM=\""
+          "Value": "\"xncamstpe8wU+3IQSOpEWXHsSv1P9PYc/NsexUBpnfM=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Fri, 29 Aug 2025 10:29:30 GMT"
+          "Value": "Fri, 29 Aug 2025 12:52:10 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -4508,13 +4508,13 @@
       "EndpointProperties": [
         {
           "Name": "integrity",
-          "Value": "sha256-DHG7Zi4XsG/n6V61ETO+xd7C6mQo9rMBH766PYhXyCM="
+          "Value": "sha256-xncamstpe8wU+3IQSOpEWXHsSv1P9PYc/NsexUBpnfM="
         }
       ]
     },
     {
       "Route": "js/modal-manager.js.gz",
-      "AssetFile": "/Users/xentinus/Development/DriveWise/obj/Debug/net9.0/compressed/rg72ym9ten-8jwth1rpaj.gz",
+      "AssetFile": "/Users/xentinus/Development/DriveWise/obj/Debug/net9.0/compressed/rg72ym9ten-itiutgca8u.gz",
       "Selectors": [],
       "ResponseHeaders": [
         {
@@ -4523,7 +4523,7 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "1809"
+          "Value": "2249"
         },
         {
           "Name": "Content-Type",
@@ -4531,11 +4531,11 @@
         },
         {
           "Name": "ETag",
-          "Value": "\"z52IxDXAsI240OA/ptZfaZMy/bYqHPfiYzW5b3ingzI=\""
+          "Value": "\"Ty4daM0apVkEoR9H1NBwoVFUwPPc/U8jtyGeb1a9xIs=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Fri, 29 Aug 2025 10:29:30 GMT"
+          "Value": "Fri, 29 Aug 2025 12:52:10 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -4553,7 +4553,7 @@
       "EndpointProperties": [
         {
           "Name": "integrity",
-          "Value": "sha256-z52IxDXAsI240OA/ptZfaZMy/bYqHPfiYzW5b3ingzI="
+          "Value": "sha256-Ty4daM0apVkEoR9H1NBwoVFUwPPc/U8jtyGeb1a9xIs="
         }
       ]
     },

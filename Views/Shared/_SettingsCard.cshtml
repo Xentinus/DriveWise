@@ -1,5 +1,118 @@
+
 @* Partial for Settings card *@
-<div class="settings-card">
-    <p>Alapbeállítások</p>
-    <label>Értesítések <input type="checkbox" checked /></label>
+<div class="settings-card card p-3">
+    <p class="settings-title">Alapbeállítások</p>
+
+    <div class="settings-item">
+        <div class="settings-label">Értesítések</div>
+        <div class="settings-value">
+            <label class="switch">
+                <input type="checkbox" data-storage-key="notifications" checked />
+                <span class="switch-slider" aria-hidden="true"></span>
+            </label>
+        </div>
+    </div>
+
+    <div class="settings-item">
+        <div class="settings-label">Mértékegység</div>
+        <div class="settings-value">
+            <select id="unitSelect" data-storage-key="unit" class="form-select form-select-sm" aria-label="Mértékegység">
+                <option value="0">Metrikus</option>
+                <option value="1">Angolszász</option>
+            </select>
+        </div>
+    </div>
+
+<!-- fixed extra closing div -->
 </div>
+
+<script>
+(function() {
+    function init() {
+        console.log('[settings] init');
+        // Generic storage wiring: any element with `data-storage-key` will be
+        // - initialized from localStorage if a value exists
+        // - saved to localStorage immediately on change
+        // - dispatch a `settingChanged` event with { key, value }
+        // Special-case: when key === 'unit' also dispatch `unitChanged` with numeric unit
+
+        // Use localStorage for persistence
+        function readStored(key) {
+            try {
+                return localStorage.getItem(key);
+            } catch (e) {
+                console.warn('[settings] readStored failed', e);
+                return null;
+            }
+        }
+        function writeStored(key, value) {
+            try {
+                localStorage.setItem(key, String(value));
+                console.log('[settings] write', key, value);
+            } catch (e) {
+                console.warn('[settings] writeStored failed', e);
+            }
+        }
+
+        const elems = document.querySelectorAll('[data-storage-key]');
+        console.log('[settings] elements found', elems.length);
+        elems.forEach(el => {
+            const key = el.getAttribute('data-storage-key');
+            if (!key) return;
+
+            const stored = readStored(key);
+            console.log('[settings] init key=', key, 'stored=', stored);
+
+            // Initialize based on element type
+            if (el.type === 'checkbox') {
+                if (stored !== null) {
+                    el.checked = stored === '1' || stored === 'true';
+                } else {
+                    // persist default state
+                    writeStored(key, el.checked ? '1' : '0');
+                }
+                el.addEventListener('change', () => {
+                    const val = el.checked ? '1' : '0';
+                    writeStored(key, val);
+                    dispatchChange(key, val);
+                });
+
+            } else if (el.tagName === 'SELECT' || el.tagName === 'INPUT') {
+                if (stored !== null) {
+                    try { el.value = stored; } catch (e) { console.warn('[settings] set value failed', key, stored); }
+                } else {
+                    writeStored(key, el.value);
+                }
+                el.addEventListener('change', () => {
+                    const val = el.value;
+                    writeStored(key, val);
+                    dispatchChange(key, val);
+                });
+
+            } else {
+                // other elements with data-storage-key (e.g., custom controls)
+                if (stored !== null) {
+                    el.textContent = stored;
+                }
+            }
+        });
+
+        function dispatchChange(key, value) {
+            try {
+                window.dispatchEvent(new CustomEvent('settingChanged', { detail: { key, value } }));
+            } catch (e) { console.warn('[settings] dispatch settingChanged failed', e); }
+            if (key === 'unit') {
+                try {
+                    window.dispatchEvent(new CustomEvent('unitChanged', { detail: { unit: Number(value) } }));
+                } catch (e) { console.warn('[settings] dispatch unitChanged failed', e); }
+            }
+        }
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
+    } else {
+        init();
+    }
+})();
+</script>
