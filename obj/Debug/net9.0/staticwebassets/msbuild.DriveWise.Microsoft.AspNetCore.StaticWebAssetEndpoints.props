@@ -64,13 +64,13 @@
       <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\js\modal-manager.js'))</AssetFile>
       <Selectors><![CDATA[[]]]></Selectors>
       <EndpointProperties><![CDATA[[{"Name":"fingerprint","Value":"itiutgca8u"},{"Name":"integrity","Value":"sha256-xncamstpe8wU\u002B3IQSOpEWXHsSv1P9PYc/NsexUBpnfM="},{"Name":"label","Value":"_content/DriveWise/js/modal-manager.js"}]]]></EndpointProperties>
-      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=31536000, immutable"},{"Name":"Content-Length","Value":"6060"},{"Name":"Content-Type","Value":"text/javascript"},{"Name":"ETag","Value":"\u0022xncamstpe8wU\u002B3IQSOpEWXHsSv1P9PYc/NsexUBpnfM=\u0022"},{"Name":"Last-Modified","Value":"Fri, 29 Aug 2025 12:52:10 GMT"}]]]></ResponseHeaders>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=31536000, immutable"},{"Name":"Content-Length","Value":"6060"},{"Name":"Content-Type","Value":"text/javascript"},{"Name":"ETag","Value":"\u0022xncamstpe8wU\u002B3IQSOpEWXHsSv1P9PYc/NsexUBpnfM=\u0022"},{"Name":"Last-Modified","Value":"Fri, 29 Aug 2025 13:01:13 GMT"}]]]></ResponseHeaders>
     </StaticWebAssetEndpoint>
     <StaticWebAssetEndpoint Include="_content/DriveWise/js/modal-manager.js">
       <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\js\modal-manager.js'))</AssetFile>
       <Selectors><![CDATA[[]]]></Selectors>
       <EndpointProperties><![CDATA[[{"Name":"integrity","Value":"sha256-xncamstpe8wU\u002B3IQSOpEWXHsSv1P9PYc/NsexUBpnfM="}]]]></EndpointProperties>
-      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"no-cache"},{"Name":"Content-Length","Value":"6060"},{"Name":"Content-Type","Value":"text/javascript"},{"Name":"ETag","Value":"\u0022xncamstpe8wU\u002B3IQSOpEWXHsSv1P9PYc/NsexUBpnfM=\u0022"},{"Name":"Last-Modified","Value":"Fri, 29 Aug 2025 12:52:10 GMT"}]]]></ResponseHeaders>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"no-cache"},{"Name":"Content-Length","Value":"6060"},{"Name":"Content-Type","Value":"text/javascript"},{"Name":"ETag","Value":"\u0022xncamstpe8wU\u002B3IQSOpEWXHsSv1P9PYc/NsexUBpnfM=\u0022"},{"Name":"Last-Modified","Value":"Fri, 29 Aug 2025 13:01:13 GMT"}]]]></ResponseHeaders>
     </StaticWebAssetEndpoint>
     <StaticWebAssetEndpoint Include="_content/DriveWise/lib/bootstrap/dist/css/bootstrap-grid.bqjiyaj88i.css">
       <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\lib\bootstrap\dist\css\bootstrap-grid.css'))</AssetFile>
