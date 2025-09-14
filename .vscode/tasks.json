@@ -36,6 +36,26 @@
                 "${workspaceFolder}/DriveWise.csproj"
             ],
             "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "run-with-profile",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "run",
+                "--launch-profile",
+                "VSCode Simple Browser"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
+            }
         }
     ]
 }

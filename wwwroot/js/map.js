@@ -84,9 +84,6 @@ document.addEventListener('DOMContentLoaded', function () {
                         })
                     }).addTo(map);
                     console.log('Current position marker added to map');
-                    
-                    // Add popup to current position marker
-                    currentPositionMarker.bindPopup('Az aktuális pozíciód');
                 },
                 function(error) {
                     console.log('GPS Geolocation failed:', error.message, 'Code:', error.code);
@@ -130,7 +127,6 @@ document.addEventListener('DOMContentLoaded', function () {
                         })
                     }).addTo(map);
                     
-                    currentPositionMarker.bindPopup('Hozzávetőleges pozíció (' + data.city + ')');
                     console.log('IP-based position marker added to map');
                 } else {
                     console.log('IP-based geolocation also failed');
@@ -140,92 +136,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 console.log('IP-based geolocation error:', err);
             });
     }
-
-    // Add a manual location button as fallback
-    var locationButton = L.control({ position: 'topright' });
-    locationButton.onAdd = function(map) {
-        var div = L.DomUtil.create('div', 'leaflet-bar leaflet-control leaflet-control-custom');
-        div.innerHTML = '<button class="location-btn" title="Aktuális pozíció"><i>📍</i></button>';
-        div.style.backgroundColor = 'white';
-        div.style.border = '2px solid rgba(0,0,0,0.2)';
-        div.style.borderRadius = '4px';
-        div.style.cursor = 'pointer';
-        
-        div.onclick = function(){
-            console.log('Manual location button clicked');
-            if (navigator.geolocation) {
-                // Try with very relaxed settings
-                navigator.geolocation.getCurrentPosition(
-                    function(position) {
-                        var lat = position.coords.latitude;
-                        var lng = position.coords.longitude;
-                        console.log('Manual GPS location received:', lat, lng);
-                        
-                        map.setView([lat, lng], 15);
-                        
-                        if (currentPositionMarker) {
-                            map.removeLayer(currentPositionMarker);
-                        }
-                        
-                        currentPositionMarker = L.marker([lat, lng], {
-                            icon: L.divIcon({
-                                className: 'current-position-marker',
-                                html: '<div class="current-position-icon"></div>',
-                                iconSize: [20, 20],
-                                iconAnchor: [10, 10]
-                            })
-                        }).addTo(map);
-                        
-                        currentPositionMarker.bindPopup('Pontos GPS pozíció').openPopup();
-                    },
-                    function(error) {
-                        console.log('Manual GPS failed, trying IP geolocation:', error.message);
-                        // If GPS fails, try IP geolocation
-                        fetch('https://ipapi.co/json/')
-                            .then(response => response.json())
-                            .then(data => {
-                                if (data.latitude && data.longitude) {
-                                    var lat = data.latitude;
-                                    var lng = data.longitude;
-                                    console.log('Manual IP location received:', lat, lng);
-                                    
-                                    map.setView([lat, lng], 12);
-                                    
-                                    if (currentPositionMarker) {
-                                        map.removeLayer(currentPositionMarker);
-                                    }
-                                    
-                                    currentPositionMarker = L.marker([lat, lng], {
-                                        icon: L.divIcon({
-                                            className: 'current-position-marker ip-location',
-                                            html: '<div class="current-position-icon ip-based"></div>',
-                                            iconSize: [20, 20],
-                                            iconAnchor: [10, 10]
-                                        })
-                                    }).addTo(map);
-                                    
-                                    currentPositionMarker.bindPopup('Hozzávetőleges pozíció (' + data.city + ')').openPopup();
-                                } else {
-                                    alert('Nem sikerült meghatározni a pozíciót');
-                                }
-                            })
-                            .catch(err => {
-                                alert('Nem sikerült meghatározni a pozíciót: ' + err.message);
-                            });
-                    },
-                    {
-                        enableHighAccuracy: false,
-                        timeout: 30000, // 30 seconds
-                        maximumAge: 60000 // 1 minute
-                    }
-                );
-            } else {
-                alert('A böngésző nem támogatja a geolokációt');
-            }
-        }
-        return div;
-    };
-    locationButton.addTo(map);
 
     // Long-press functionality for location queries
     function startLongPress(e) {

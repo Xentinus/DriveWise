@@ -6,20 +6,53 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
-// Configure URLs to use available ports
-var httpPort = GetAvailablePort(5235);
-var httpsPort = GetAvailablePort(7238);
+// Check if URLs are already configured via launch settings
+var configuredUrls = builder.Configuration["urls"] ?? Environment.GetEnvironmentVariable("ASPNETCORE_URLS");
 
-builder.WebHost.UseUrls($"http://0.0.0.0:{httpPort}", $"https://0.0.0.0:{httpsPort}");
+if (string.IsNullOrEmpty(configuredUrls))
+{
+    // Configure URLs to use available ports only if not set by launch settings
+    var httpPort = GetAvailablePort(5235);
+    var httpsPort = GetAvailablePort(7238);
+    
+    builder.WebHost.UseUrls($"http://0.0.0.0:{httpPort}", $"https://0.0.0.0:{httpsPort}");
+    
+    Console.WriteLine($"Application will be available at:");
+    Console.WriteLine($"HTTP:  http://0.0.0.0:{httpPort}");
+    Console.WriteLine($"HTTPS: https://0.0.0.0:{httpsPort}");
+    Console.WriteLine($"From other devices use your IP address (e.g., http://10.0.0.12:{httpPort})");
+}
+else
+{
+    // Parse configured URLs and check if ports are available
+    var urls = configuredUrls.Split(';');
+    var availableUrls = new List<string>();
+    
+    foreach (var url in urls)
+    {
+        var uri = new Uri(url.Trim());
+        var port = uri.Port;
+        
+        if (IsPortAvailable(port))
+        {
+            availableUrls.Add(url.Trim());
+        }
+        else
+        {
+            // Find alternative port
+            var newPort = GetAvailablePort(port);
+            var newUrl = $"{uri.Scheme}://{uri.Host}:{newPort}";
+            availableUrls.Add(newUrl);
+            Console.WriteLine($"Port {port} is busy, using {newPort} instead");
+        }
+    }
+    
+    var finalUrls = string.Join(";", availableUrls);
+    builder.WebHost.UseUrls(finalUrls.Split(';'));
+    Console.WriteLine($"Using URLs: {finalUrls}");
+}
 
 var app = builder.Build();
-
-Console.WriteLine($"Application will be available at:");
-Console.WriteLine($"HTTP:  http://0.0.0.0:{httpPort}");
-Console.WriteLine($"HTTPS: https://0.0.0.0:{httpsPort}");
-Console.WriteLine($"From other devices use your IP address (e.g., http://10.0.0.12:{httpPort})");
-
-// Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
@@ -60,5 +93,20 @@ static int GetAvailablePort(int preferredPort)
         var port = ((IPEndPoint)listener.LocalEndpoint).Port;
         listener.Stop();
         return port;
+    }
+}
+
+static bool IsPortAvailable(int port)
+{
+    try
+    {
+        using var listener = new TcpListener(IPAddress.Any, port);
+        listener.Start();
+        listener.Stop();
+        return true;
+    }
+    catch
+    {
+        return false;
     }
 }
