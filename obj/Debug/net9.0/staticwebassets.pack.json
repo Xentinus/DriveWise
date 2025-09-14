@@ -25,6 +25,10 @@
       "PackagePath": "staticwebassets/js/map.js"
     },
     {
+      "Id": "/Users/xentinus/Development/DriveWise/wwwroot/js/map_old.js",
+      "PackagePath": "staticwebassets/js/map_old.js"
+    },
+    {
       "Id": "/Users/xentinus/Development/DriveWise/wwwroot/js/modal-manager.js",
       "PackagePath": "staticwebassets/js/modal-manager.js"
     },

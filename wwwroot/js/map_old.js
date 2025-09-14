@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // Default to a Europe-wide view (no specific city) so users see the continent on load
     var map = L.map('map').setView([52.0, 10.0], 5); // Europe center, slightly closer (zoom +1)
 
-    // Use only the Cartodb navigation map - clean and optimized for driving
+    // Use only the Cartodb navigation map
     var navigationLayer = L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
         maxZoom: 20,
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
@@ -12,6 +12,31 @@ document.addEventListener('DOMContentLoaded', function () {
     // Add the navigation layer to map
     navigationLayer.addTo(map);
 
+    // Add custom layer control for mobile-friendly experience
+    var mapTypeButton = L.control({ position: 'topleft' });
+    mapTypeButton.onAdd = function(map) {
+        var div = L.DomUtil.create('div', 'leaflet-bar leaflet-control map-type-control');
+        div.innerHTML = `
+            <div class="map-type-selector">
+                <button class="map-type-btn active" data-layer="Alapértelmezett" title="Alapértelmezett térkép">🗺️</button>
+                <button class="map-type-btn" data-layer="Autós/Navigációs" title="Autós/Navigációs térkép">🚗</button>
+                <button class="map-type-btn" data-layer="Navigáció (Cartodb)" title="Tiszta navigációs térkép">🧭</button>
+                <button class="map-type-btn" data-layer="Transport" title="Közlekedési térkép">�</button>
+                <button class="map-type-btn" data-layer="Műholdas" title="Műholdas nézet">🛰️</button>
+                <button class="map-type-btn" data-layer="Sötét téma" title="Sötét téma">🌙</button>
+            </div>
+        `;
+        
+        // Add click handlers for map type buttons
+        div.addEventListener('click', function(e) {
+            if (e.target.classList.contains('map-type-btn')) {
+                var layerName = e.target.getAttribute('data-layer');
+                
+                // Remove current layer
+                map.eachLayer(function(layer) {
+                    if (layer._url) { // Check if it's a tile layer
+                        map.removeLayer(layer);
+                    }
     // Variable to store current position marker
     var currentPositionMarker = null;
 
@@ -184,6 +209,8 @@ document.addEventListener('DOMContentLoaded', function () {
         return div;
     };
     locationButton.addTo(map);
+
+    // No example marker by default (user requested no pin)
 
     // If map is in a container with dynamic size, call invalidateSize after a short delay
     setTimeout(function () { map.invalidateSize(); }, 200);
