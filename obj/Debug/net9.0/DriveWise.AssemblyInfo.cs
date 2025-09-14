@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("DriveWise")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+dd9b854f6efb9800af0e56cc211ca8286bf5e9df")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+5a9731aa9782b524ee8bff58a33da92669dbe1b3")]
 [assembly: System.Reflection.AssemblyProductAttribute("DriveWise")]
 [assembly: System.Reflection.AssemblyTitleAttribute("DriveWise")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
