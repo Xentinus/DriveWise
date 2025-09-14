@@ -35,7 +35,7 @@
   inset:0;
   background:var(--mm-backdrop);
   display:none;
-  z-index:1050;
+  z-index:1250;
   /* backdrop left transparent so page does not darken; keep clickable */
 }
 
@@ -54,7 +54,7 @@
   flex-direction:column;
   transition:transform 420ms cubic-bezier(.2,.9,.3,1), opacity 220ms ease;
   opacity:0;
-  z-index:1060;
+  z-index:1300;
 }
 
 .mm-card.open{

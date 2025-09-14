@@ -77,7 +77,7 @@ body {
     bottom: calc(env(safe-area-inset-bottom, 0px) + 12px);
     left: 0;
     right: 0;
-    z-index: 1300; /* on top of map and Leaflet controls */
+    z-index: 1000; /* below cards and modals */
     display: flex;
     justify-content: center;
     pointer-events: auto;
@@ -350,4 +350,65 @@ body {
     .settings-card { max-width: 92%; }
     .settings-value { text-align: right; }
     .settings-label { font-size: 0.95rem; }
+}
+
+/* Vehicles card layout */
+.vehicles-card, .vehicle-form-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-default);
+    border-radius: 12px;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    box-shadow: 0 8px 20px rgba(10,20,30,0.04);
+}
+
+.vehicles-container {
+    position: relative;
+}
+
+.vehicles-list {
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.vehicle-item {
+    background: var(--bg-card);
+    border: 1px solid var(--border-default) !important;
+    transition: all 0.2s ease;
+}
+
+.vehicle-item:hover {
+    box-shadow: 0 4px 12px rgba(10,20,30,0.08);
+    transform: translateY(-1px);
+}
+
+/* Dark theme vehicle items */
+[data-theme="dark"] .vehicle-item {
+    background: #2A2A2A;
+    border-color: #444444 !important;
+}
+
+[data-theme="dark"] .vehicle-item:hover {
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+}
+
+.vehicle-item h6 {
+    color: var(--text-default);
+    font-weight: 600;
+}
+
+.vehicle-item .text-muted {
+    color: var(--text-muted) !important;
+}
+
+/* Modal responsive improvements */
+@media (max-width: 768px) {
+    .modal-lg {
+        max-width: 95%;
+    }
+    
+    .vehicles-card, .vehicle-form-card {
+        max-width: 92%;
+    }
 }
