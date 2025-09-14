@@ -33,6 +33,10 @@
       "PackagePath": "staticwebassets/js/modal-manager.js"
     },
     {
+      "Id": "/Users/xentinus/Development/DriveWise/wwwroot/js/theme-manager.js",
+      "PackagePath": "staticwebassets/js/theme-manager.js"
+    },
+    {
       "Id": "/Users/xentinus/Development/DriveWise/wwwroot/lib/bootstrap/LICENSE",
       "PackagePath": "staticwebassets/lib/bootstrap"
     },

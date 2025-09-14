@@ -13,6 +13,17 @@
         </div>
     </div>
 
+    <p class="settings-title">Téma</p>
+    <div class="settings-item">
+        <div class="settings-label">Megjelenés</div>
+        <div class="settings-value">
+            <select id="themeSelect" data-storage-key="theme" class="form-select form-select-sm" aria-label="Téma">
+                <option value="light">Világos</option>
+                <option value="dark">Sötét</option>
+            </select>
+        </div>
+    </div>
+
     <p class="settings-title">Mértékegység</p>
     <div class="settings-item">
         <div class="settings-label">Választás</div>
@@ -124,6 +135,11 @@
                 try {
                     window.dispatchEvent(new CustomEvent('unitChanged', { detail: { unit: Number(value) } }));
                 } catch (e) { console.warn('[settings] dispatch unitChanged failed', e); }
+            }
+            if (key === 'theme') {
+                try {
+                    window.dispatchEvent(new CustomEvent('themeChanged', { detail: { theme: value } }));
+                } catch (e) { console.warn('[settings] dispatch themeChanged failed', e); }
             }
         }
     }

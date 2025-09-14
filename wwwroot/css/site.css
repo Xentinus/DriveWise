@@ -22,6 +22,31 @@
   --bs-border-color: var(--border-default);
 }
 
+/* Dark theme */
+[data-theme="dark"] {
+  --color-primary: #4FC3F7;
+  --color-primary-dark: #0288D1;
+  --color-primary-light: #263238;
+  --color-page-bg: #121212;
+  --color-surface: #1E1E1E;
+  --color-text: #E0E0E0;
+  --color-muted: #9E9E9E;
+  --color-border: #333333;
+
+  /* semantic */
+  --bg-body: var(--color-page-bg);
+  --bg-card: var(--color-surface);
+  --text-default: var(--color-text);
+  --text-muted: var(--color-muted);
+  --border-default: var(--color-border);
+
+  /* Bootstrap overrides for dark theme */
+  --bs-body-bg: var(--bg-body);
+  --bs-body-color: var(--text-default);
+  --bs-primary: var(--color-primary);
+  --bs-border-color: var(--border-default);
+}
+
 html, body {
     height: 100%;
 }
@@ -68,6 +93,13 @@ body {
     box-shadow: 0 12px 36px rgba(20,30,40,0.06);
     display:inline-block;
 }
+
+/* Dark theme navigation */
+[data-theme="dark"] .bottom-nav.v2 .nav-wrap {
+    background: #2A2A2A;
+    border: 1px solid rgba(255,255,255,0.1);
+    box-shadow: 0 12px 36px rgba(0,0,0,0.3);
+}
 .bottom-nav.v2 .nav {
     gap: 20px;
     align-items: center;
@@ -87,8 +119,19 @@ body {
     box-shadow: 0 6px 18px rgba(10,14,18,0.03);
     transition: transform 160ms ease, box-shadow 160ms ease, background-color 160ms ease;
 }
+
+/* Dark theme navigation buttons */
+[data-theme="dark"] .bottom-nav.v2 .nav-btn {
+    color: #E0E0E0;
+    background: #3A3A3A;
+    border: 1px solid rgba(255,255,255,0.05);
+    box-shadow: 0 6px 18px rgba(0,0,0,0.2);
+}
 .bottom-nav.v2 .nav-btn i { font-size:1.35rem; line-height:1; }
 .bottom-nav.v2 .nav-btn span { font-size:0.78rem; margin-top:6px; color: #475569; font-weight:600; }
+
+/* Dark theme navigation button text */
+[data-theme="dark"] .bottom-nav.v2 .nav-btn span { color: #B0B0B0; }
 .bottom-nav.v2 .nav-btn.center {
     background: linear-gradient(180deg,#1a73e8,#0d6efd);
     color:#fff;
@@ -181,6 +224,13 @@ body {
     min-width: 360px; /* make the pill a bit wider by default */
     margin: 0 auto; /* always centered */
     box-shadow: 0 18px 40px rgba(11,20,40,0.12);
+}
+
+/* Dark theme pill container */
+[data-theme="dark"] .bottom-nav .container {
+    background: #2A2A2A;
+    color: #E0E0E0;
+    box-shadow: 0 18px 40px rgba(0,0,0,0.4);
 }
 
 /* Icon color and inactive state */
@@ -279,6 +329,22 @@ body {
 
 /* small form-select tweaks to match design */
 .form-select-sm { height: 34px; padding: 4px 8px; font-size: 0.9rem; }
+
+/* Dark theme form elements */
+[data-theme="dark"] .form-select,
+[data-theme="dark"] .form-select-sm {
+    background-color: #3A3A3A;
+    border-color: #555555;
+    color: #E0E0E0;
+}
+
+[data-theme="dark"] .form-select:focus,
+[data-theme="dark"] .form-select-sm:focus {
+    background-color: #3A3A3A;
+    border-color: var(--color-primary);
+    color: #E0E0E0;
+    box-shadow: 0 0 0 0.2rem rgba(79, 195, 247, 0.25);
+}
 
 @media (max-width: 480px) {
     .settings-card { max-width: 92%; }

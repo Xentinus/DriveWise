@@ -10,6 +10,24 @@
   --mm-shadow: 0 12px 40px rgba(0,0,0,0.25);
   --mm-accent: #007aff; /* iOS blue */
   --mm-header-height: 62px;
+  --mm-text: #111;
+  --mm-border: rgba(0,0,0,0.06);
+  --mm-loading-text: #666;
+  --mm-handle: rgba(0,0,0,0.12);
+}
+
+/* Dark theme variables */
+[data-theme="dark"] {
+  --mm-bg: #2A2A2A;
+  --mm-backdrop: transparent;
+  --mm-radius: 14px;
+  --mm-shadow: 0 12px 40px rgba(0,0,0,0.5);
+  --mm-accent: #4FC3F7;
+  --mm-header-height: 62px;
+  --mm-text: #E0E0E0;
+  --mm-border: rgba(255,255,255,0.1);
+  --mm-loading-text: #B0B0B0;
+  --mm-handle: rgba(255,255,255,0.2);
 }
 
 .mm-backdrop{
@@ -50,14 +68,14 @@
   align-items:center;
   justify-content:space-between;
   padding:0 16px;
-  border-bottom:1px solid rgba(0,0,0,0.06);
+  border-bottom:1px solid var(--mm-border);
   font-family: "Nunito", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
 }
 
 .mm-title{
   font-size:18px;
   font-weight:700;
-  color:#111;
+  color:var(--mm-text);
 }
 
 .mm-close{
@@ -83,19 +101,19 @@
   gap:12px;
   justify-content:center;
   padding:18px 12px;
-  color:#666;
+  color:var(--mm-loading-text);
   font-family: "Nunito", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
 }
 .mm-spinner{
   width:34px;
   height:34px;
   border-radius:50%;
-  border:4px solid rgba(0,0,0,0.08);
+  border:4px solid var(--mm-border);
   border-top-color: var(--mm-accent);
   animation: mm-spin 900ms linear infinite;
   box-shadow: 0 2px 8px rgba(0,0,0,0.08) inset;
 }
-.mm-loading-text{font-size:14px;color:#666}
+.mm-loading-text{font-size:14px;color:var(--mm-loading-text)}
 
 @keyframes mm-spin{
   from{transform:rotate(0)}
@@ -107,7 +125,7 @@
   width:54px;
   height:6px;
   border-radius:6px;
-  background:rgba(0,0,0,0.12);
+  background:var(--mm-handle);
   margin:10px auto 0 auto;
 }
 
