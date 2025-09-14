@@ -1,6 +1,10 @@
 {
   "Files": [
     {
+      "Id": "/Users/xentinus/Development/DriveWise/wwwroot/css/map.css",
+      "PackagePath": "staticwebassets/css/map.css"
+    },
+    {
       "Id": "/Users/xentinus/Development/DriveWise/wwwroot/css/modal-manager.css",
       "PackagePath": "staticwebassets/css/modal-manager.css"
     },

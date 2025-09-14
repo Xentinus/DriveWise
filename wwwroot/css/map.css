@@ -1,0 +1,86 @@
+/* Map-specific styles */
+
+/* Current position marker styles */
+.current-position-marker {
+    background: transparent !important;
+    border: none !important;
+}
+
+.current-position-icon {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #4285f4;
+    border: 3px solid #ffffff;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+    position: relative;
+    animation: pulse 2s infinite;
+}
+
+/* IP-based location styling (less precise) */
+.current-position-icon.ip-based {
+    background: #4285f4;
+    animation: pulse 2s infinite;
+}
+
+.current-position-icon::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 8px;
+    height: 8px;
+    background: #ffffff;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+}
+
+/* Pulse animation for current position */
+@keyframes pulse {
+    0% {
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3), 0 0 0 0 rgba(66, 133, 244, 0.7);
+    }
+    70% {
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3), 0 0 0 10px rgba(66, 133, 244, 0);
+    }
+    100% {
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3), 0 0 0 0 rgba(66, 133, 244, 0);
+    }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .current-position-icon {
+        width: 18px;
+        height: 18px;
+        border-width: 2px;
+    }
+    
+    .current-position-icon::before {
+        width: 6px;
+        height: 6px;
+    }
+}
+
+/* Location button styles */
+.location-btn {
+    background: white;
+    border: none;
+    width: 34px;
+    height: 34px;
+    border-radius: 2px;
+    font-size: 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s;
+}
+
+.location-btn:hover {
+    background-color: #f4f4f4;
+}
+
+.location-btn:active {
+    background-color: #e9e9e9;
+}

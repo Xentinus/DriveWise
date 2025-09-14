@@ -90,7 +90,9 @@
 /Users/xentinus/Development/DriveWise/obj/Debug/net9.0/DriveWise.genruntimeconfig.cache
 /Users/xentinus/Development/DriveWise/obj/Debug/net9.0/ref/DriveWise.dll
 /Users/xentinus/Development/DriveWise/obj/Debug/net9.0/compressed/4zscdd0rdg-gom3avtr5t.gz
-/Users/xentinus/Development/DriveWise/obj/Debug/net9.0/compressed/vtd49j6uox-3b5grhjb1f.gz
 /Users/xentinus/Development/DriveWise/obj/Debug/net9.0/compressed/4e0blgolux-p5weoh8ezu.gz
 /Users/xentinus/Development/DriveWise/obj/Debug/net9.0/compressed/kyuhkmpkdx-lnsdfpnq1j.gz
 /Users/xentinus/Development/DriveWise/obj/Debug/net9.0/compressed/rg72ym9ten-itiutgca8u.gz
+/Users/xentinus/Development/DriveWise/obj/Debug/net9.0/DriveWise.sourcelink.json
+/Users/xentinus/Development/DriveWise/obj/Debug/net9.0/compressed/vtd49j6uox-iman0t34mq.gz
+/Users/xentinus/Development/DriveWise/obj/Debug/net9.0/compressed/0d42s9au7c-l1vl922q22.gz
