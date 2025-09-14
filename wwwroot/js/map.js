@@ -50,6 +50,13 @@ document.addEventListener('DOMContentLoaded', function () {
     // Variable to store current position marker
     var currentPositionMarker = null;
 
+    // Variables for long-press detection
+    var longPressTimer = null;
+    var longPressPosition = null;
+    var isLongPressing = false;
+    var longPressThreshold = 800; // ms
+    var moveThreshold = 10; // pixels
+
     // Check if geolocation is supported and get user's location
     if (navigator.geolocation) {
         console.log('Geolocation is supported, requesting position...');
@@ -220,6 +227,112 @@ document.addEventListener('DOMContentLoaded', function () {
     };
     locationButton.addTo(map);
 
+    // Long-press functionality for location queries
+    function startLongPress(e) {
+        var position = e.latlng || (e.originalEvent && L.latLng(e.originalEvent.latlng));
+        if (!position) return;
+        
+        longPressPosition = position;
+        isLongPressing = false;
+        
+        longPressTimer = setTimeout(function() {
+            isLongPressing = true;
+            handleLongPress(longPressPosition);
+        }, longPressThreshold);
+    }
+
+    function cancelLongPress() {
+        if (longPressTimer) {
+            clearTimeout(longPressTimer);
+            longPressTimer = null;
+        }
+        longPressPosition = null;
+        isLongPressing = false;
+    }
+
+    function handleLongPress(position) {
+        console.log('Long press detected at:', position.lat, position.lng);
+        
+        // Add visual feedback - temporary marker
+        var longPressMarker = L.marker([position.lat, position.lng], {
+            icon: L.divIcon({
+                className: 'long-press-marker',
+                html: '<div class="long-press-icon loading"></div>',
+                iconSize: [30, 30],
+                iconAnchor: [15, 15]
+            })
+        }).addTo(map);
+        
+        // Query location data
+        queryLocationData(position.lat, position.lng).then(function(data) {
+            // Update marker to show success
+            longPressMarker.setIcon(L.divIcon({
+                className: 'long-press-marker',
+                html: '<div class="long-press-icon success"></div>',
+                iconSize: [30, 30],
+                iconAnchor: [15, 15]
+            }));
+            
+            // Show location info popup
+            showLocationInfo(data, position, longPressMarker);
+        }).catch(function(error) {
+            console.error('Error querying location data:', error);
+            
+            // Update marker to show error
+            longPressMarker.setIcon(L.divIcon({
+                className: 'long-press-marker',
+                html: '<div class="long-press-icon error"></div>',
+                iconSize: [30, 30],
+                iconAnchor: [15, 15]
+            }));
+            
+            // Show error popup
+            longPressMarker.bindPopup('Hiba a helyszín adatainak lekérdezésekor').openPopup();
+            
+            // Remove marker after a delay
+            setTimeout(function() {
+                map.removeLayer(longPressMarker);
+            }, 3000);
+        });
+    }
+
+    // Add event listeners to map for long-press
+    map.on('mousedown', function(e) {
+        if (e.originalEvent.button === 0) { // Left mouse button
+            startLongPress(e);
+        }
+    });
+
+    map.on('mouseup', cancelLongPress);
+    map.on('mousemove', function(e) {
+        if (longPressTimer && longPressPosition) {
+            var distance = map.distance(longPressPosition, e.latlng);
+            if (distance > moveThreshold) {
+                cancelLongPress();
+            }
+        }
+    });
+
+    // Touch events for mobile
+    map.on('touchstart', function(e) {
+        if (e.originalEvent.touches.length === 1) { // Single touch
+            startLongPress(e);
+        }
+    });
+
+    map.on('touchend', cancelLongPress);
+    map.on('touchcancel', cancelLongPress);
+    map.on('touchmove', function(e) {
+        if (longPressTimer && longPressPosition && e.originalEvent.touches.length === 1) {
+            var touch = e.originalEvent.touches[0];
+            var touchLatLng = map.containerPointToLatLng([touch.clientX, touch.clientY]);
+            var distance = map.distance(longPressPosition, touchLatLng);
+            if (distance > moveThreshold) {
+                cancelLongPress();
+            }
+        }
+    });
+
     // If map is in a container with dynamic size, call invalidateSize after a short delay
     setTimeout(function () { map.invalidateSize(); }, 200);
 
@@ -244,6 +357,159 @@ document.addEventListener('DOMContentLoaded', function () {
             // Placeholder actions removed - ModalManager handles showing panels/cards.
         });
     });
+    
+    // Location data query function
+    function queryLocationData(lat, lng) {
+        return new Promise(function(resolve, reject) {
+            // Use Nominatim API for reverse geocoding
+            var nominatimUrl = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&zoom=18&addressdetails=1&extratags=1&namedetails=1&accept-language=hu,en`;
+            
+            // Query both location and elevation data simultaneously
+            var nominatimPromise = fetch(nominatimUrl, {
+                headers: {
+                    'User-Agent': 'DriveWise/1.0'
+                }
+            }).then(function(response) {
+                if (!response.ok) {
+                    throw new Error('Nominatim API response was not ok');
+                }
+                return response.json();
+            });
+
+            // Query elevation data from Open Elevation API
+            var elevationUrl = `https://api.open-elevation.com/api/v1/lookup?locations=${lat},${lng}`;
+            var elevationPromise = fetch(elevationUrl)
+                .then(function(response) {
+                    if (!response.ok) {
+                        throw new Error('Elevation API response was not ok');
+                    }
+                    return response.json();
+                })
+                .catch(function() {
+                    // If elevation API fails, return null
+                    return { results: [{ elevation: null }] };
+                });
+
+            // Wait for both requests to complete
+            Promise.all([nominatimPromise, elevationPromise])
+                .then(function(results) {
+                    var locationData = results[0];
+                    var elevationData = results[1];
+                    
+                    if (locationData.error) {
+                        throw new Error(locationData.error);
+                    }
+                    
+                    var elevation = null;
+                    if (elevationData && elevationData.results && elevationData.results[0]) {
+                        elevation = elevationData.results[0].elevation;
+                    }
+                    
+                    resolve(formatLocationData(locationData, lat, lng, elevation));
+                })
+                .catch(function(error) {
+                    reject(error);
+                });
+        });
+    }
+
+    // Format location data for display
+    function formatLocationData(osmData, lat, lng, elevation) {
+        var formatted = {
+            coordinates: {
+                lat: lat,
+                lng: lng,
+                formatted: lat.toFixed(6) + ', ' + lng.toFixed(6)
+            },
+            elevation: elevation,
+            address: {},
+            details: {}
+        };
+
+        if (osmData.address) {
+            var addr = osmData.address;
+            formatted.address = {
+                display_name: osmData.display_name || 'Ismeretlen helyszín',
+                house_number: addr.house_number || '',
+                road: addr.road || addr.street || '',
+                neighbourhood: addr.neighbourhood || addr.suburb || '',
+                city: addr.city || addr.town || addr.village || '',
+                postcode: addr.postcode || '',
+                state: addr.state || '',
+                country: addr.country || ''
+            };
+        }
+
+        return formatted;
+    }
+
+    // Show location info popup
+    function showLocationInfo(locationData, position, marker) {
+        var popupContent = createLocationPopupContent(locationData);
+        
+        marker.bindPopup(popupContent, {
+            maxWidth: 300,
+            className: 'location-info-popup'
+        }).openPopup();
+
+        // Auto-remove marker after 10 seconds if popup is closed
+        marker.on('popupclose', function() {
+            setTimeout(function() {
+                if (map.hasLayer(marker)) {
+                    map.removeLayer(marker);
+                }
+            }, 10000);
+        });
+    }
+
+    // Create popup content HTML
+    function createLocationPopupContent(data) {
+        var html = '<div class="location-info">';
+        html += '<div class="location-info-header">';
+        html += '<h4 class="location-title">📍 Helyszín információ</h4>';
+        html += '</div>';
+
+        html += '<div class="location-info-content">';
+        
+        // Address information
+        if (data.address && data.address.display_name) {
+            html += '<div class="location-section">';
+            html += '<strong>Cím:</strong><br>';
+            html += '<span class="address-text">' + escapeHtml(data.address.display_name) + '</span>';
+            html += '</div>';
+        }
+
+        // Coordinates
+        html += '<div class="location-section">';
+        html += '<strong>Koordináták:</strong><br>';
+        html += '<code class="coordinates">' + data.coordinates.formatted + '</code>';
+        html += '</div>';
+
+        // Elevation information
+        if (data.elevation !== null && data.elevation !== undefined) {
+            html += '<div class="location-section">';
+            html += '<strong>Magasság:</strong><br>';
+            html += '<span class="elevation-text">' + Math.round(data.elevation) + ' méter</span>';
+            html += '</div>';
+        }
+
+        html += '</div>';
+        html += '</div>';
+
+        return html;
+    }
+
+    // Utility function to escape HTML
+    function escapeHtml(text) {
+        var map = {
+            '&': '&amp;',
+            '<': '&lt;',
+            '>': '&gt;',
+            '"': '&quot;',
+            "'": '&#039;'
+        };
+        return text.replace(/[&<>"']/g, function(m) { return map[m]; });
+    }
     
     // Ripple helper
     function uiRipple(el, ev) {
