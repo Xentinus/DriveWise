@@ -85,7 +85,11 @@
 /* Dark theme for custom position marker */
 [data-theme="dark"] .current-position-icon {
     background: #4FC3F7;
-    border-color: #2A2A2A;
+    border-color: #1E1E1E;
+}
+
+[data-theme="dark"] .current-position-icon::before {
+    background: #1E1E1E;
 }
 
 /* Long-press marker styles */
@@ -264,7 +268,7 @@
 }
 
 [data-theme="dark"] .long-press-icon {
-    border-color: #2A2A2A;
+    border-color: #1E1E1E;
 }
 
 /* Responsive adjustments for location popup */

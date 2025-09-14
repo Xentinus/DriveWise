@@ -30,7 +30,7 @@
   --color-page-bg: #121212;
   --color-surface: #1E1E1E;
   --color-text: #E0E0E0;
-  --color-muted: #9E9E9E;
+  --color-muted: #B0B0B0;
   --color-border: #333333;
 
   /* semantic */
@@ -45,6 +45,7 @@
   --bs-body-color: var(--text-default);
   --bs-primary: var(--color-primary);
   --bs-border-color: var(--border-default);
+  --bs-secondary-color: var(--color-muted);
 }
 
 html, body {
@@ -344,6 +345,46 @@ body {
     border-color: var(--color-primary);
     color: #E0E0E0;
     box-shadow: 0 0 0 0.2rem rgba(79, 195, 247, 0.25);
+}
+
+/* Enhanced dark theme text visibility */
+[data-theme="dark"] .text-muted {
+    color: var(--color-muted) !important;
+}
+
+[data-theme="dark"] small.text-muted {
+    color: var(--color-muted) !important;
+}
+
+/* Ensure optional text has sufficient contrast */
+[data-theme="dark"] .form-label small.text-muted {
+    color: #C0C0C0 !important;
+}
+
+/* Dark theme form input improvements */
+[data-theme="dark"] .form-control,
+[data-theme="dark"] .form-control:focus {
+    background-color: #3A3A3A;
+    border-color: #555555;
+    color: #E0E0E0;
+}
+
+[data-theme="dark"] .form-control:focus {
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 0.2rem rgba(79, 195, 247, 0.25);
+}
+
+/* Placeholder text in dark theme */
+[data-theme="dark"] .form-control::placeholder {
+    color: #888888;
+    opacity: 1;
+}
+
+/* Input group text (units) in dark theme */
+[data-theme="dark"] .input-group-text {
+    background-color: #3A3A3A;
+    border-color: #555555;
+    color: #B0B0B0;
 }
 
 @media (max-width: 480px) {
