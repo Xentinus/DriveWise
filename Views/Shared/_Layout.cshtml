@@ -20,9 +20,32 @@
 <body>
     <div id="map"></div>
     
-    <!-- Search bar overlay -->
-    <div class="search-overlay">
-        <div class="search-container">
+    <!-- Unified Top-Left Widget -->
+    <div class="unified-top-widget">
+        <!-- Zoom Controls -->
+        <div class="zoom-controls">
+            <button type="button" class="zoom-btn" id="zoomIn" title="Nagyítás">
+                +
+            </button>
+            <button type="button" class="zoom-btn" id="zoomOut" title="Kicsinyítés">
+                −
+            </button>
+        </div>
+        
+        <!-- Weather Widget -->
+        <div class="weather-controls">
+            <div id="weatherWidget" class="weather-widget-content">
+                <div class="weather-loading">
+                    <div class="spinner-border" role="status">
+                        <span class="visually-hidden">Betöltés...</span>
+                    </div>
+                    <span>Időjárás...</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Search Controls -->
+        <div class="search-controls">
             <div class="search-input-group">
                 <i class="bi bi-search search-icon"></i>
                 <input type="text" id="locationSearch" class="search-input" placeholder="Keresés címek között..." autocomplete="off">

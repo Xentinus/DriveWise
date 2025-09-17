@@ -22,9 +22,14 @@ class WeatherWidget {
     }
 
     createWidget() {
-        const weatherWidget = document.createElement('div');
-        weatherWidget.className = 'weather-widget';
-        weatherWidget.innerHTML = `
+        // Find the existing weather widget container in the unified widget
+        const weatherContainer = document.getElementById('weatherWidget');
+        if (!weatherContainer) {
+            console.error('Weather widget container not found');
+            return;
+        }
+        
+        weatherContainer.innerHTML = `
             <div class="weather-container">
                 <div class="weather-loading">
                     <div class="spinner-border" role="status">
@@ -35,8 +40,7 @@ class WeatherWidget {
             </div>
         `;
         
-        document.body.appendChild(weatherWidget);
-        this.widgetElement = weatherWidget;
+        this.widgetElement = weatherContainer;
     }
 
     getCurrentLocation() {
@@ -98,8 +102,6 @@ class WeatherWidget {
                 <i class="bi ${iconClass} weather-icon ${this.weatherData.condition.toLowerCase()}"></i>
                 <div class="weather-temp">${Math.round(this.weatherData.temperature)}°C</div>
             </div>
-            <div class="weather-condition">${this.weatherData.description}</div>
-            <div class="weather-location">${this.weatherData.locationName}</div>
         `;
     }
 

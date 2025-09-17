@@ -1,7 +1,9 @@
 // Initialize map when DOM is ready to ensure container size is correct
 document.addEventListener('DOMContentLoaded', function () {
     // Default to a Europe-wide view (no specific city) so users see the continent on load
-    var map = L.map('map').setView([52.0, 10.0], 5); // Europe center, slightly closer (zoom +1)
+    var map = L.map('map', {
+        zoomControl: false // Disable default zoom controls
+    }).setView([52.0, 10.0], 5); // Europe center, slightly closer (zoom +1)
     
     // Make map globally available for search functionality
     window.map = map;
@@ -443,4 +445,48 @@ document.addEventListener('DOMContentLoaded', function () {
         document.querySelectorAll('.nav-item').forEach(function (n) { n.classList.remove('active'); });
         el.classList.add('active');
     }
+    
+    // Custom zoom controls functionality
+    function setupCustomZoomControls() {
+        var zoomInBtn = document.getElementById('zoomIn');
+        var zoomOutBtn = document.getElementById('zoomOut');
+        
+        if (zoomInBtn) {
+            zoomInBtn.addEventListener('click', function() {
+                map.zoomIn();
+            });
+        }
+        
+        if (zoomOutBtn) {
+            zoomOutBtn.addEventListener('click', function() {
+                map.zoomOut();
+            });
+        }
+        
+        // Update button states based on zoom level
+        function updateZoomButtonStates() {
+            var currentZoom = map.getZoom();
+            var maxZoom = map.getMaxZoom();
+            var minZoom = map.getMinZoom();
+            
+            if (zoomInBtn) {
+                zoomInBtn.disabled = (currentZoom >= maxZoom);
+                zoomInBtn.style.opacity = (currentZoom >= maxZoom) ? '0.5' : '1';
+            }
+            
+            if (zoomOutBtn) {
+                zoomOutBtn.disabled = (currentZoom <= minZoom);
+                zoomOutBtn.style.opacity = (currentZoom <= minZoom) ? '0.5' : '1';
+            }
+        }
+        
+        // Listen to zoom changes
+        map.on('zoomend', updateZoomButtonStates);
+        
+        // Initial state
+        updateZoomButtonStates();
+    }
+    
+    // Initialize custom zoom controls
+    setupCustomZoomControls();
 });

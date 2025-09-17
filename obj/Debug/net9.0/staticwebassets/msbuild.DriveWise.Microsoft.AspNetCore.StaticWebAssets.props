@@ -48,8 +48,8 @@
       <RelatedAsset></RelatedAsset>
       <AssetTraitName></AssetTraitName>
       <AssetTraitValue></AssetTraitValue>
-      <Fingerprint>p1n4svn6ai</Fingerprint>
-      <Integrity>U0oDvN+UTm685BKxzk8DvTKROrj0+uttTF5N81eQJcs=</Integrity>
+      <Fingerprint>5lz1oplmh6</Fingerprint>
+      <Integrity>l6kuaQZHCWzb9w6kB99tgIaNVyb4G8UbGXFHBb+Ev1E=</Integrity>
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       <OriginalItemSpec>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\css\site.css'))</OriginalItemSpec>
@@ -66,8 +66,8 @@
       <RelatedAsset></RelatedAsset>
       <AssetTraitName></AssetTraitName>
       <AssetTraitValue></AssetTraitValue>
-      <Fingerprint>a05qkzias7</Fingerprint>
-      <Integrity>2jtdPcVmd1kXSy7MV4nkuKT58BrgjcE1GFA12zyLYA4=</Integrity>
+      <Fingerprint>otpep5zpfy</Fingerprint>
+      <Integrity>xCg1nuobQMqh/IzYxyBJy+s9jD89qU9NAW/qYd1Co0A=</Integrity>
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       <OriginalItemSpec>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\css\weather-widget.css'))</OriginalItemSpec>
@@ -120,8 +120,8 @@
       <RelatedAsset></RelatedAsset>
       <AssetTraitName></AssetTraitName>
       <AssetTraitValue></AssetTraitValue>
-      <Fingerprint>0i95uyf7kt</Fingerprint>
-      <Integrity>qOpT2iyRepSrmaZRrK0F4ATyUAjMh7lSL/U+vbC5Do4=</Integrity>
+      <Fingerprint>xx3smk7699</Fingerprint>
+      <Integrity>C2fX8b5wYcWtIzyHK7B6oZ1C3jJSSx/8UMyvnDBOO1c=</Integrity>
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       <OriginalItemSpec>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\js\map.js'))</OriginalItemSpec>
@@ -174,8 +174,8 @@
       <RelatedAsset></RelatedAsset>
       <AssetTraitName></AssetTraitName>
       <AssetTraitValue></AssetTraitValue>
-      <Fingerprint>g2a5nsgpsv</Fingerprint>
-      <Integrity>yJYX9Srw9weFk/bp6bKz/0K4lAUwg0wG/C9fPQ7eXwQ=</Integrity>
+      <Fingerprint>d6s4xqug5o</Fingerprint>
+      <Integrity>W0/N12VyLtLK4b7eE2xbQ6t6SBL2v7fxJYLcFxQKqwU=</Integrity>
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       <OriginalItemSpec>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\js\search.js'))</OriginalItemSpec>
@@ -228,8 +228,8 @@
       <RelatedAsset></RelatedAsset>
       <AssetTraitName></AssetTraitName>
       <AssetTraitValue></AssetTraitValue>
-      <Fingerprint>omoa6qx90a</Fingerprint>
-      <Integrity>MFnPt3xoX98u0+mDx7OSodEwX9qIKhsz3nDLGv51Kng=</Integrity>
+      <Fingerprint>w3um0bo939</Fingerprint>
+      <Integrity>FPJp4q5Lsb6YvUg+OcHjcEmgkMlbXnW1TJVyuuZoLFA=</Integrity>
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       <OriginalItemSpec>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\js\weather-widget.js'))</OriginalItemSpec>

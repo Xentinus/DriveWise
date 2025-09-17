@@ -4,6 +4,7 @@ document.addEventListener('DOMContentLoaded', function() {
     var clearButton = document.getElementById('clearSearch');
     var searchResults = document.getElementById('searchResults');
     var searchInputGroup = document.querySelector('.search-input-group');
+    var unifiedWidget = document.querySelector('.unified-top-widget');
     var searchTimeout;
     var currentSearchMarker = null;
     var selectedResultIndex = -1;
@@ -87,7 +88,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Hide results when clicking outside
     document.addEventListener('click', function(e) {
-        if (!e.target.closest('.search-container')) {
+        if (!e.target.closest('.search-container') && !e.target.closest('.unified-top-widget .search-controls')) {
             hideSearchResults();
         }
     });
@@ -127,6 +128,7 @@ document.addEventListener('DOMContentLoaded', function() {
         searchResults.innerHTML = '<div class="search-loading"><i class="bi bi-arrow-clockwise spin"></i> Keresés...</div>';
         searchResults.style.display = 'block';
         searchInputGroup.classList.add('results-visible');
+        
         // Add show class for animation after a brief delay
         setTimeout(function() {
             searchResults.classList.add('show');
@@ -138,6 +140,7 @@ document.addEventListener('DOMContentLoaded', function() {
         searchResults.innerHTML = '<div class="search-no-results">Hiba történt a keresés során</div>';
         searchResults.style.display = 'block';
         searchInputGroup.classList.add('results-visible');
+        
         setTimeout(function() {
             searchResults.classList.add('show');
         }, 10);
@@ -149,6 +152,7 @@ document.addEventListener('DOMContentLoaded', function() {
             searchResults.innerHTML = '<div class="search-no-results">Nincs találat</div>';
             searchResults.style.display = 'block';
             searchInputGroup.classList.add('results-visible');
+            
             setTimeout(function() {
                 searchResults.classList.add('show');
             }, 10);
