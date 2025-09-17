@@ -53,6 +53,24 @@
         </div>
     </div>
 
+    <p class="settings-title">Névjegy</p>
+    <div class="settings-item">
+        <div class="settings-label">Fejlesztő</div>
+        <div class="settings-value">
+            <a href="https://github.com/Xentinus" target="_blank" rel="noopener noreferrer" class="text-decoration-none">
+                <i class="bi bi-github"></i> Xentinus
+            </a>
+        </div>
+    </div>
+    <div class="settings-item">
+        <div class="settings-label">Térkép adatok</div>
+        <div class="settings-value">
+            <small class="text-muted" id="map-attribution">
+                © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">OpenStreetMap</a> contributors
+            </small>
+        </div>
+    </div>
+
 <!-- fixed extra closing div -->
 </div>
 
@@ -62,6 +80,9 @@
         console.log('[settings] init');
         // Use the global StorageManager for form element initialization
         StorageManager.initFormStorage();
+        
+        // Update map attribution text in settings
+        updateMapAttribution();
         
         // Special event dispatching for theme and unit changes
         window.addEventListener('storageChanged', function(event) {
@@ -83,6 +104,16 @@
                 }
             }
         });
+    }
+
+    function updateMapAttribution() {
+        // Get the complete attribution from map layers
+        const attributionText = '© <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">OpenStreetMap</a> contributors © <a href="https://carto.com/attributions" target="_blank" rel="noopener noreferrer">CARTO</a>';
+        
+        const attributionElement = document.getElementById('map-attribution');
+        if (attributionElement) {
+            attributionElement.innerHTML = attributionText;
+        }
     }
 
     if (document.readyState === 'loading') {

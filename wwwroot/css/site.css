@@ -356,6 +356,11 @@ body {
     }
 }
 
+/* Hide Leaflet attribution control - moved to settings */
+.leaflet-control-attribution {
+    display: none !important;
+}
+
 /* Search overlay styles */
 .search-overlay {
     position: fixed;
@@ -704,6 +709,44 @@ body {
 
 /* Button group sizing in settings */
 .settings-value .btn { min-width: 84px; }
+
+/* GitHub link styling in settings */
+.settings-value a[href*="github.com"] {
+    color: var(--color-primary);
+    transition: color 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-weight: 500;
+}
+
+.settings-value a[href*="github.com"]:hover {
+    color: var(--color-primary-dark);
+}
+
+[data-theme="dark"] .settings-value a[href*="github.com"] {
+    color: var(--color-primary);
+}
+
+[data-theme="dark"] .settings-value a[href*="github.com"]:hover {
+    color: #81C784;
+}
+
+/* Map attribution styling in settings */
+#map-attribution {
+    font-size: 0.8rem;
+    line-height: 1.3;
+    color: var(--text-muted);
+}
+
+#map-attribution a {
+    color: var(--color-primary);
+    text-decoration: none;
+}
+
+#map-attribution a:hover {
+    text-decoration: underline;
+}
 
 /* small form-select tweaks to match design */
 .form-select-sm { height: 34px; padding: 4px 8px; font-size: 0.9rem; }
