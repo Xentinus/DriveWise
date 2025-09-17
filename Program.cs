@@ -1,10 +1,17 @@
 using System.Net;
 using System.Net.Sockets;
+using DriveWise.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+// Add HTTP client for weather service
+builder.Services.AddHttpClient<IWeatherService, WeatherService>();
+
+// Register weather service
+builder.Services.AddScoped<IWeatherService, WeatherService>();
 
 // Check if URLs are already configured via launch settings
 var configuredUrls = builder.Configuration["urls"] ?? Environment.GetEnvironmentVariable("ASPNETCORE_URLS");

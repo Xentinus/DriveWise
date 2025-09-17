@@ -718,3 +718,9 @@ FodyWeavers.xsd
 # Additional files built by Visual Studio
 
 # End of https://www.toptal.com/developers/gitignore/api/visualstudio,visualstudiocode,csharp,aspnetcore
+
+# Custom additions for DriveWise project
+# Configuration files with sensitive data (API keys, connection strings, etc.)
+appsettings.json
+appsettings.*.json
+!appsettings.Example.json

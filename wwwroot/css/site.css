@@ -269,7 +269,7 @@ body {
     border-radius: 12px;
     box-shadow: 0 8px 20px rgba(10,20,30,0.08);
     overflow: hidden;
-    margin-top: 12px;
+    margin-top: 80px; /* Push down to make room for weather widget */
     margin-right: 12px;
 }
 

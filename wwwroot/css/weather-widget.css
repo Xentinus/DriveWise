@@ -1,0 +1,170 @@
+/* Weather Widget Styles */
+.weather-widget {
+    position: fixed;
+    top: 12px;
+    right: 12px;
+    z-index: 1100;
+    pointer-events: auto;
+}
+
+.weather-container {
+    background: var(--bg-card);
+    border: 1px solid var(--border-default);
+    border-radius: 12px;
+    padding: 12px 16px;
+    box-shadow: 0 8px 20px rgba(10,20,30,0.08);
+    min-width: 140px;
+    transition: all 0.2s ease;
+}
+
+.weather-container:hover {
+    box-shadow: 0 12px 30px rgba(10,20,30,0.12);
+    transform: translateY(-2px);
+}
+
+.weather-main {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 4px;
+}
+
+.weather-icon {
+    font-size: 1.5rem;
+    line-height: 1;
+}
+
+.weather-temp {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--text-default);
+    margin: 0;
+}
+
+.weather-condition {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    margin: 0;
+    text-transform: capitalize;
+    line-height: 1.2;
+}
+
+.weather-location {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    margin: 0;
+    margin-top: 2px;
+    opacity: 0.8;
+}
+
+.weather-loading {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+}
+
+.weather-loading .spinner-border {
+    width: 1rem;
+    height: 1rem;
+    border-width: 2px;
+}
+
+.weather-error {
+    color: #dc3545;
+    font-size: 0.8rem;
+    text-align: center;
+    padding: 4px 0;
+}
+
+/* Weather icons mapping using Bootstrap Icons */
+.weather-icon.clear { color: #FFD700; }
+.weather-icon.clouds { color: #6c757d; }
+.weather-icon.rain { color: #007bff; }
+.weather-icon.drizzle { color: #17a2b8; }
+.weather-icon.thunderstorm { color: #6f42c1; }
+.weather-icon.snow { color: #e9ecef; }
+.weather-icon.mist,
+.weather-icon.fog,
+.weather-icon.haze { color: #adb5bd; }
+
+/* Dark theme weather widget */
+[data-theme="dark"] .weather-container {
+    background: #2A2A2A;
+    border-color: #444444;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+}
+
+[data-theme="dark"] .weather-container:hover {
+    box-shadow: 0 12px 30px rgba(0,0,0,0.4);
+}
+
+[data-theme="dark"] .weather-temp {
+    color: #E0E0E0;
+}
+
+[data-theme="dark"] .weather-condition,
+[data-theme="dark"] .weather-location {
+    color: #B0B0B0;
+}
+
+[data-theme="dark"] .weather-loading {
+    color: #B0B0B0;
+}
+
+/* Mobile responsive adjustments */
+@media (max-width: 480px) {
+    .weather-widget {
+        top: 8px;
+        right: 8px;
+    }
+    
+    .weather-container {
+        padding: 10px 12px;
+        min-width: 120px;
+    }
+    
+    .weather-icon {
+        font-size: 1.3rem;
+    }
+    
+    .weather-temp {
+        font-size: 1.1rem;
+    }
+    
+    .weather-condition {
+        font-size: 0.7rem;
+    }
+    
+    .weather-location {
+        font-size: 0.65rem;
+    }
+}
+
+/* Extra small screens */
+@media (max-width: 360px) {
+    .weather-container {
+        min-width: 100px;
+        padding: 8px 10px;
+    }
+    
+    .weather-temp {
+        font-size: 1rem;
+    }
+    
+    .weather-icon {
+        font-size: 1.2rem;
+    }
+}
+
+/* Ensure weather widget doesn't interfere with zoom controls */
+.leaflet-control-zoom.leaflet-bar.leaflet-control {
+    margin-top: 80px; /* Push zoom controls down to avoid weather widget */
+}
+
+@media (max-width: 480px) {
+    .leaflet-control-zoom.leaflet-bar.leaflet-control {
+        margin-top: 70px;
+    }
+}
