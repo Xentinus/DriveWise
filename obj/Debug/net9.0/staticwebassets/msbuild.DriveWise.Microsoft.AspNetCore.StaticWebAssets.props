@@ -192,8 +192,8 @@
       <RelatedAsset></RelatedAsset>
       <AssetTraitName></AssetTraitName>
       <AssetTraitValue></AssetTraitValue>
-      <Fingerprint>pdykztttw5</Fingerprint>
-      <Integrity>DZLKHgtJErMuWisIGQt6qWvAivUCsHAaYsShZV01hG0=</Integrity>
+      <Fingerprint>m0imzy5wcq</Fingerprint>
+      <Integrity>SuAN9f78B1fFCmKHRcs8jNO0AsR5XLGFAif+GZzV9U0=</Integrity>
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       <OriginalItemSpec>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\js\storage-manager.js'))</OriginalItemSpec>

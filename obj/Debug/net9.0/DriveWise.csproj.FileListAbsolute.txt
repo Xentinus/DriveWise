@@ -94,7 +94,6 @@
 /Users/xentinus/Development/DriveWise/obj/Debug/net9.0/DriveWise.sourcelink.json
 /Users/xentinus/Development/DriveWise/obj/Debug/net9.0/compressed/vwjbn3ujcx-flg5hv8kpz.gz
 /Users/xentinus/Development/DriveWise/obj/Debug/net9.0/compressed/ovegg5c13r-sacrwdzndl.gz
-/Users/xentinus/Development/DriveWise/obj/Debug/net9.0/compressed/r51yfm8a9h-pdykztttw5.gz
 /Users/xentinus/Development/DriveWise/obj/Debug/net9.0/compressed/4e0blgolux-nox4gmrno5.gz
 /Users/xentinus/Development/DriveWise/obj/Debug/net9.0/compressed/0d42s9au7c-cjtpsexqmw.gz
 /Users/xentinus/Development/DriveWise/bin/Debug/net9.0/appsettings.Example.json
@@ -103,3 +102,4 @@
 /Users/xentinus/Development/DriveWise/obj/Debug/net9.0/compressed/vtd49j6uox-p9c2zewra9.gz
 /Users/xentinus/Development/DriveWise/obj/Debug/net9.0/compressed/3dp0fyxt7x-wf0eo1g14r.gz
 /Users/xentinus/Development/DriveWise/obj/Debug/net9.0/compressed/kyuhkmpkdx-y4cl5nz2gi.gz
+/Users/xentinus/Development/DriveWise/obj/Debug/net9.0/compressed/r51yfm8a9h-m0imzy5wcq.gz

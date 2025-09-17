@@ -9,7 +9,21 @@ window.StorageManager = (function() {
     function readStored(key) {
         try {
             const value = localStorage.getItem(key);
-            return value ? JSON.parse(value) : null;
+            if (value === null) return null;
+            
+            // Special handling for theme - it might be stored as plain string by ThemeManager
+            if (key === 'theme' && (value === 'light' || value === 'dark')) {
+                return value;
+            }
+            
+            // Try to parse as JSON, fallback to plain string
+            try {
+                return JSON.parse(value);
+            } catch (parseError) {
+                // If JSON parsing fails, return the raw value
+                console.log('[StorageManager] Using raw value for key:', key, 'value:', value);
+                return value;
+            }
         } catch (e) {
             console.warn('[StorageManager] readStored failed for key:', key, e);
             return null;
@@ -18,8 +32,14 @@ window.StorageManager = (function() {
 
     function writeStored(key, value) {
         try {
-            localStorage.setItem(key, JSON.stringify(value));
-            console.log('[StorageManager] write', key, value);
+            // Special handling for theme - store as plain string to be compatible with ThemeManager
+            if (key === 'theme') {
+                localStorage.setItem(key, value);
+                console.log('[StorageManager] write theme as plain string', key, value);
+            } else {
+                localStorage.setItem(key, JSON.stringify(value));
+                console.log('[StorageManager] write as JSON', key, value);
+            }
             return true;
         } catch (e) {
             console.warn('[StorageManager] writeStored failed for key:', key, e);
@@ -126,15 +146,17 @@ window.StorageManager = (function() {
                 if (!key) return;
 
                 const stored = this.get(key);
-                console.log('[StorageManager] init form element key=', key, 'stored=', stored);
+                console.log('[StorageManager] init form element key=', key, 'stored=', stored, 'current value=', el.value || el.checked);
 
                 // Initialize based on element type
                 if (el.type === 'checkbox') {
                     if (stored !== null) {
                         el.checked = stored === true || stored === '1' || stored === 'true';
+                        console.log('[StorageManager] loaded checkbox', key, '=', el.checked);
                     } else {
                         // persist default state
                         this.set(key, el.checked);
+                        console.log('[StorageManager] saved checkbox default', key, '=', el.checked);
                     }
                     el.addEventListener('change', () => {
                         const val = el.checked;
@@ -146,11 +168,17 @@ window.StorageManager = (function() {
                     if (stored !== null) {
                         try { 
                             el.value = stored; 
+                            console.log('[StorageManager] loaded select/input', key, '=', stored);
                         } catch (e) { 
                             console.warn('[StorageManager] set form value failed', key, stored); 
                         }
                     } else {
+                        // For selects, if no option is naturally selected, select the first one as default
+                        if (el.tagName === 'SELECT' && el.selectedIndex === -1) {
+                            el.selectedIndex = 0;
+                        }
                         this.set(key, el.value);
+                        console.log('[StorageManager] saved select/input default', key, '=', el.value);
                     }
                     el.addEventListener('change', () => {
                         const val = el.value;

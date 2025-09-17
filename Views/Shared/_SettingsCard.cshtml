@@ -7,7 +7,7 @@
         <div class="settings-label">Értesítések</div>
         <div class="settings-value">
             <label class="switch">
-                <input type="checkbox" data-storage-key="notifications" checked />
+                <input type="checkbox" data-storage-key="notifications" />
                 <span class="switch-slider" aria-hidden="true"></span>
             </label>
         </div>
@@ -78,8 +78,29 @@
 (function() {
     function init() {
         console.log('[settings] init');
+        
+        // Set sensible defaults before storage initialization
+        setDefaults();
+        
+        // Sync with current theme state
+        syncCurrentTheme();
+        
+        // Debug: Check what's in storage before initialization
+        console.log('[settings] Storage contents before init:');
+        console.log('[settings] theme:', StorageManager.get('theme'));
+        console.log('[settings] unit:', StorageManager.get('unit'));
+        console.log('[settings] currency:', StorageManager.get('currency'));
+        console.log('[settings] notifications:', StorageManager.get('notifications'));
+        
         // Use the global StorageManager for form element initialization
         StorageManager.initFormStorage();
+        
+        // Debug: Check what's in storage after initialization
+        console.log('[settings] Storage contents after init:');
+        console.log('[settings] theme:', StorageManager.get('theme'));
+        console.log('[settings] unit:', StorageManager.get('unit'));
+        console.log('[settings] currency:', StorageManager.get('currency'));
+        console.log('[settings] notifications:', StorageManager.get('notifications'));
         
         // Update map attribution text in settings
         updateMapAttribution();
@@ -98,10 +119,56 @@
             
             if (key === 'theme') {
                 try {
+                    // Notify ThemeManager about theme change
+                    if (window.ThemeManager) {
+                        window.ThemeManager.setTheme(value);
+                    }
                     window.dispatchEvent(new CustomEvent('themeChanged', { detail: { theme: value } }));
                 } catch (e) { 
                     console.warn('[settings] dispatch themeChanged failed', e); 
                 }
+            }
+        });
+    }
+
+    function syncCurrentTheme() {
+        // Ensure the theme select shows the actual current theme
+        if (window.ThemeManager) {
+            const currentTheme = window.ThemeManager.getCurrentTheme();
+            const themeSelect = document.getElementById('themeSelect');
+            if (themeSelect && currentTheme) {
+                themeSelect.value = currentTheme;
+                // Also update the storage to ensure consistency
+                StorageManager.set('theme', currentTheme);
+                console.log('[settings] synced current theme:', currentTheme);
+            }
+        }
+    }
+
+    function setDefaults() {
+        // Set sensible default values for form elements if none exist in storage
+        const defaults = {
+            'notifications': true,
+            'theme': 'light',
+            'unit': '0',  // Metrikus
+            'currency': 'HUF'
+        };
+
+        // Special handling for theme - get current theme from ThemeManager if available
+        if (window.ThemeManager) {
+            defaults.theme = window.ThemeManager.getCurrentTheme();
+            console.log('[settings] Using current theme from ThemeManager:', defaults.theme);
+        }
+
+        Object.keys(defaults).forEach(key => {
+            const element = document.querySelector(`[data-storage-key="${key}"]`);
+            if (element) {
+                if (element.type === 'checkbox') {
+                    element.checked = defaults[key];
+                } else {
+                    element.value = defaults[key];
+                }
+                console.log('[settings] set default for', key, '=', defaults[key]);
             }
         });
     }
