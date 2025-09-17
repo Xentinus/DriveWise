@@ -18,6 +18,21 @@
 </head>
 <body>
     <div id="map"></div>
+    
+    <!-- Search bar overlay -->
+    <div class="search-overlay">
+        <div class="search-container">
+            <div class="search-input-group">
+                <i class="bi bi-search search-icon"></i>
+                <input type="text" id="locationSearch" class="search-input" placeholder="Keresés címek között..." autocomplete="off">
+                <button type="button" id="clearSearch" class="clear-search-btn" style="display: none;">
+                    <i class="bi bi-x"></i>
+                </button>
+            </div>
+            <div id="searchResults" class="search-results" style="display: none;"></div>
+        </div>
+    </div>
+    
     @RenderBody()
 
     <!-- Button-nav v2: centered, modern, responsive -->
@@ -54,6 +69,7 @@
     <script src="~/js/storage-manager.js" asp-append-version="true"></script>
     <script src="~/js/theme-manager.js" asp-append-version="true"></script>
     <script src="~/js/map.js" asp-append-version="true"></script>
+    <script src="~/js/search.js" asp-append-version="true"></script>
     <script src="~/js/bottom-nav.js" asp-append-version="true"></script>
     <script src="~/js/modal-manager.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)

@@ -2,6 +2,9 @@
 document.addEventListener('DOMContentLoaded', function () {
     // Default to a Europe-wide view (no specific city) so users see the continent on load
     var map = L.map('map').setView([52.0, 10.0], 5); // Europe center, slightly closer (zoom +1)
+    
+    // Make map globally available for search functionality
+    window.map = map;
 
     // Define light and dark tile layers
     var lightLayer = L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {

@@ -33,6 +33,10 @@
       "PackagePath": "staticwebassets/js/modal-manager.js"
     },
     {
+      "Id": "/Users/xentinus/Development/DriveWise/wwwroot/js/search.js",
+      "PackagePath": "staticwebassets/js/search.js"
+    },
+    {
       "Id": "/Users/xentinus/Development/DriveWise/wwwroot/js/storage-manager.js",
       "PackagePath": "staticwebassets/js/storage-manager.js"
     },
