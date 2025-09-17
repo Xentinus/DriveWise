@@ -97,6 +97,13 @@
     flex: 1;
 }
 
+/* Tablet and larger screens - reduce search field width to 65% */
+@media (min-width: 769px) {
+    .unified-top-widget .search-controls {
+        min-width: 364px; /* 65% of original 560px */
+    }
+}
+
 /* Dark theme for unified widget */
 [data-theme="dark"] .unified-top-widget {
     background: #2A2A2A;
@@ -117,8 +124,44 @@
     color: #4FC3F7;
 }
 
-/* Mobile responsive adjustments */
-@media (max-width: 768px) {
+/* Tablet responsive adjustments - proportional width instead of full width */
+@media (min-width: 481px) and (max-width: 768px) {
+    .unified-top-widget {
+        top: 8px;
+        left: 8px;
+        padding: 4px;
+        gap: 4px;
+        width: auto; /* Let content determine width */
+        max-width: 600px; /* Reasonable maximum for tablets */
+    }
+    
+    .unified-top-widget .zoom-controls {
+        padding: 1px;
+        flex-direction: row;
+        min-width: auto;
+    }
+    
+    .unified-top-widget .zoom-controls .zoom-btn {
+        width: 26px;
+        height: 26px;
+        font-size: 14px;
+        margin: 0 1px;
+    }
+    
+    .unified-top-widget .weather-controls {
+        min-width: 100px;
+        padding: 2px 4px;
+    }
+    
+    .unified-top-widget .search-controls {
+        min-width: 280px; /* Proportional size for tablets */
+        flex: 0; /* Don't expand to fill */
+        width: auto;
+    }
+}
+
+/* Mobile responsive adjustments - full width for small screens */
+@media (max-width: 480px) {
     .unified-top-widget {
         top: 8px;
         left: 8px;
