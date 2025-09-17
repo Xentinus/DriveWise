@@ -99,4 +99,6 @@
 /Users/xentinus/Development/DriveWise/obj/Debug/net9.0/compressed/0d42s9au7c-cjtpsexqmw.gz
 /Users/xentinus/Development/DriveWise/obj/Debug/net9.0/compressed/vtd49j6uox-0i95uyf7kt.gz
 /Users/xentinus/Development/DriveWise/obj/Debug/net9.0/compressed/3dp0fyxt7x-g2a5nsgpsv.gz
-/Users/xentinus/Development/DriveWise/obj/Debug/net9.0/compressed/kyuhkmpkdx-l2o2zh88el.gz
+/Users/xentinus/Development/DriveWise/obj/Debug/net9.0/compressed/9j4e8y8tu7-a05qkzias7.gz
+/Users/xentinus/Development/DriveWise/obj/Debug/net9.0/compressed/qldwkne2gx-omoa6qx90a.gz
+/Users/xentinus/Development/DriveWise/obj/Debug/net9.0/compressed/kyuhkmpkdx-p1n4svn6ai.gz

@@ -605,7 +605,7 @@
         {
           "Name": "Content-Encoding",
           "Value": "gzip",
-          "Quality": "0.000190005700"
+          "Quality": "0.000189107413"
         }
       ],
       "ResponseHeaders": [
@@ -623,7 +623,7 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "5262"
+          "Value": "5287"
         },
         {
           "Name": "Content-Type",
@@ -631,15 +631,15 @@
         },
         {
           "Name": "ETag",
-          "Value": "\"jMIwwsA8k3NG/F8awM9Bmmd5O18MJjJFqSlGQCdQ1Cw=\""
+          "Value": "\"gmXw59iMmONsJ5q8leGESmfS1S+Id5XmJrB3ZWHGkUA=\""
         },
         {
           "Name": "ETag",
-          "Value": "W/\"o7JrvGvCVYrXrUV/RsNFWQB0WKRbX8Q7Mnzb9iBvNmg=\""
+          "Value": "W/\"U0oDvN+UTm685BKxzk8DvTKROrj0+uttTF5N81eQJcs=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Wed, 17 Sep 2025 17:47:13 GMT"
+          "Value": "Wed, 17 Sep 2025 18:07:01 GMT"
         },
         {
           "Name": "Vary",
@@ -649,7 +649,7 @@
       "EndpointProperties": [
         {
           "Name": "integrity",
-          "Value": "sha256-o7JrvGvCVYrXrUV/RsNFWQB0WKRbX8Q7Mnzb9iBvNmg="
+          "Value": "sha256-U0oDvN+UTm685BKxzk8DvTKROrj0+uttTF5N81eQJcs="
         }
       ]
     },
@@ -668,7 +668,7 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "22939"
+          "Value": "22987"
         },
         {
           "Name": "Content-Type",
@@ -676,17 +676,17 @@
         },
         {
           "Name": "ETag",
-          "Value": "\"o7JrvGvCVYrXrUV/RsNFWQB0WKRbX8Q7Mnzb9iBvNmg=\""
+          "Value": "\"U0oDvN+UTm685BKxzk8DvTKROrj0+uttTF5N81eQJcs=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Wed, 17 Sep 2025 17:47:13 GMT"
+          "Value": "Wed, 17 Sep 2025 18:07:01 GMT"
         }
       ],
       "EndpointProperties": [
         {
           "Name": "integrity",
-          "Value": "sha256-o7JrvGvCVYrXrUV/RsNFWQB0WKRbX8Q7Mnzb9iBvNmg="
+          "Value": "sha256-U0oDvN+UTm685BKxzk8DvTKROrj0+uttTF5N81eQJcs="
         }
       ]
     },
@@ -709,7 +709,7 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "5262"
+          "Value": "5287"
         },
         {
           "Name": "Content-Type",
@@ -717,11 +717,11 @@
         },
         {
           "Name": "ETag",
-          "Value": "\"jMIwwsA8k3NG/F8awM9Bmmd5O18MJjJFqSlGQCdQ1Cw=\""
+          "Value": "\"gmXw59iMmONsJ5q8leGESmfS1S+Id5XmJrB3ZWHGkUA=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Wed, 17 Sep 2025 17:47:13 GMT"
+          "Value": "Wed, 17 Sep 2025 18:07:01 GMT"
         },
         {
           "Name": "Vary",
@@ -731,18 +731,18 @@
       "EndpointProperties": [
         {
           "Name": "integrity",
-          "Value": "sha256-jMIwwsA8k3NG/F8awM9Bmmd5O18MJjJFqSlGQCdQ1Cw="
+          "Value": "sha256-gmXw59iMmONsJ5q8leGESmfS1S+Id5XmJrB3ZWHGkUA="
         }
       ]
     },
     {
-      "Route": "css/site.l2o2zh88el.css",
+      "Route": "css/site.p1n4svn6ai.css",
       "AssetFile": "css/site.css.gz",
       "Selectors": [
         {
           "Name": "Content-Encoding",
           "Value": "gzip",
-          "Quality": "0.000190005700"
+          "Quality": "0.000189107413"
         }
       ],
       "ResponseHeaders": [
@@ -760,7 +760,7 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "5262"
+          "Value": "5287"
         },
         {
           "Name": "Content-Type",
@@ -768,15 +768,15 @@
         },
         {
           "Name": "ETag",
-          "Value": "\"jMIwwsA8k3NG/F8awM9Bmmd5O18MJjJFqSlGQCdQ1Cw=\""
+          "Value": "\"gmXw59iMmONsJ5q8leGESmfS1S+Id5XmJrB3ZWHGkUA=\""
         },
         {
           "Name": "ETag",
-          "Value": "W/\"o7JrvGvCVYrXrUV/RsNFWQB0WKRbX8Q7Mnzb9iBvNmg=\""
+          "Value": "W/\"U0oDvN+UTm685BKxzk8DvTKROrj0+uttTF5N81eQJcs=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Wed, 17 Sep 2025 17:47:13 GMT"
+          "Value": "Wed, 17 Sep 2025 18:07:01 GMT"
         },
         {
           "Name": "Vary",
@@ -786,11 +786,11 @@
       "EndpointProperties": [
         {
           "Name": "fingerprint",
-          "Value": "l2o2zh88el"
+          "Value": "p1n4svn6ai"
         },
         {
           "Name": "integrity",
-          "Value": "sha256-o7JrvGvCVYrXrUV/RsNFWQB0WKRbX8Q7Mnzb9iBvNmg="
+          "Value": "sha256-U0oDvN+UTm685BKxzk8DvTKROrj0+uttTF5N81eQJcs="
         },
         {
           "Name": "label",
@@ -799,7 +799,7 @@
       ]
     },
     {
-      "Route": "css/site.l2o2zh88el.css",
+      "Route": "css/site.p1n4svn6ai.css",
       "AssetFile": "css/site.css",
       "Selectors": [],
       "ResponseHeaders": [
@@ -813,7 +813,7 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "22939"
+          "Value": "22987"
         },
         {
           "Name": "Content-Type",
@@ -821,21 +821,21 @@
         },
         {
           "Name": "ETag",
-          "Value": "\"o7JrvGvCVYrXrUV/RsNFWQB0WKRbX8Q7Mnzb9iBvNmg=\""
+          "Value": "\"U0oDvN+UTm685BKxzk8DvTKROrj0+uttTF5N81eQJcs=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Wed, 17 Sep 2025 17:47:13 GMT"
+          "Value": "Wed, 17 Sep 2025 18:07:01 GMT"
         }
       ],
       "EndpointProperties": [
         {
           "Name": "fingerprint",
-          "Value": "l2o2zh88el"
+          "Value": "p1n4svn6ai"
         },
         {
           "Name": "integrity",
-          "Value": "sha256-o7JrvGvCVYrXrUV/RsNFWQB0WKRbX8Q7Mnzb9iBvNmg="
+          "Value": "sha256-U0oDvN+UTm685BKxzk8DvTKROrj0+uttTF5N81eQJcs="
         },
         {
           "Name": "label",
@@ -844,7 +844,7 @@
       ]
     },
     {
-      "Route": "css/site.l2o2zh88el.css.gz",
+      "Route": "css/site.p1n4svn6ai.css.gz",
       "AssetFile": "css/site.css.gz",
       "Selectors": [],
       "ResponseHeaders": [
@@ -862,7 +862,7 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "5262"
+          "Value": "5287"
         },
         {
           "Name": "Content-Type",
@@ -870,11 +870,11 @@
         },
         {
           "Name": "ETag",
-          "Value": "\"jMIwwsA8k3NG/F8awM9Bmmd5O18MJjJFqSlGQCdQ1Cw=\""
+          "Value": "\"gmXw59iMmONsJ5q8leGESmfS1S+Id5XmJrB3ZWHGkUA=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Wed, 17 Sep 2025 17:47:13 GMT"
+          "Value": "Wed, 17 Sep 2025 18:07:01 GMT"
         },
         {
           "Name": "Vary",
@@ -884,15 +884,313 @@
       "EndpointProperties": [
         {
           "Name": "fingerprint",
-          "Value": "l2o2zh88el"
+          "Value": "p1n4svn6ai"
         },
         {
           "Name": "integrity",
-          "Value": "sha256-jMIwwsA8k3NG/F8awM9Bmmd5O18MJjJFqSlGQCdQ1Cw="
+          "Value": "sha256-gmXw59iMmONsJ5q8leGESmfS1S+Id5XmJrB3ZWHGkUA="
         },
         {
           "Name": "label",
           "Value": "css/site.css.gz"
+        }
+      ]
+    },
+    {
+      "Route": "css/weather-widget.a05qkzias7.css",
+      "AssetFile": "css/weather-widget.css.gz",
+      "Selectors": [
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip",
+          "Quality": "0.000980392157"
+        }
+      ],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        },
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "1019"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/css"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"WbNnLmkp5cxnnfehB1DW2ZcaEpIS+nsbQuSduXW/hXk=\""
+        },
+        {
+          "Name": "ETag",
+          "Value": "W/\"2jtdPcVmd1kXSy7MV4nkuKT58BrgjcE1GFA12zyLYA4=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Wed, 17 Sep 2025 18:03:23 GMT"
+        },
+        {
+          "Name": "Vary",
+          "Value": "Content-Encoding"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "a05qkzias7"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-2jtdPcVmd1kXSy7MV4nkuKT58BrgjcE1GFA12zyLYA4="
+        },
+        {
+          "Name": "label",
+          "Value": "css/weather-widget.css"
+        }
+      ]
+    },
+    {
+      "Route": "css/weather-widget.a05qkzias7.css",
+      "AssetFile": "css/weather-widget.css",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "3298"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/css"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"2jtdPcVmd1kXSy7MV4nkuKT58BrgjcE1GFA12zyLYA4=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Wed, 17 Sep 2025 18:03:23 GMT"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "a05qkzias7"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-2jtdPcVmd1kXSy7MV4nkuKT58BrgjcE1GFA12zyLYA4="
+        },
+        {
+          "Name": "label",
+          "Value": "css/weather-widget.css"
+        }
+      ]
+    },
+    {
+      "Route": "css/weather-widget.a05qkzias7.css.gz",
+      "AssetFile": "css/weather-widget.css.gz",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        },
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "1019"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/css"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"WbNnLmkp5cxnnfehB1DW2ZcaEpIS+nsbQuSduXW/hXk=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Wed, 17 Sep 2025 18:03:23 GMT"
+        },
+        {
+          "Name": "Vary",
+          "Value": "Content-Encoding"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "a05qkzias7"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-WbNnLmkp5cxnnfehB1DW2ZcaEpIS+nsbQuSduXW/hXk="
+        },
+        {
+          "Name": "label",
+          "Value": "css/weather-widget.css.gz"
+        }
+      ]
+    },
+    {
+      "Route": "css/weather-widget.css",
+      "AssetFile": "css/weather-widget.css.gz",
+      "Selectors": [
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip",
+          "Quality": "0.000980392157"
+        }
+      ],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        },
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "1019"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/css"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"WbNnLmkp5cxnnfehB1DW2ZcaEpIS+nsbQuSduXW/hXk=\""
+        },
+        {
+          "Name": "ETag",
+          "Value": "W/\"2jtdPcVmd1kXSy7MV4nkuKT58BrgjcE1GFA12zyLYA4=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Wed, 17 Sep 2025 18:03:23 GMT"
+        },
+        {
+          "Name": "Vary",
+          "Value": "Content-Encoding"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-2jtdPcVmd1kXSy7MV4nkuKT58BrgjcE1GFA12zyLYA4="
+        }
+      ]
+    },
+    {
+      "Route": "css/weather-widget.css",
+      "AssetFile": "css/weather-widget.css",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "3298"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/css"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"2jtdPcVmd1kXSy7MV4nkuKT58BrgjcE1GFA12zyLYA4=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Wed, 17 Sep 2025 18:03:23 GMT"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-2jtdPcVmd1kXSy7MV4nkuKT58BrgjcE1GFA12zyLYA4="
+        }
+      ]
+    },
+    {
+      "Route": "css/weather-widget.css.gz",
+      "AssetFile": "css/weather-widget.css.gz",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        },
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "1019"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/css"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"WbNnLmkp5cxnnfehB1DW2ZcaEpIS+nsbQuSduXW/hXk=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Wed, 17 Sep 2025 18:03:23 GMT"
+        },
+        {
+          "Name": "Vary",
+          "Value": "Content-Encoding"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-WbNnLmkp5cxnnfehB1DW2ZcaEpIS+nsbQuSduXW/hXk="
         }
       ]
     },
@@ -3277,6 +3575,304 @@
         {
           "Name": "label",
           "Value": "js/theme-manager.js.gz"
+        }
+      ]
+    },
+    {
+      "Route": "js/weather-widget.js",
+      "AssetFile": "js/weather-widget.js.gz",
+      "Selectors": [
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip",
+          "Quality": "0.000643500644"
+        }
+      ],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        },
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "1553"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/javascript"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"O3RY9BFMqDIeJbi026jDWM3ttIYtLexw72zOExj8k6Q=\""
+        },
+        {
+          "Name": "ETag",
+          "Value": "W/\"MFnPt3xoX98u0+mDx7OSodEwX9qIKhsz3nDLGv51Kng=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Wed, 17 Sep 2025 18:03:44 GMT"
+        },
+        {
+          "Name": "Vary",
+          "Value": "Content-Encoding"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-MFnPt3xoX98u0+mDx7OSodEwX9qIKhsz3nDLGv51Kng="
+        }
+      ]
+    },
+    {
+      "Route": "js/weather-widget.js",
+      "AssetFile": "js/weather-widget.js",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "5222"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/javascript"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"MFnPt3xoX98u0+mDx7OSodEwX9qIKhsz3nDLGv51Kng=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Wed, 17 Sep 2025 18:03:44 GMT"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-MFnPt3xoX98u0+mDx7OSodEwX9qIKhsz3nDLGv51Kng="
+        }
+      ]
+    },
+    {
+      "Route": "js/weather-widget.js.gz",
+      "AssetFile": "js/weather-widget.js.gz",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        },
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "1553"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/javascript"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"O3RY9BFMqDIeJbi026jDWM3ttIYtLexw72zOExj8k6Q=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Wed, 17 Sep 2025 18:03:44 GMT"
+        },
+        {
+          "Name": "Vary",
+          "Value": "Content-Encoding"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-O3RY9BFMqDIeJbi026jDWM3ttIYtLexw72zOExj8k6Q="
+        }
+      ]
+    },
+    {
+      "Route": "js/weather-widget.omoa6qx90a.js",
+      "AssetFile": "js/weather-widget.js.gz",
+      "Selectors": [
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip",
+          "Quality": "0.000643500644"
+        }
+      ],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        },
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "1553"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/javascript"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"O3RY9BFMqDIeJbi026jDWM3ttIYtLexw72zOExj8k6Q=\""
+        },
+        {
+          "Name": "ETag",
+          "Value": "W/\"MFnPt3xoX98u0+mDx7OSodEwX9qIKhsz3nDLGv51Kng=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Wed, 17 Sep 2025 18:03:44 GMT"
+        },
+        {
+          "Name": "Vary",
+          "Value": "Content-Encoding"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "omoa6qx90a"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-MFnPt3xoX98u0+mDx7OSodEwX9qIKhsz3nDLGv51Kng="
+        },
+        {
+          "Name": "label",
+          "Value": "js/weather-widget.js"
+        }
+      ]
+    },
+    {
+      "Route": "js/weather-widget.omoa6qx90a.js",
+      "AssetFile": "js/weather-widget.js",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "5222"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/javascript"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"MFnPt3xoX98u0+mDx7OSodEwX9qIKhsz3nDLGv51Kng=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Wed, 17 Sep 2025 18:03:44 GMT"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "omoa6qx90a"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-MFnPt3xoX98u0+mDx7OSodEwX9qIKhsz3nDLGv51Kng="
+        },
+        {
+          "Name": "label",
+          "Value": "js/weather-widget.js"
+        }
+      ]
+    },
+    {
+      "Route": "js/weather-widget.omoa6qx90a.js.gz",
+      "AssetFile": "js/weather-widget.js.gz",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        },
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "1553"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "text/javascript"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"O3RY9BFMqDIeJbi026jDWM3ttIYtLexw72zOExj8k6Q=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Wed, 17 Sep 2025 18:03:44 GMT"
+        },
+        {
+          "Name": "Vary",
+          "Value": "Content-Encoding"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "omoa6qx90a"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-O3RY9BFMqDIeJbi026jDWM3ttIYtLexw72zOExj8k6Q="
+        },
+        {
+          "Name": "label",
+          "Value": "js/weather-widget.js.gz"
         }
       ]
     },

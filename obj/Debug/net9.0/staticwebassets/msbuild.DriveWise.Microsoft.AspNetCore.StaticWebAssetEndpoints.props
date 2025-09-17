@@ -27,14 +27,26 @@
     <StaticWebAssetEndpoint Include="_content/DriveWise/css/site.css">
       <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\css\site.css'))</AssetFile>
       <Selectors><![CDATA[[]]]></Selectors>
-      <EndpointProperties><![CDATA[[{"Name":"integrity","Value":"sha256-o7JrvGvCVYrXrUV/RsNFWQB0WKRbX8Q7Mnzb9iBvNmg="}]]]></EndpointProperties>
-      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"no-cache"},{"Name":"Content-Length","Value":"22939"},{"Name":"Content-Type","Value":"text/css"},{"Name":"ETag","Value":"\u0022o7JrvGvCVYrXrUV/RsNFWQB0WKRbX8Q7Mnzb9iBvNmg=\u0022"},{"Name":"Last-Modified","Value":"Wed, 17 Sep 2025 17:47:13 GMT"}]]]></ResponseHeaders>
+      <EndpointProperties><![CDATA[[{"Name":"integrity","Value":"sha256-U0oDvN\u002BUTm685BKxzk8DvTKROrj0\u002ButtTF5N81eQJcs="}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"no-cache"},{"Name":"Content-Length","Value":"22987"},{"Name":"Content-Type","Value":"text/css"},{"Name":"ETag","Value":"\u0022U0oDvN\u002BUTm685BKxzk8DvTKROrj0\u002ButtTF5N81eQJcs=\u0022"},{"Name":"Last-Modified","Value":"Wed, 17 Sep 2025 18:07:01 GMT"}]]]></ResponseHeaders>
     </StaticWebAssetEndpoint>
-    <StaticWebAssetEndpoint Include="_content/DriveWise/css/site.l2o2zh88el.css">
+    <StaticWebAssetEndpoint Include="_content/DriveWise/css/site.p1n4svn6ai.css">
       <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\css\site.css'))</AssetFile>
       <Selectors><![CDATA[[]]]></Selectors>
-      <EndpointProperties><![CDATA[[{"Name":"fingerprint","Value":"l2o2zh88el"},{"Name":"integrity","Value":"sha256-o7JrvGvCVYrXrUV/RsNFWQB0WKRbX8Q7Mnzb9iBvNmg="},{"Name":"label","Value":"_content/DriveWise/css/site.css"}]]]></EndpointProperties>
-      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=31536000, immutable"},{"Name":"Content-Length","Value":"22939"},{"Name":"Content-Type","Value":"text/css"},{"Name":"ETag","Value":"\u0022o7JrvGvCVYrXrUV/RsNFWQB0WKRbX8Q7Mnzb9iBvNmg=\u0022"},{"Name":"Last-Modified","Value":"Wed, 17 Sep 2025 17:47:13 GMT"}]]]></ResponseHeaders>
+      <EndpointProperties><![CDATA[[{"Name":"fingerprint","Value":"p1n4svn6ai"},{"Name":"integrity","Value":"sha256-U0oDvN\u002BUTm685BKxzk8DvTKROrj0\u002ButtTF5N81eQJcs="},{"Name":"label","Value":"_content/DriveWise/css/site.css"}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=31536000, immutable"},{"Name":"Content-Length","Value":"22987"},{"Name":"Content-Type","Value":"text/css"},{"Name":"ETag","Value":"\u0022U0oDvN\u002BUTm685BKxzk8DvTKROrj0\u002ButtTF5N81eQJcs=\u0022"},{"Name":"Last-Modified","Value":"Wed, 17 Sep 2025 18:07:01 GMT"}]]]></ResponseHeaders>
+    </StaticWebAssetEndpoint>
+    <StaticWebAssetEndpoint Include="_content/DriveWise/css/weather-widget.a05qkzias7.css">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\css\weather-widget.css'))</AssetFile>
+      <Selectors><![CDATA[[]]]></Selectors>
+      <EndpointProperties><![CDATA[[{"Name":"fingerprint","Value":"a05qkzias7"},{"Name":"integrity","Value":"sha256-2jtdPcVmd1kXSy7MV4nkuKT58BrgjcE1GFA12zyLYA4="},{"Name":"label","Value":"_content/DriveWise/css/weather-widget.css"}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=31536000, immutable"},{"Name":"Content-Length","Value":"3298"},{"Name":"Content-Type","Value":"text/css"},{"Name":"ETag","Value":"\u00222jtdPcVmd1kXSy7MV4nkuKT58BrgjcE1GFA12zyLYA4=\u0022"},{"Name":"Last-Modified","Value":"Wed, 17 Sep 2025 18:03:23 GMT"}]]]></ResponseHeaders>
+    </StaticWebAssetEndpoint>
+    <StaticWebAssetEndpoint Include="_content/DriveWise/css/weather-widget.css">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\css\weather-widget.css'))</AssetFile>
+      <Selectors><![CDATA[[]]]></Selectors>
+      <EndpointProperties><![CDATA[[{"Name":"integrity","Value":"sha256-2jtdPcVmd1kXSy7MV4nkuKT58BrgjcE1GFA12zyLYA4="}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"no-cache"},{"Name":"Content-Length","Value":"3298"},{"Name":"Content-Type","Value":"text/css"},{"Name":"ETag","Value":"\u00222jtdPcVmd1kXSy7MV4nkuKT58BrgjcE1GFA12zyLYA4=\u0022"},{"Name":"Last-Modified","Value":"Wed, 17 Sep 2025 18:03:23 GMT"}]]]></ResponseHeaders>
     </StaticWebAssetEndpoint>
     <StaticWebAssetEndpoint Include="_content/DriveWise/favicon.61n19gt1b8.ico">
       <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\favicon.ico'))</AssetFile>
@@ -131,6 +143,18 @@
       <Selectors><![CDATA[[]]]></Selectors>
       <EndpointProperties><![CDATA[[{"Name":"fingerprint","Value":"sacrwdzndl"},{"Name":"integrity","Value":"sha256-/CRWcoSMwXWyeio6c1nn\u002B875G8KsvS9x8X6jomde4XE="},{"Name":"label","Value":"_content/DriveWise/js/theme-manager.js"}]]]></EndpointProperties>
       <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=31536000, immutable"},{"Name":"Content-Length","Value":"2981"},{"Name":"Content-Type","Value":"text/javascript"},{"Name":"ETag","Value":"\u0022/CRWcoSMwXWyeio6c1nn\u002B875G8KsvS9x8X6jomde4XE=\u0022"},{"Name":"Last-Modified","Value":"Sun, 14 Sep 2025 12:48:01 GMT"}]]]></ResponseHeaders>
+    </StaticWebAssetEndpoint>
+    <StaticWebAssetEndpoint Include="_content/DriveWise/js/weather-widget.js">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\js\weather-widget.js'))</AssetFile>
+      <Selectors><![CDATA[[]]]></Selectors>
+      <EndpointProperties><![CDATA[[{"Name":"integrity","Value":"sha256-MFnPt3xoX98u0\u002BmDx7OSodEwX9qIKhsz3nDLGv51Kng="}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"no-cache"},{"Name":"Content-Length","Value":"5222"},{"Name":"Content-Type","Value":"text/javascript"},{"Name":"ETag","Value":"\u0022MFnPt3xoX98u0\u002BmDx7OSodEwX9qIKhsz3nDLGv51Kng=\u0022"},{"Name":"Last-Modified","Value":"Wed, 17 Sep 2025 18:03:44 GMT"}]]]></ResponseHeaders>
+    </StaticWebAssetEndpoint>
+    <StaticWebAssetEndpoint Include="_content/DriveWise/js/weather-widget.omoa6qx90a.js">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\js\weather-widget.js'))</AssetFile>
+      <Selectors><![CDATA[[]]]></Selectors>
+      <EndpointProperties><![CDATA[[{"Name":"fingerprint","Value":"omoa6qx90a"},{"Name":"integrity","Value":"sha256-MFnPt3xoX98u0\u002BmDx7OSodEwX9qIKhsz3nDLGv51Kng="},{"Name":"label","Value":"_content/DriveWise/js/weather-widget.js"}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=31536000, immutable"},{"Name":"Content-Length","Value":"5222"},{"Name":"Content-Type","Value":"text/javascript"},{"Name":"ETag","Value":"\u0022MFnPt3xoX98u0\u002BmDx7OSodEwX9qIKhsz3nDLGv51Kng=\u0022"},{"Name":"Last-Modified","Value":"Wed, 17 Sep 2025 18:03:44 GMT"}]]]></ResponseHeaders>
     </StaticWebAssetEndpoint>
     <StaticWebAssetEndpoint Include="_content/DriveWise/lib/bootstrap/dist/css/bootstrap-grid.bqjiyaj88i.css">
       <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\lib\bootstrap\dist\css\bootstrap-grid.css'))</AssetFile>
