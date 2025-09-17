@@ -101,14 +101,10 @@ document.addEventListener('DOMContentLoaded', function() {
         
         showSearchLoading();
         
-        // Use Nominatim API for geocoding
-        var nominatimUrl = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&limit=5&countrycodes=HU&addressdetails=1&extratags=1&namedetails=1&accept-language=hu,en`;
+        // Use our local API instead of direct Nominatim calls
+        var searchUrl = `/api/location/search?q=${encodeURIComponent(query)}&limit=5`;
         
-        fetch(nominatimUrl, {
-            headers: {
-                'User-Agent': 'DriveWise/1.0'
-            }
-        })
+        fetch(searchUrl)
         .then(function(response) {
             if (!response.ok) {
                 throw new Error('Search API response was not ok');
@@ -116,7 +112,24 @@ document.addEventListener('DOMContentLoaded', function() {
             return response.json();
         })
         .then(function(results) {
-            displaySearchResults(results);
+            // Convert our API response format to match the expected format
+            var convertedResults = results.map(function(result) {
+                return {
+                    display_name: result.displayName,
+                    lat: result.latitude.toString(),
+                    lon: result.longitude.toString(),
+                    address: result.address ? {
+                        house_number: result.address.houseNumber,
+                        road: result.address.road,
+                        neighbourhood: result.address.neighbourhood,
+                        city: result.address.city,
+                        postcode: result.address.postcode,
+                        state: result.address.state,
+                        country: result.address.country
+                    } : {}
+                };
+            });
+            displaySearchResults(convertedResults);
         })
         .catch(function(error) {
             console.error('Search error:', error);
@@ -284,47 +297,39 @@ document.addEventListener('DOMContentLoaded', function() {
     
     function queryLocationData(lat, lng) {
         return new Promise(function(resolve, reject) {
-            // Use the same location query function as in map.js
-            var nominatimUrl = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&zoom=18&addressdetails=1&extratags=1&namedetails=1&accept-language=hu,en`;
+            // Use our local API for location details
+            var detailsUrl = `/api/location/details?lat=${lat}&lon=${lng}`;
             
-            var nominatimPromise = fetch(nominatimUrl, {
-                headers: {
-                    'User-Agent': 'DriveWise/1.0'
-                }
-            }).then(function(response) {
-                if (!response.ok) {
-                    throw new Error('Nominatim API response was not ok');
-                }
-                return response.json();
-            });
-
-            var elevationUrl = `https://api.open-elevation.com/api/v1/lookup?locations=${lat},${lng}`;
-            var elevationPromise = fetch(elevationUrl)
+            fetch(detailsUrl)
                 .then(function(response) {
                     if (!response.ok) {
-                        throw new Error('Elevation API response was not ok');
+                        throw new Error('Location details API response was not ok');
                     }
                     return response.json();
                 })
-                .catch(function() {
-                    return { results: [{ elevation: null }] };
-                });
-
-            Promise.all([nominatimPromise, elevationPromise])
-                .then(function(results) {
-                    var locationData = results[0];
-                    var elevationData = results[1];
+                .then(function(result) {
+                    // Convert our API response to the expected format
+                    var locationData = {
+                        coordinates: {
+                            lat: lat,
+                            lng: lng,
+                            formatted: lat.toFixed(6) + ', ' + lng.toFixed(6)
+                        },
+                        elevation: result.elevation,
+                        address: {
+                            display_name: result.displayName || 'Ismeretlen helyszín',
+                            house_number: result.address?.houseNumber || '',
+                            road: result.address?.road || '',
+                            neighbourhood: result.address?.neighbourhood || '',
+                            city: result.address?.city || '',
+                            postcode: result.address?.postcode || '',
+                            state: result.address?.state || '',
+                            country: result.address?.country || ''
+                        },
+                        details: {}
+                    };
                     
-                    if (locationData.error) {
-                        throw new Error(locationData.error);
-                    }
-                    
-                    var elevation = null;
-                    if (elevationData && elevationData.results && elevationData.results[0]) {
-                        elevation = elevationData.results[0].elevation;
-                    }
-                    
-                    resolve(formatLocationData(locationData, lat, lng, elevation));
+                    resolve(locationData);
                 })
                 .catch(function(error) {
                     reject(error);

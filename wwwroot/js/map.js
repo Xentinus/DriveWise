@@ -276,51 +276,20 @@ document.addEventListener('DOMContentLoaded', function () {
     // Location data query function
     function queryLocationData(lat, lng) {
         return new Promise(function(resolve, reject) {
-            // Use Nominatim API for reverse geocoding
-            var nominatimUrl = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&zoom=18&addressdetails=1&extratags=1&namedetails=1&accept-language=hu,en`;
+            // Use our local API for location details
+            var detailsUrl = `/api/location/details?lat=${lat}&lon=${lng}`;
             
-            // Query both location and elevation data simultaneously
-            var nominatimPromise = fetch(nominatimUrl, {
-                headers: {
-                    'User-Agent': 'DriveWise/1.0'
-                }
-            }).then(function(response) {
-                if (!response.ok) {
-                    throw new Error('Nominatim API response was not ok');
-                }
-                return response.json();
-            });
-
-            // Query elevation data from Open Elevation API
-            var elevationUrl = `https://api.open-elevation.com/api/v1/lookup?locations=${lat},${lng}`;
-            var elevationPromise = fetch(elevationUrl)
+            fetch(detailsUrl)
                 .then(function(response) {
                     if (!response.ok) {
-                        throw new Error('Elevation API response was not ok');
+                        throw new Error('Location details API response was not ok');
                     }
                     return response.json();
                 })
-                .catch(function() {
-                    // If elevation API fails, return null
-                    return { results: [{ elevation: null }] };
-                });
-
-            // Wait for both requests to complete
-            Promise.all([nominatimPromise, elevationPromise])
-                .then(function(results) {
-                    var locationData = results[0];
-                    var elevationData = results[1];
-                    
-                    if (locationData.error) {
-                        throw new Error(locationData.error);
-                    }
-                    
-                    var elevation = null;
-                    if (elevationData && elevationData.results && elevationData.results[0]) {
-                        elevation = elevationData.results[0].elevation;
-                    }
-                    
-                    resolve(formatLocationData(locationData, lat, lng, elevation));
+                .then(function(result) {
+                    // Convert our API response to the expected format
+                    var locationData = formatLocationData(result, lat, lng, result.elevation);
+                    resolve(locationData);
                 })
                 .catch(function(error) {
                     reject(error);
@@ -329,7 +298,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     // Format location data for display
-    function formatLocationData(osmData, lat, lng, elevation) {
+    function formatLocationData(apiData, lat, lng, elevation) {
         var formatted = {
             coordinates: {
                 lat: lat,
@@ -341,17 +310,21 @@ document.addEventListener('DOMContentLoaded', function () {
             details: {}
         };
 
-        if (osmData.address) {
-            var addr = osmData.address;
+        if (apiData.address) {
+            var addr = apiData.address;
             formatted.address = {
-                display_name: osmData.display_name || 'Ismeretlen helyszín',
-                house_number: addr.house_number || '',
-                road: addr.road || addr.street || '',
-                neighbourhood: addr.neighbourhood || addr.suburb || '',
-                city: addr.city || addr.town || addr.village || '',
+                display_name: apiData.displayName || 'Ismeretlen helyszín',
+                house_number: addr.houseNumber || '',
+                road: addr.road || '',
+                neighbourhood: addr.neighbourhood || '',
+                city: addr.city || '',
                 postcode: addr.postcode || '',
                 state: addr.state || '',
                 country: addr.country || ''
+            };
+        } else {
+            formatted.address = {
+                display_name: apiData.displayName || 'Ismeretlen helyszín'
             };
         }
 
