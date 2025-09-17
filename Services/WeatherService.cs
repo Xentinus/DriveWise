@@ -38,6 +38,14 @@ namespace DriveWise.Services
                 
                 if (!response.IsSuccessStatusCode)
                 {
+                    // Log the specific error for debugging
+                    Console.WriteLine($"OpenWeatherMap API error: {response.StatusCode} - {response.ReasonPhrase}");
+                    
+                    if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+                    {
+                        Console.WriteLine("API key is invalid or expired. Using mock data instead.");
+                    }
+                    
                     // Fallback to mock data if API fails
                     return CreateMockWeatherData(latitude, longitude);
                 }
