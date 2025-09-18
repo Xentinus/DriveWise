@@ -13,11 +13,17 @@ builder.Services.AddHttpClient<IWeatherService, WeatherService>();
 // Add HTTP client for location service
 builder.Services.AddHttpClient<ILocationService, LocationService>();
 
+// Add HTTP client for routing service
+builder.Services.AddHttpClient<IRoutingService, RoutingService>();
+
 // Register weather service
 builder.Services.AddScoped<IWeatherService, WeatherService>();
 
 // Register location service
 builder.Services.AddScoped<ILocationService, LocationService>();
+
+// Register routing service
+builder.Services.AddScoped<IRoutingService, RoutingService>();
 
 // Check if URLs are already configured via launch settings
 var configuredUrls = builder.Configuration["urls"] ?? Environment.GetEnvironmentVariable("ASPNETCORE_URLS");

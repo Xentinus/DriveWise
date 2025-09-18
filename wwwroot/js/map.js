@@ -97,6 +97,16 @@ document.addEventListener('DOMContentLoaded', function () {
                         })
                     }).addTo(map);
                     console.log('Current position marker added to map');
+                    
+                    // Update NavigationManager with current position
+                    if (window.NavigationManager) {
+                        window.NavigationManager.updateUserPosition(lat, lng);
+                    }
+                    
+                    // Emit position update event
+                    window.dispatchEvent(new CustomEvent('userLocationUpdate', {
+                        detail: JSON.stringify({ lat: lat, lng: lng })
+                    }));
                 },
                 function(error) {
                     console.log('GPS Geolocation failed:', error.message, 'Code:', error.code);
@@ -390,6 +400,14 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         html += '</div>';
+        
+        // Navigation actions with proper UTF-8 encoding
+        html += '<div class="location-actions">';
+        html += '<button type="button" class="navigate-btn" onclick="handleNavigation(' + data.coordinates.lat + ', ' + data.coordinates.lng + ', \'' + escapeHtml(data.address?.display_name || 'Kiválasztott helyszín') + '\')">';
+        html += '<i class="bi bi-signpost-2 btn-icon"></i> Navigálás ide';
+        html += '</button>';
+        html += '</div>';
+        
         html += '</div>';
 
         return html;
@@ -407,6 +425,41 @@ document.addEventListener('DOMContentLoaded', function () {
         return text.replace(/[&<>"']/g, function(m) { return map[m]; });
     }
     
+    // Navigation handler function
+    window.handleNavigation = function(lat, lng, locationName) {
+        console.log('[map] Navigation requested to:', lat, lng, locationName);
+        
+        // Close all popups and remove long-press markers
+        map.eachLayer(function(layer) {
+            if (layer._popup && layer._popup.isOpen()) {
+                layer.closePopup();
+            }
+            // Remove long-press markers
+            if (layer.options && layer.options.icon && 
+                layer.options.icon.options && 
+                layer.options.icon.options.className === 'long-press-marker') {
+                setTimeout(function() {
+                    if (map.hasLayer(layer)) {
+                        map.removeLayer(layer);
+                    }
+                }, 500); // Small delay to let user see the navigation started
+            }
+        });
+        
+        if (window.NavigationManager) {
+            window.NavigationManager.navigateToLocation(lat, lng, locationName)
+                .then(function() {
+                    console.log('[map] Navigation started successfully');
+                })
+                .catch(function(error) {
+                    console.error('[map] Navigation failed:', error);
+                });
+        } else {
+            console.error('[map] NavigationManager not available');
+            alert('A navigációs szolgáltatás nem érhető el. Kérjük, frissítse az oldalt.');
+        }
+    };
+
     // Ripple helper
     function uiRipple(el, ev) {
         var rect = el.getBoundingClientRect();

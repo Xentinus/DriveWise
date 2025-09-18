@@ -27,4 +27,27 @@ namespace DriveWise.Models
         public string State { get; set; } = string.Empty;
         public string Country { get; set; } = string.Empty;
     }
+
+    // Route models
+    public class RouteResult
+    {
+        public RouteGeometry? Geometry { get; set; }
+        public double Distance { get; set; } // in meters
+        public double Duration { get; set; } // in seconds
+        public List<RouteStep> Steps { get; set; } = new List<RouteStep>();
+    }
+
+    public class RouteGeometry
+    {
+        public string Type { get; set; } = "LineString";
+        public List<List<double>> Coordinates { get; set; } = new List<List<double>>();
+    }
+
+    public class RouteStep
+    {
+        public string Instruction { get; set; } = string.Empty;
+        public double Distance { get; set; }
+        public double Duration { get; set; }
+        public RouteGeometry? Geometry { get; set; }
+    }
 }

@@ -48,48 +48,9 @@
     }
 }
 
-/* Responsive adjustments */
-@media (max-width: 768px) {
-    .current-position-icon {
-        width: 18px;
-        height: 18px;
-        border-width: 2px;
-    }
-    
-    .current-position-icon::before {
-        width: 6px;
-        height: 6px;
-    }
-}
-
-/* Dark theme for Leaflet controls */
-[data-theme="dark"] .leaflet-control-zoom a {
-    background-color: #3A3A3A !important;
-    color: #E0E0E0 !important;
-    border-color: #555555 !important;
-}
-
-[data-theme="dark"] .leaflet-control-zoom a:hover {
-    background-color: #4A4A4A !important;
-}
-
-[data-theme="dark"] .leaflet-control-attribution {
-    background-color: rgba(58, 58, 58, 0.8) !important;
-    color: #E0E0E0 !important;
-}
-
-[data-theme="dark"] .leaflet-control-attribution a {
-    color: #4FC3F7 !important;
-}
-
-/* Dark theme for custom position marker */
-[data-theme="dark"] .current-position-icon {
-    background: #4FC3F7;
-    border-color: #1E1E1E;
-}
-
-[data-theme="dark"] .current-position-icon::before {
-    background: #1E1E1E;
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
 }
 
 /* Long-press marker styles */
@@ -138,9 +99,16 @@
     content: '✗';
 }
 
-@keyframes spin {
-    from { transform: rotate(0deg); }
-    to { transform: rotate(360deg); }
+/* Search result marker styles */
+.search-result-marker {
+    background: transparent !important;
+    border: none !important;
+}
+
+.search-result-icon {
+    font-size: 24px;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.5));
 }
 
 /* Location info popup styles */
@@ -241,7 +209,237 @@
     font-family: inherit;
 }
 
-/* Dark theme for location popup */
+/* Navigation button styles */
+.location-actions {
+    padding: 12px 16px;
+    border-top: 1px solid #e0e0e0;
+    background: #f8f9fa;
+    font-family: inherit;
+}
+
+.navigate-btn {
+    background: #007bff;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 16px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    justify-content: center;
+    font-family: inherit;
+}
+
+.navigate-btn:hover {
+    background: #0056b3;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 123, 255, 0.3);
+}
+
+.navigate-btn:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(0, 123, 255, 0.2);
+}
+
+.navigate-btn:disabled {
+    background: #6c757d;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+.navigate-btn.loading {
+    background: #ffc107;
+    color: #212529;
+}
+
+.navigate-btn.loading .btn-icon {
+    animation: spin 1s linear infinite;
+}
+
+.navigate-btn .btn-icon {
+    font-size: 16px;
+    transition: transform 0.2s ease;
+}
+
+/* Route markers styles */
+.route-marker {
+    background: transparent !important;
+    border: none !important;
+}
+
+.route-marker-icon {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50% 50% 50% 0;
+    border: 3px solid #ffffff;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.3);
+    font-size: 16px;
+    color: white;
+    position: relative;
+    transform: rotate(-45deg);
+}
+
+.route-marker-icon i {
+    transform: rotate(45deg);
+}
+
+.route-marker-icon.start {
+    background: #28a745; /* Green for start */
+}
+
+.route-marker-icon.end {
+    background: #dc3545; /* Red for end/destination */
+}
+
+/* Hover effects for route markers */
+.route-marker-icon:hover {
+    transform: rotate(-45deg) scale(1.1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+/* Dark theme for route markers */
+[data-theme="dark"] .route-marker-icon {
+    border-color: #1E1E1E;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.6);
+}
+
+[data-theme="dark"] .route-marker-icon.start {
+    background: #4CAF50; /* Brighter green for dark theme */
+}
+
+[data-theme="dark"] .route-marker-icon.end {
+    background: #F44336; /* Brighter red for dark theme */
+}
+
+/* Route markers using current position style with different colors */
+.current-position-icon.route-start {
+    background: #28a745; /* Green for route start */
+    border: 3px solid #ffffff;
+    animation: pulse 2s infinite;
+}
+
+.current-position-icon.route-end {
+    background: #dc3545; /* Red for route end/destination */
+    border: 3px solid #ffffff;
+    animation: pulse 2s infinite;
+}
+
+/* Dark theme for route markers using current position style */
+[data-theme="dark"] .current-position-icon.route-start {
+    background: #4CAF50; /* Brighter green for dark theme */
+    border-color: #1E1E1E;
+}
+
+[data-theme="dark"] .current-position-icon.route-end {
+    background: #F44336; /* Brighter red for dark theme */
+    border-color: #1E1E1E;
+}
+
+/* Remove old route marker styles since we're using current position style */
+.route-marker {
+    background: transparent !important;
+    border: none !important;
+}
+
+.route-marker-icon {
+    /* Keep as fallback but won't be used anymore */
+    display: none;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .current-position-icon {
+        width: 18px;
+        height: 18px;
+        border-width: 2px;
+    }
+    
+    .current-position-icon::before {
+        width: 6px;
+        height: 6px;
+    }
+    
+    .location-info-popup .leaflet-popup-content-wrapper {
+        max-width: 280px !important;
+    }
+    
+    .location-info-header {
+        padding: 10px 14px;
+    }
+    
+    .location-title {
+        font-size: 15px;
+    }
+    
+    .location-info-content {
+        padding: 14px;
+    }
+    
+    .location-actions {
+        padding: 10px 14px;
+    }
+    
+    .navigate-btn {
+        padding: 8px 14px;
+        font-size: 13px;
+    }
+    
+    .long-press-icon {
+        width: 28px;
+        height: 28px;
+        font-size: 14px;
+    }
+
+    .route-marker-icon {
+        width: 28px;
+        height: 28px;
+        font-size: 14px;
+        border-width: 2px;
+    }
+}
+
+/* Dark theme styles */
+[data-theme="dark"] .leaflet-control-zoom a {
+    background-color: #3A3A3A !important;
+    color: #E0E0E0 !important;
+    border-color: #555555 !important;
+}
+
+[data-theme="dark"] .leaflet-control-zoom a:hover {
+    background-color: #4A4A4A !important;
+}
+
+[data-theme="dark"] .leaflet-control-attribution {
+    background-color: rgba(58, 58, 58, 0.8) !important;
+    color: #E0E0E0 !important;
+}
+
+[data-theme="dark"] .leaflet-control-attribution a {
+    color: #4FC3F7 !important;
+}
+
+[data-theme="dark"] .current-position-icon {
+    background: #4FC3F7;
+    border-color: #1E1E1E;
+}
+
+[data-theme="dark"] .current-position-icon::before {
+    background: #1E1E1E;
+}
+
+[data-theme="dark"] .long-press-icon {
+    border-color: #1E1E1E;
+}
+
 [data-theme="dark"] .location-info-popup .leaflet-popup-content-wrapper {
     background: #2A2A2A;
     color: #E0E0E0;
@@ -261,12 +459,6 @@
     color: #B0B0B0;
 }
 
-[data-theme="dark"] .coordinates {
-    background: #3A3A3A;
-    color: #E0E0E0;
-    border-color: #555555;
-}
-
 [data-theme="dark"] .location-type {
     color: #B0B0B0;
 }
@@ -275,31 +467,22 @@
     color: #B0B0B0;
 }
 
-[data-theme="dark"] .long-press-icon {
-    border-color: #1E1E1E;
+[data-theme="dark"] .location-actions {
+    background: #333333;
+    border-top-color: #555555;
 }
 
-/* Responsive adjustments for location popup */
-@media (max-width: 768px) {
-    .location-info-popup .leaflet-popup-content-wrapper {
-        max-width: 280px !important;
-    }
-    
-    .location-info-header {
-        padding: 10px 14px;
-    }
-    
-    .location-title {
-        font-size: 15px;
-    }
-    
-    .location-info-content {
-        padding: 14px;
-    }
-    
-    .long-press-icon {
-        width: 28px;
-        height: 28px;
-        font-size: 14px;
-    }
+[data-theme="dark"] .coordinates {
+    background: #3A3A3A;
+    color: #E0E0E0;
+    border-color: #555555;
+}
+
+[data-theme="dark"] .navigate-btn {
+    background: #4FC3F7;
+    color: #1E1E1E;
+}
+
+[data-theme="dark"] .navigate-btn:hover {
+    background: #29B6F6;
 }

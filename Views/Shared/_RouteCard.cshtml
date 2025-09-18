@@ -1,0 +1,413 @@
+﻿@* Partial for Route information card *@
+<div class="route-card" id="routeCard" style="display: none;">
+    <div class="route-card-header">
+        <div class="route-card-title">
+            <i class="bi bi-signpost"></i>
+            <span>Útvonal információ</span>
+        </div>
+        <div class="route-card-controls">
+            <button type="button" class="route-card-minimize" id="routeCardMinimize" title="Minimalizálás">
+                <i class="bi bi-dash"></i>
+            </button>
+        </div>
+    </div>
+    
+    <div class="route-card-content" id="routeCardContent">
+        <div class="route-summary">
+            <div class="route-detail-row">
+                <div class="route-detail-icon">
+                    <i class="bi bi-geo-alt"></i>
+                </div>
+                <div class="route-detail-info">
+                    <div class="route-detail-label">Cél</div>
+                    <div class="route-detail-value" id="routeDestination">-</div>
+                </div>
+            </div>
+            
+            <div class="route-detail-row">
+                <div class="route-detail-icon">
+                    <i class="bi bi-clock"></i>
+                </div>
+                <div class="route-detail-info">
+                    <div class="route-detail-label">Becsült idő</div>
+                    <div class="route-detail-value" id="routeDuration">-</div>
+                </div>
+            </div>
+            
+            <div class="route-detail-row">
+                <div class="route-detail-icon">
+                    <i class="bi bi-rulers"></i>
+                </div>
+                <div class="route-detail-info">
+                    <div class="route-detail-label">Távolság</div>
+                    <div class="route-detail-value" id="routeDistance">-</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="route-actions">
+            <button type="button" class="route-action-btn route-center-btn" id="routeCenterBtn">
+                <i class="bi bi-arrows-fullscreen"></i>
+                Útvonal középre
+            </button>
+            <button type="button" class="route-action-btn route-clear-btn" id="routeClearBtn">
+                <i class="bi bi-trash"></i>
+                Útvonal törlése
+            </button>
+        </div>
+    </div>
+    
+    <!-- Minimized state handle -->
+    <div class="route-card-handle" id="routeCardHandle" style="display: none;">
+        <i class="bi bi-signpost"></i>
+    </div>
+</div>
+
+<script>
+(function() {
+    'use strict';
+    
+    let isMinimized = false;
+    let hasActiveRoute = false;
+    let showTimeout = null;
+    let isShowingRoute = false; // Guard variable
+    
+    function init() {
+        console.log('[route-card] Route card initialized');
+        
+        const routeCard = document.getElementById('routeCard');
+        const minimizeBtn = document.getElementById('routeCardMinimize');
+        const handle = document.getElementById('routeCardHandle');
+        const centerBtn = document.getElementById('routeCenterBtn');
+        const clearBtn = document.getElementById('routeClearBtn');
+        
+        if (!routeCard) {
+            console.warn('[route-card] Route card element not found');
+            return;
+        }
+        
+        // Minimize/restore functionality
+        if (minimizeBtn) {
+            minimizeBtn.addEventListener('click', function() {
+                minimizeRouteCard();
+            });
+        }
+        
+        if (handle) {
+            handle.addEventListener('click', function() {
+                restoreRouteCard();
+            });
+        }
+        
+        // Center route functionality
+        if (centerBtn) {
+            centerBtn.addEventListener('click', function() {
+                centerRouteOnMap();
+            });
+        }
+        
+        // Clear route functionality
+        if (clearBtn) {
+            clearBtn.addEventListener('click', function() {
+                clearRoute();
+            });
+        }
+        
+        // Listen for route events
+        window.addEventListener('routeCalculated', function(event) {
+            console.log('[route-card] routeCalculated event received:', event.detail);
+            if (event.detail) {
+                try {
+                    const routeData = typeof event.detail === 'string' ? JSON.parse(event.detail) : event.detail;
+                    console.log('[route-card] Parsed route data:', routeData);
+                    showRouteCard(routeData);
+                } catch (e) {
+                    console.warn('[route-card] Failed to parse route data:', e);
+                }
+            }
+        });
+        
+        window.addEventListener('routeCleared', function(event) {
+            console.log('[route-card] routeCleared event received:', event.detail);
+            
+            // Don't hide if we're currently showing a route
+            if (isShowingRoute) {
+                console.log('[route-card] Currently showing route, ignoring routeCleared event');
+                return;
+            }
+            
+            // Add a delay to prevent immediate hiding after showing
+            setTimeout(() => {
+                if (!hasActiveRoute) {
+                    console.log('[route-card] Route already cleared, skipping hide');
+                    return;
+                }
+                if (isShowingRoute) {
+                    console.log('[route-card] Route showing in progress, skipping hide');
+                    return;
+                }
+                hideRouteCard();
+            }, 200);
+        });
+    }
+    
+    function showRouteCard(routeData) {
+        console.log('[route-card] Showing route card with data:', routeData);
+        
+        const routeCard = document.getElementById('routeCard');
+        if (!routeCard) {
+            console.warn('[route-card] Route card element not found!');
+            return;
+        }
+        
+        // Set guard to prevent immediate hiding
+        isShowingRoute = true;
+        
+        // Clear any pending hide operation
+        if (showTimeout) {
+            clearTimeout(showTimeout);
+            showTimeout = null;
+        }
+        
+        // Update route information first
+        updateRouteInfo(routeData);
+        
+        // Ensure card is not in minimized state
+        if (isMinimized) {
+            restoreRouteCard();
+        }
+        
+        // Reset any existing classes
+        routeCard.classList.remove('visible');
+        
+        // Show the card
+        routeCard.style.display = 'block';
+        hasActiveRoute = true;
+        
+        // Add route-active class to unified-top-widget for mobile layout adjustment
+        updateUnifiedWidgetLayout(true);
+        
+        console.log('[route-card] Card display set to block, adding visible class...');
+        
+        // Add show class for animation with longer delay to ensure DOM is ready
+        showTimeout = setTimeout(() => {
+            routeCard.classList.add('visible');
+            console.log('[route-card] Visible class added, card should be shown');
+            showTimeout = null;
+            
+            // Clear guard after animation completes
+            setTimeout(() => {
+                isShowingRoute = false;
+                console.log('[route-card] Show animation complete, guard cleared');
+            }, 350); // Wait for CSS transition to complete
+        }, 50);
+    }
+    
+    function hideRouteCard() {
+        console.log('[route-card] Hiding route card');
+        
+        const routeCard = document.getElementById('routeCard');
+        if (!routeCard) return;
+        
+        // Only hide if the card is currently visible
+        if (!hasActiveRoute) {
+            console.log('[route-card] Card already hidden, skipping');
+            return;
+        }
+        
+        routeCard.classList.remove('visible');
+        hasActiveRoute = false;
+        
+        // Remove route-active class from unified-top-widget
+        updateUnifiedWidgetLayout(false);
+        
+        setTimeout(() => {
+            if (!hasActiveRoute) { // Double check before hiding
+                routeCard.style.display = 'none';
+                console.log('[route-card] Card hidden');
+                if (isMinimized) {
+                    restoreRouteCard(); // Reset state
+                }
+            }
+        }, 300);
+    }
+    
+    function minimizeRouteCard() {
+        console.log('[route-card] Minimizing route card');
+        
+        const routeCard = document.getElementById('routeCard');
+        const content = document.getElementById('routeCardContent');
+        const handle = document.getElementById('routeCardHandle');
+        const minimizeBtn = document.getElementById('routeCardMinimize');
+        
+        if (!routeCard || !content || !handle || !minimizeBtn) return;
+        
+        routeCard.classList.add('minimized');
+        content.style.display = 'none';
+        handle.style.display = 'flex';
+        minimizeBtn.innerHTML = '<i class="bi bi-plus"></i>';
+        minimizeBtn.title = 'Visszaállítás';
+        
+        isMinimized = true;
+        
+        // Keep route-active class even when minimized (we still need space)
+        updateUnifiedWidgetLayout(true);
+    }
+    
+    function restoreRouteCard() {
+        console.log('[route-card] Restoring route card');
+        
+        const routeCard = document.getElementById('routeCard');
+        const content = document.getElementById('routeCardContent');
+        const handle = document.getElementById('routeCardHandle');
+        const minimizeBtn = document.getElementById('routeCardMinimize');
+        
+        if (!routeCard || !content || !handle || !minimizeBtn) return;
+        
+        routeCard.classList.remove('minimized');
+        content.style.display = 'block';
+        handle.style.display = 'none';
+        minimizeBtn.innerHTML = '<i class="bi bi-dash"></i>';
+        minimizeBtn.title = 'Minimalizálás';
+        
+        isMinimized = false;
+        
+        // Keep route-active class when restored
+        updateUnifiedWidgetLayout(true);
+    }
+    
+    function updateRouteInfo(routeData) {
+        const destinationEl = document.getElementById('routeDestination');
+        const durationEl = document.getElementById('routeDuration');
+        const distanceEl = document.getElementById('routeDistance');
+        
+        if (destinationEl && routeData.destination) {
+            destinationEl.textContent = routeData.destination;
+        }
+        
+        if (durationEl && routeData.duration !== undefined) {
+            durationEl.textContent = formatDuration(routeData.duration);
+        }
+        
+        if (distanceEl && routeData.distance !== undefined) {
+            distanceEl.textContent = formatDistance(routeData.distance);
+        }
+    }
+    
+    function centerRouteOnMap() {
+        console.log('[route-card] Centering route on map');
+        
+        if (window.NavigationManager && window.NavigationManager.centerRoute) {
+            window.NavigationManager.centerRoute();
+        }
+    }
+    
+    function clearRoute() {
+        console.log('[route-card] Clearing route from card');
+        
+        // Call NavigationManager.clearRoute() to actually remove route and markers from map
+        if (window.NavigationManager && window.NavigationManager.clearRoute) {
+            window.NavigationManager.clearRoute();
+        } else {
+            console.warn('[route-card] NavigationManager not available for route clearing');
+            // Fallback: just hide the card and dispatch event
+            hideRouteCard();
+            window.dispatchEvent(new CustomEvent('routeCleared', {
+                detail: JSON.stringify({ source: 'route-card-fallback' })
+            }));
+        }
+    }
+    
+    function formatDistance(meters) {
+        if (meters < 1000) {
+            return Math.round(meters) + ' m';
+        } else {
+            return (meters / 1000).toFixed(1) + ' km';
+        }
+    }
+    
+    function formatDuration(seconds) {
+        const hours = Math.floor(seconds / 3600);
+        const minutes = Math.floor((seconds % 3600) / 60);
+        
+        if (hours > 0) {
+            return `${hours} óra ${minutes} perc`;
+        } else {
+            return `${minutes} perc`;
+        }
+    }
+    
+    function updateUnifiedWidgetLayout(hasRoute) {
+        const unifiedWidget = document.querySelector('.unified-top-widget');
+        if (!unifiedWidget) return;
+        
+        if (hasRoute) {
+            unifiedWidget.classList.add('route-active');
+            console.log('[route-card] Added route-active class to unified widget');
+        } else {
+            unifiedWidget.classList.remove('route-active');
+            console.log('[route-card] Removed route-active class from unified widget');
+        }
+    }
+    
+    // Initialize when DOM is ready
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
+    } else {
+        init();
+    }
+    
+    // Debug helper - can be called from browser console
+    window.debugRouteCard = function() {
+        console.log('=== ROUTE CARD DEBUG INFO ===');
+        console.log('hasActiveRoute:', hasActiveRoute);
+        console.log('isMinimized:', isMinimized);
+        console.log('showTimeout:', showTimeout);
+        console.log('isShowingRoute:', isShowingRoute);
+        
+        const routeCard = document.getElementById('routeCard');
+        if (routeCard) {
+            console.log('routeCard element exists');
+            console.log('routeCard.style.display:', routeCard.style.display);
+            console.log('routeCard.className:', routeCard.className);
+            console.log('routeCard.offsetWidth:', routeCard.offsetWidth);
+            console.log('routeCard.offsetHeight:', routeCard.offsetHeight);
+        } else {
+            console.log('routeCard element NOT FOUND!');
+        }
+        
+        console.log('=== END DEBUG INFO ===');
+    };
+    
+    // Test helper - can be called from browser console
+    window.testRouteCard = function() {
+        console.log('Testing route card with dummy data...');
+        const testData = {
+            destination: 'Test Location',
+            distance: 5000,
+            duration: 600,
+            geometry: { coordinates: [[19.0402, 47.4979], [19.0500, 47.5000]] }
+        };
+        showRouteCard(testData);
+    };
+    
+    // Export functions for external use
+    window.RouteCard = {
+        show: showRouteCard,
+        hide: hideRouteCard,
+        minimize: minimizeRouteCard,
+        restore: restoreRouteCard,
+        isVisible: function() { return hasActiveRoute; },
+        isMinimized: function() { return isMinimized; },
+        debug: function() {
+            console.log('[route-card] Debug info:', {
+                hasActiveRoute: hasActiveRoute,
+                isMinimized: isMinimized,
+                cardElement: document.getElementById('routeCard'),
+                cardClasses: document.getElementById('routeCard')?.className,
+                cardStyle: document.getElementById('routeCard')?.style.display
+            });
+        }
+    };
+})();
+</script>

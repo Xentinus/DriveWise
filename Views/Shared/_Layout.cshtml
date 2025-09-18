@@ -76,6 +76,7 @@
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/modal-manager.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/map.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/route-card.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/weather-widget.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/pwa.css" asp-append-version="true" />
     
@@ -144,6 +145,9 @@
     
     @RenderBody()
 
+    <!-- Route Card -->
+    @await Html.PartialAsync("_RouteCard")
+
     <!-- Button-nav v2: centered, modern, responsive -->
     <footer class="bottom-nav v2" role="navigation" aria-label="Fő navigáció">
         <div class="nav-wrap">
@@ -182,6 +186,7 @@
     <script src="~/js/pwa.js" asp-append-version="true"></script>
     <script src="~/js/map.js" asp-append-version="true"></script>
     <script src="~/js/search.js" asp-append-version="true"></script>
+    <script src="~/js/navigation.js" asp-append-version="true"></script>
     <script src="~/js/bottom-nav.js" asp-append-version="true"></script>
     <script src="~/js/modal-manager.js" asp-append-version="true"></script>
     <script src="~/js/weather-widget.js" asp-append-version="true"></script>

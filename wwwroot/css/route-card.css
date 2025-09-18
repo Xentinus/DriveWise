@@ -1,0 +1,396 @@
+/* Route Card Styles */
+.route-card {
+    position: fixed;
+    top: 20px;
+    right: -400px; /* Start off-screen */
+    width: 350px;
+    max-width: 90vw;
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+    z-index: 1500;
+    transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    font-family: 'Nunito', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    border: 1px solid #e0e0e0;
+}
+
+.route-card.visible {
+    right: 20px;
+}
+
+.route-card.minimized {
+    width: 60px;
+    height: 60px;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.route-card.minimized.visible {
+    right: 20px;
+}
+
+/* Route Card Header */
+.route-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 20px;
+    border-bottom: 1px solid #e0e0e0;
+    background: #f8f9fa;
+    border-radius: 12px 12px 0 0;
+}
+
+.route-card-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 600;
+    font-size: 16px;
+    color: #333;
+}
+
+.route-card-title i {
+    color: #007bff;
+    font-size: 18px;
+}
+
+.route-card-controls {
+    display: flex;
+    gap: 4px;
+}
+
+.route-card-minimize,
+.route-card-close {
+    background: transparent;
+    border: none;
+    width: 32px;
+    height: 32px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    color: #666;
+}
+
+.route-card-minimize:hover {
+    background: #e3f2fd;
+    color: #007bff;
+}
+
+.route-card-close:hover {
+    background: #ffebee;
+    color: #d32f2f;
+}
+
+/* Route Card Content */
+.route-card-content {
+    padding: 20px;
+}
+
+.route-summary {
+    margin-bottom: 20px;
+}
+
+.route-detail-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.route-detail-row:last-child {
+    margin-bottom: 0;
+}
+
+.route-detail-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    background: #e3f2fd;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.route-detail-icon i {
+    color: #007bff;
+    font-size: 16px;
+}
+
+.route-detail-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.route-detail-label {
+    font-size: 12px;
+    font-weight: 500;
+    color: #666;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 2px;
+}
+
+.route-detail-value {
+    font-size: 14px;
+    font-weight: 600;
+    color: #333;
+    word-break: break-word;
+}
+
+/* Route Actions */
+.route-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    border-top: 1px solid #e0e0e0;
+    padding-top: 16px;
+}
+
+.route-action-btn {
+    background: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    padding: 10px 16px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    justify-content: center;
+    color: #495057;
+}
+
+.route-action-btn:hover {
+    background: #e9ecef;
+    border-color: #adb5bd;
+}
+
+.route-action-btn i {
+    font-size: 14px;
+}
+
+.route-center-btn:hover {
+    background: #e3f2fd;
+    border-color: #007bff;
+    color: #007bff;
+}
+
+.route-clear-btn:hover {
+    background: #ffebee;
+    border-color: #d32f2f;
+    color: #d32f2f;
+}
+
+/* Minimized Handle - styled like unified-top-widget */
+.route-card-handle {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    background: #ffffff;
+    border: 1px solid #e0e0e0;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.route-card-handle:hover {
+    background: #f8f9fa;
+    transform: scale(1.02);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+}
+
+.route-card-handle i {
+    color: #007bff;
+    font-size: 18px;
+}
+
+/* Dark Theme */
+[data-theme="dark"] .route-card {
+    background: #2A2A2A;
+    border-color: #555555;
+    color: #E0E0E0;
+}
+
+[data-theme="dark"] .route-card-header {
+    background: #333333;
+    border-bottom-color: #555555;
+}
+
+[data-theme="dark"] .route-card-title {
+    color: #E0E0E0;
+}
+
+[data-theme="dark"] .route-card-title i {
+    color: #4FC3F7;
+}
+
+[data-theme="dark"] .route-card-minimize,
+[data-theme="dark"] .route-card-close {
+    color: #B0B0B0;
+}
+
+[data-theme="dark"] .route-card-minimize:hover {
+    background: #263238;
+    color: #4FC3F7;
+}
+
+[data-theme="dark"] .route-card-close:hover {
+    background: #3E2723;
+    color: #FF5722;
+}
+
+[data-theme="dark"] .route-detail-icon {
+    background: #263238;
+}
+
+[data-theme="dark"] .route-detail-icon i {
+    color: #4FC3F7;
+}
+
+[data-theme="dark"] .route-detail-label {
+    color: #B0B0B0;
+}
+
+[data-theme="dark"] .route-detail-value {
+    color: #E0E0E0;
+}
+
+[data-theme="dark"] .route-actions {
+    border-top-color: #555555;
+}
+
+[data-theme="dark"] .route-action-btn {
+    background: #3A3A3A;
+    border-color: #555555;
+    color: #B0B0B0;
+}
+
+[data-theme="dark"] .route-action-btn:hover {
+    background: #4A4A4A;
+    border-color: #666666;
+}
+
+[data-theme="dark"] .route-center-btn:hover {
+    background: #263238;
+    border-color: #4FC3F7;
+    color: #4FC3F7;
+}
+
+[data-theme="dark"] .route-clear-btn:hover {
+    background: #3E2723;
+    border-color: #FF5722;
+    color: #FF5722;
+}
+
+[data-theme="dark"] .route-card-handle {
+    background: #2A2A2A;
+    border-color: #555555;
+}
+
+[data-theme="dark"] .route-card-handle:hover {
+    background: #333333;
+}
+
+[data-theme="dark"] .route-card-handle i {
+    color: #4FC3F7;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .route-card {
+        width: 320px;
+        top: 10px;
+        right: -340px;
+    }
+    
+    .route-card.visible {
+        right: 10px;
+    }
+    
+    .route-card.minimized {
+        width: 50px;
+        height: 50px;
+        border-radius: 10px;
+    }
+    
+    .route-card.minimized.visible {
+        right: 10px;
+    }
+    
+    .route-card-header {
+        padding: 12px 16px;
+    }
+    
+    .route-card-title {
+        font-size: 15px;
+    }
+    
+    .route-card-content {
+        padding: 16px;
+    }
+    
+    .route-detail-row {
+        margin-bottom: 12px;
+    }
+    
+    .route-detail-icon {
+        width: 32px;
+        height: 32px;
+    }
+    
+    .route-detail-icon i {
+        font-size: 14px;
+    }
+    
+    .route-actions {
+        padding-top: 12px;
+    }
+    
+    .route-action-btn {
+        padding: 8px 12px;
+        font-size: 12px;
+    }
+    
+    .route-card-handle i {
+        font-size: 16px;
+    }
+}
+
+@media (max-width: 480px) {
+    .route-card {
+        width: calc(100vw - 20px);
+        max-width: none;
+        right: -100vw;
+    }
+    
+    .route-card.visible {
+        right: 10px;
+    }
+    
+    .route-card.minimized {
+        width: 45px;
+        height: 45px;
+        border-radius: 8px;
+    }
+    
+    .route-card.minimized.visible {
+        right: 10px;
+    }
+    
+    .route-card-handle i {
+        font-size: 14px;
+    }
+}

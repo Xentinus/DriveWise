@@ -58,6 +58,40 @@ document.addEventListener('DOMContentLoaded', function() {
         }, 300);
     });
     
+    // Add focus/blur handlers for mobile layout optimization
+    searchInput.addEventListener('focus', function() {
+        // Add search-focused class to unified widget
+        var unifiedWidget = document.querySelector('.unified-top-widget');
+        if (unifiedWidget) {
+            unifiedWidget.classList.add('search-focused');
+        }
+        
+        // Temporarily minimize route card if it's visible and not minimized
+        if (window.RouteCard && window.RouteCard.isVisible() && !window.RouteCard.isMinimized()) {
+            window.RouteCard.minimize();
+            // Set a flag to restore it later
+            searchInput.dataset.shouldRestoreRoute = 'true';
+        }
+    });
+    
+    searchInput.addEventListener('blur', function() {
+        // Small delay to allow clicks on search results
+        setTimeout(() => {
+            var unifiedWidget = document.querySelector('.unified-top-widget');
+            if (unifiedWidget) {
+                unifiedWidget.classList.remove('search-focused');
+            }
+            
+            // Restore route card if we minimized it
+            if (searchInput.dataset.shouldRestoreRoute === 'true') {
+                if (window.RouteCard && window.RouteCard.isVisible()) {
+                    window.RouteCard.restore();
+                }
+                delete searchInput.dataset.shouldRestoreRoute;
+            }
+        }, 150);
+    });
+    
     // Clear button functionality
     clearButton.addEventListener('click', function() {
         clearSearch();
@@ -93,7 +127,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
     
-    function performSearch(query) {
+    function performSearch(query = '') {
         if (!query || query.length < 2) {
             hideSearchResults();
             return;
@@ -403,6 +437,14 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         html += '</div>';
+        
+        // Navigation actions with proper UTF-8 encoding
+        html += '<div class="location-actions">';
+        html += '<button type="button" class="navigate-btn" onclick="handleSearchNavigation(' + data.coordinates.lat + ', ' + data.coordinates.lng + ', \'' + escapeHtml(data.address?.display_name || 'Keresett helyszín') + '\')">';
+        html += '<i class="bi bi-signpost-2 btn-icon"></i> Navigálás ide';
+        html += '</button>';
+        html += '</div>';
+        
         html += '</div>';
 
         return html;
@@ -453,4 +495,36 @@ document.addEventListener('DOMContentLoaded', function() {
         };
         return text.replace(/[&<>"']/g, function(m) { return map[m]; });
     }
+    
+    // Navigation handler function for search results
+    window.handleSearchNavigation = function(lat, lng, locationName) {
+        console.log('[search] Navigation requested to:', lat, lng, locationName);
+        
+        // Close the popup and remove search marker
+        if (currentSearchMarker) {
+            if (currentSearchMarker._popup && currentSearchMarker._popup.isOpen()) {
+                currentSearchMarker.closePopup();
+            }
+            // Remove the search marker after a short delay
+            setTimeout(function() {
+                if (map.hasLayer(currentSearchMarker)) {
+                    map.removeLayer(currentSearchMarker);
+                    currentSearchMarker = null;
+                }
+            }, 500); // Small delay to let user see the navigation started
+        }
+        
+        if (window.NavigationManager) {
+            window.NavigationManager.navigateToLocation(lat, lng, locationName)
+                .then(function() {
+                    console.log('[search] Navigation started successfully');
+                })
+                .catch(function(error) {
+                    console.error('[search] Navigation failed:', error);
+                });
+        } else {
+            console.error('[search] NavigationManager not available');
+            alert('A navigációs szolgáltatás nem érhető el. Kérjük, frissítse az oldalt.');
+        }
+    };
 });
