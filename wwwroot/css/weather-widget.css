@@ -80,6 +80,16 @@
     padding: 4px 0;
 }
 
+/* Weather controls container - initially hidden */
+.weather-controls {
+    display: none; /* Hidden by default */
+}
+
+/* Show weather controls when widget is visible */
+.weather-controls.visible {
+    display: block;
+}
+
 /* Weather icons mapping using Bootstrap Icons */
 .weather-icon.clear { color: #FFD700; }
 .weather-icon.clouds { color: #6c757d; }

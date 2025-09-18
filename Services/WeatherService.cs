@@ -19,17 +19,21 @@ namespace DriveWise.Services
         {
             _httpClient = httpClient;
             _configuration = configuration;
-            _apiKey = _configuration["OpenWeatherMap:ApiKey"] ?? "demo_key";
+            _apiKey = _configuration["OpenWeatherMap:ApiKey"] ?? "";
         }
 
         public async Task<WeatherData?> GetWeatherByCoordinatesAsync(double latitude, double longitude)
         {
             try
             {
-                // If demo API key, return mock data
-                if (_apiKey == "demo_key" || _apiKey == "demo_key_replace_with_real_api_key")
+                // Return null if no valid API key is configured
+                if (string.IsNullOrEmpty(_apiKey) || 
+                    _apiKey == "demo_key" || 
+                    _apiKey == "demo_key_replace_with_real_api_key" ||
+                    _apiKey == "YOUR_ACTUAL_API_KEY_HERE")
                 {
-                    return CreateMockWeatherData(latitude, longitude);
+                    Console.WriteLine("No valid API key configured - weather data not available");
+                    return null;
                 }
 
                 var url = $"{BASE_URL}?lat={latitude}&lon={longitude}&appid={_apiKey}&units=metric&lang=hu";
@@ -38,16 +42,8 @@ namespace DriveWise.Services
                 
                 if (!response.IsSuccessStatusCode)
                 {
-                    // Log the specific error for debugging
                     Console.WriteLine($"OpenWeatherMap API error: {response.StatusCode} - {response.ReasonPhrase}");
-                    
-                    if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
-                    {
-                        Console.WriteLine("API key is invalid or expired. Using mock data instead.");
-                    }
-                    
-                    // Fallback to mock data if API fails
-                    return CreateMockWeatherData(latitude, longitude);
+                    return null;
                 }
 
                 var jsonContent = await response.Content.ReadAsStringAsync();
@@ -71,93 +67,13 @@ namespace DriveWise.Services
                     };
                 }
 
-                return CreateMockWeatherData(latitude, longitude);
+                return null;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                // Log the exception in a real application
-                return CreateMockWeatherData(latitude, longitude);
+                Console.WriteLine($"Weather service error: {ex.Message}");
+                return null;
             }
-        }
-
-        private WeatherData CreateMockWeatherData(double latitude, double longitude)
-        {
-            // Create realistic mock data based on coordinates and current time
-            var random = new Random();
-            var hour = DateTime.Now.Hour;
-            
-            // Base temperature varies by location (rough approximation)
-            var baseTemp = latitude > 50 ? 5 : (latitude > 40 ? 15 : 25);
-            var temperature = baseTemp + random.Next(-5, 8);
-            
-            // More clouds/rain in afternoon/evening
-            var conditions = new[] { "Clear", "Clouds", "Rain", "Drizzle" };
-            var weights = hour > 12 && hour < 18 ? new[] { 0.3, 0.4, 0.2, 0.1 } : new[] { 0.5, 0.3, 0.15, 0.05 };
-            
-            var condition = GetRandomWeightedChoice(conditions, weights, random);
-            var descriptions = new Dictionary<string, string[]>
-            {
-                ["Clear"] = new[] { "tiszta ég", "napos", "derült" },
-                ["Clouds"] = new[] { "felhős", "változóan felhős", "borult" },
-                ["Rain"] = new[] { "eső", "zápor", "esős" },
-                ["Drizzle"] = new[] { "szitálás", "ködszitálás", "gyenge eső" }
-            };
-
-            var locationName = GetLocationName(latitude, longitude);
-
-            return new WeatherData
-            {
-                Temperature = temperature,
-                Condition = condition,
-                Description = descriptions[condition][random.Next(descriptions[condition].Length)],
-                Icon = GetMockIcon(condition),
-                Humidity = random.Next(40, 90),
-                WindSpeed = random.Next(0, 15),
-                LocationName = locationName,
-                LastUpdated = DateTime.UtcNow
-            };
-        }
-
-        private string GetRandomWeightedChoice(string[] choices, double[] weights, Random random)
-        {
-            var totalWeight = weights.Sum();
-            var randomValue = random.NextDouble() * totalWeight;
-            
-            for (int i = 0; i < choices.Length; i++)
-            {
-                randomValue -= weights[i];
-                if (randomValue <= 0)
-                    return choices[i];
-            }
-            
-            return choices[0];
-        }
-
-        private string GetMockIcon(string condition)
-        {
-            return condition switch
-            {
-                "Clear" => "01d",
-                "Clouds" => "03d",
-                "Rain" => "10d",
-                "Drizzle" => "09d",
-                _ => "01d"
-            };
-        }
-
-        private string GetLocationName(double latitude, double longitude)
-        {
-            // Simple approximation based on coordinates
-            if (Math.Abs(latitude - 47.4979) < 0.1 && Math.Abs(longitude - 19.0402) < 0.1)
-                return "Budapest";
-            if (Math.Abs(latitude - 47.5316) < 0.1 && Math.Abs(longitude - 21.6273) < 0.1)
-                return "Debrecen";
-            if (Math.Abs(latitude - 46.2530) < 0.1 && Math.Abs(longitude - 20.1414) < 0.1)
-                return "Szeged";
-            if (Math.Abs(latitude - 47.9040) < 0.1 && Math.Abs(longitude - 21.7292) < 0.1)
-                return "Nyíregyháza";
-            
-            return "Ismeretlen helység";
         }
     }
 }

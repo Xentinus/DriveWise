@@ -5,20 +5,15 @@ class WeatherWidget {
         this.weatherData = null;
         this.updateInterval = null;
         this.updateIntervalMs = 10 * 60 * 1000; // 10 minutes
+        this.isVisible = false;
         
         this.init();
     }
 
     init() {
         this.createWidget();
+        this.hideWidget(); // Initially hidden
         this.getCurrentLocation();
-        
-        // Update weather every 10 minutes
-        this.updateInterval = setInterval(() => {
-            if (this.currentPosition) {
-                this.fetchWeather(this.currentPosition.lat, this.currentPosition.lng);
-            }
-        }, this.updateIntervalMs);
     }
 
     createWidget() {
@@ -33,19 +28,37 @@ class WeatherWidget {
             <div class="weather-container">
                 <div class="weather-loading">
                     <div class="spinner-border" role="status">
-                        <span class="visually-hidden">Betöltés...</span>
+                        <span class="visually-hidden">Helyszín keresése...</span>
                     </div>
-                    <span>Időjárás...</span>
+                    <span>GPS...</span>
                 </div>
             </div>
         `;
         
         this.widgetElement = weatherContainer;
+        this.weatherControlsElement = document.querySelector('.weather-controls');
+    }
+
+    hideWidget() {
+        if (this.weatherControlsElement) {
+            this.weatherControlsElement.classList.remove('visible');
+            this.weatherControlsElement.style.display = 'none';
+            this.isVisible = false;
+        }
+    }
+
+    showWidget() {
+        if (this.weatherControlsElement) {
+            this.weatherControlsElement.style.display = 'block';
+            this.weatherControlsElement.classList.add('visible');
+            this.isVisible = true;
+        }
     }
 
     getCurrentLocation() {
         if (!navigator.geolocation) {
-            this.showError('A GPS nem támogatott');
+            console.log('GPS not supported - weather widget will remain hidden');
+            this.hideWidget();
             return;
         }
 
@@ -55,25 +68,40 @@ class WeatherWidget {
                     lat: position.coords.latitude,
                     lng: position.coords.longitude
                 };
+                this.showWidget();
                 this.fetchWeather(this.currentPosition.lat, this.currentPosition.lng);
+                
+                // Start the update interval only after successful GPS
+                if (this.updateInterval) {
+                    clearInterval(this.updateInterval);
+                }
+                this.updateInterval = setInterval(() => {
+                    if (this.currentPosition && this.isVisible) {
+                        this.fetchWeather(this.currentPosition.lat, this.currentPosition.lng);
+                    }
+                }, this.updateIntervalMs);
             },
             (error) => {
-                console.error('GPS hiba:', error);
-                this.showError('GPS hiba');
-                
-                // Fallback: Use Budapest coordinates
-                this.currentPosition = { lat: 47.4979, lng: 19.0402 };
-                this.fetchWeather(this.currentPosition.lat, this.currentPosition.lng);
+                console.log('GPS error - weather widget will remain hidden:', error);
+                this.hideWidget();
+                // Clear any existing position and interval
+                this.currentPosition = null;
+                if (this.updateInterval) {
+                    clearInterval(this.updateInterval);
+                    this.updateInterval = null;
+                }
             },
             {
                 enableHighAccuracy: false,
-                timeout: 10000,
+                timeout: 15000,
                 maximumAge: 5 * 60 * 1000 // 5 minutes
             }
         );
     }
 
     async fetchWeather(lat, lng) {
+        if (!this.isVisible) return;
+
         try {
             const response = await fetch(`/api/weather?lat=${lat}&lon=${lng}`);
             
@@ -82,17 +110,25 @@ class WeatherWidget {
             }
             
             const weatherData = await response.json();
-            this.weatherData = weatherData;
-            this.updateWidget();
+            
+            // Only update if we got valid weather data
+            if (weatherData && weatherData.temperature !== undefined) {
+                this.weatherData = weatherData;
+                this.updateWidget();
+            } else {
+                // Hide widget if no valid data
+                this.hideWidget();
+            }
             
         } catch (error) {
             console.error('Időjárás API hiba:', error);
-            this.showError('Nincs adat');
+            // Hide widget on API error instead of showing error message
+            this.hideWidget();
         }
     }
 
     updateWidget() {
-        if (!this.weatherData) return;
+        if (!this.weatherData || !this.isVisible) return;
 
         const container = this.widgetElement.querySelector('.weather-container');
         const iconClass = this.getWeatherIcon(this.weatherData.condition);
@@ -121,18 +157,10 @@ class WeatherWidget {
         return iconMap[condition] || 'bi-question-circle-fill';
     }
 
-    showError(message) {
-        const container = this.widgetElement.querySelector('.weather-container');
-        container.innerHTML = `
-            <div class="weather-error">
-                <i class="bi bi-exclamation-triangle"></i>
-                <div>${message}</div>
-            </div>
-        `;
-    }
-
     // Update position when map center changes (optional integration)
     updatePosition(lat, lng) {
+        if (!this.isVisible) return;
+        
         this.currentPosition = { lat, lng };
         this.fetchWeather(lat, lng);
     }
@@ -141,9 +169,7 @@ class WeatherWidget {
         if (this.updateInterval) {
             clearInterval(this.updateInterval);
         }
-        if (this.widgetElement) {
-            this.widgetElement.remove();
-        }
+        this.hideWidget();
     }
 }
 
@@ -155,7 +181,7 @@ document.addEventListener('DOMContentLoaded', () => {
 // Optional: Update weather when map view changes significantly
 // This can be integrated with the map's moveend event if desired
 window.updateWeatherLocation = function(lat, lng) {
-    if (window.weatherWidget) {
+    if (window.weatherWidget && window.weatherWidget.isVisible) {
         window.weatherWidget.updatePosition(lat, lng);
     }
 };

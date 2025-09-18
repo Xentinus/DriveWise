@@ -1,13 +1,13 @@
 {
-  "name": "DriveWise - Intelligens Útitárs",
+  "name": "DriveWise - Intelligens ÃštitÃ¡rs",
   "short_name": "DriveWise",
-  "description": "Intelligens térképes navigációs alkalmazás id?járás el?rejelzéssel és járm?kezeléssel",
+  "description": "Intelligens tï¿½rkï¿½pes navigï¿½ciï¿½s alkalmazï¿½s id?jï¿½rï¿½s el?rejelzï¿½ssel ï¿½s jï¿½rm?kezelï¿½ssel",
   "start_url": "/",
   "display": "fullscreen",
   "orientation": "portrait",
   "theme_color": "#2563eb",
   "background_color": "#ffffff",
-  "categories": ["navigation", "travel", "utilities"],
+  "categories": [ "navigation", "travel", "utilities" ],
   "lang": "hu",
   "dir": "ltr",
   "scope": "/",
@@ -77,9 +77,9 @@
   ],
   "shortcuts": [
     {
-      "name": "Járm?vek",
-      "short_name": "Járm?vek",
-      "description": "Járm?lista megtekintése",
+      "name": "JÃ¡rmÅ±vek",
+      "short_name": "JÃ¡rmÅ±vek",
+      "description": "JÃ¡rmÅ±vek megtekintï¿½se",
       "url": "/?action=vehicles",
       "icons": [
         {
@@ -89,9 +89,9 @@
       ]
     },
     {
-      "name": "Tervezés",
-      "short_name": "Tervezés",
-      "description": "Útvonaltervezés",
+      "name": "Ãštvonal tervezÃ©s",
+      "short_name": "Ãštvonal tervezÃ©s",
+      "description": "Ãštvonal tervezÃ©s",
       "url": "/?action=plan",
       "icons": [
         {
