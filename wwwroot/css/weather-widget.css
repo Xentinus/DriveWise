@@ -26,7 +26,8 @@
     display: flex;
     align-items: center;
     gap: 8px;
-    margin-bottom: 4px;
+    /* Remove margin-bottom to align with other widgets */
+    margin-bottom: 0;
 }
 
 .weather-icon {
@@ -36,7 +37,8 @@
 
 .weather-temp {
     font-size: 1.2rem;
-    font-weight: 700;
+    /* Change font-weight from 700 to 500 to match search input styling */
+    font-weight: 500;
     color: var(--text-default);
     margin: 0;
 }
