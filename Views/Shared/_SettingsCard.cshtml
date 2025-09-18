@@ -52,6 +52,16 @@
         </div>
     </div>
 
+    <p class="settings-title">Adatok kezelése</p>
+    <div class="settings-item">
+        <div class="settings-label">Összes adat törlése</div>
+        <div class="settings-value">
+            <button type="button" id="clearAllDataBtn" class="btn btn-outline-danger btn-sm">
+                <i class="bi bi-exclamation-triangle"></i> Reset
+            </button>
+        </div>
+    </div>
+
     <p class="settings-title">Névjegy</p>
     <div class="settings-item">
         <div class="settings-label">Fejlesztő</div>
@@ -63,9 +73,9 @@
     </div>
     <div class="settings-item">
         <div class="settings-label">Térkép adatok</div>
-        <div class="settings-value" style="flex-direction: column; align-items: flex-start; text-align: left; min-width: auto; width: 100%;">
-            <small class="text-muted" id="map-attribution" style="word-wrap: break-word; word-break: break-word; white-space: normal; line-height: 1.4; display: block; width: 100%; max-width: 100%; overflow-wrap: break-word; font-size: 0.75rem;">
-                © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">OpenStreetMap</a> contributors
+        <div class="settings-value">
+            <small class="text-muted" id="map-attribution" style="text-align: right; display: block; width: 100%; font-size: 0.75rem;">
+                
             </small>
         </div>
     </div>
@@ -102,6 +112,9 @@
         // Update map attribution text in settings
         updateMapAttribution();
         
+        // Initialize data management functionality
+        initDataManagement();
+        
         // Special event dispatching for theme and unit changes
         window.addEventListener('storageChanged', function(event) {
             const { key, value } = event.detail;
@@ -126,6 +139,86 @@
                 }
             }
         });
+    }
+
+    function initDataManagement() {
+        const clearAllDataBtn = document.getElementById('clearAllDataBtn');
+        
+        if (clearAllDataBtn) {
+            clearAllDataBtn.addEventListener('click', function() {
+                clearAllData();
+            });
+        }
+    }
+
+    function clearAllData() {
+        // Show confirmation dialog
+        const confirmed = confirm('Biztosan törölni szeretnéd az összes mentett adatot? Ez visszaállítja az alkalmazást az alapértelmezett állapotba.\n\nTörölve lesz:\n- Beállítások\n- Járművek\n- Keresési előzmények\n- Tárolt adatok');
+        
+        if (!confirmed) {
+            return;
+        }
+        
+        try {
+            // Show loading state
+            const btn = document.getElementById('clearAllDataBtn');
+            const originalHtml = btn.innerHTML;
+            btn.innerHTML = '<i class="bi bi-arrow-clockwise spin"></i> Törlés...';
+            btn.disabled = true;
+            
+            // Clear localStorage
+            try {
+                localStorage.clear();
+                console.log('[settings] localStorage cleared');
+            } catch (e) {
+                console.warn('[settings] localStorage clear failed:', e);
+            }
+            
+            // Clear sessionStorage
+            try {
+                sessionStorage.clear();
+                console.log('[settings] sessionStorage cleared');
+            } catch (e) {
+                console.warn('[settings] sessionStorage clear failed:', e);
+            }
+            
+            // Clear IndexedDB if available
+            if ('indexedDB' in window) {
+                try {
+                    // Common database names used by apps
+                    const dbNames = ['DriveWise', 'vehicles', 'settings', 'cache'];
+                    dbNames.forEach(dbName => {
+                        const deleteReq = indexedDB.deleteDatabase(dbName);
+                        deleteReq.onsuccess = () => console.log('[settings] IndexedDB cleared:', dbName);
+                        deleteReq.onerror = () => console.warn('[settings] IndexedDB clear failed:', dbName);
+                    });
+                } catch (e) {
+                    console.warn('[settings] IndexedDB clear failed:', e);
+                }
+            }
+            
+            setTimeout(() => {
+                btn.innerHTML = '<i class="bi bi-check"></i> Törölve';
+                btn.classList.remove('btn-outline-danger');
+                btn.classList.add('btn-outline-success');
+                
+                // Force complete page reload with cache busting
+                setTimeout(() => {
+                    window.location.href = window.location.protocol + '//' + window.location.host + window.location.pathname + '?_reset=' + Date.now();
+                }, 1000);
+            }, 1500);
+            
+        } catch (error) {
+            console.error('[settings] Data clearing error:', error);
+            
+            const btn = document.getElementById('clearAllDataBtn');
+            btn.innerHTML = '<i class="bi bi-x"></i> Hiba';
+            btn.disabled = false;
+            
+            setTimeout(() => {
+                btn.innerHTML = '<i class="bi bi-exclamation-triangle"></i> Reset';
+            }, 3000);
+        }
     }
 
     function syncCurrentTheme() {

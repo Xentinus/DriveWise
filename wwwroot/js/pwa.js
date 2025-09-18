@@ -3,83 +3,6 @@
     'use strict';
 
     let deferredPrompt;
-    let installButton;
-
-    // Create install button (hidden by default)
-    function createInstallButton() {
-        if (document.getElementById('pwa-install-btn')) return;
-
-        const button = document.createElement('button');
-        button.id = 'pwa-install-btn';
-        button.className = 'btn btn-primary d-none position-fixed';
-        button.style.cssText = `
-            bottom: 80px; 
-            right: 20px; 
-            z-index: 1050;
-            border-radius: 25px;
-            padding: 10px 20px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-        `;
-        button.innerHTML = '<i class="bi bi-download"></i> Alkalmazás telepítése';
-        button.setAttribute('aria-label', 'DriveWise alkalmazás telepítése');
-        
-        button.addEventListener('click', installApp);
-        document.body.appendChild(button);
-        
-        return button;
-    }
-
-    // Show install button
-    function showInstallButton() {
-        if (!installButton) {
-            installButton = createInstallButton();
-        }
-        installButton.classList.remove('d-none');
-        
-        // Auto-hide after 10 seconds
-        setTimeout(() => {
-            if (installButton) {
-                installButton.classList.add('d-none');
-            }
-        }, 10000);
-    }
-
-    // Hide install button
-    function hideInstallButton() {
-        if (installButton) {
-            installButton.classList.add('d-none');
-        }
-    }
-
-    // Install the PWA
-    async function installApp() {
-        if (!deferredPrompt) {
-            console.log('No install prompt available');
-            return;
-        }
-
-        hideInstallButton();
-
-        try {
-            // Show the install prompt
-            deferredPrompt.prompt();
-            
-            // Wait for the user to respond to the prompt
-            const { outcome } = await deferredPrompt.userChoice;
-            
-            if (outcome === 'accepted') {
-                console.log('User accepted the install prompt');
-            } else {
-                console.log('User dismissed the install prompt');
-                // Show button again after 30 seconds if dismissed
-                setTimeout(showInstallButton, 30000);
-            }
-            
-            deferredPrompt = null;
-        } catch (error) {
-            console.error('Error during app installation:', error);
-        }
-    }
 
     // Check if app is running in standalone mode
     function isStandalone() {
@@ -88,30 +11,25 @@
                window.navigator.standalone === true;
     }
 
-    // Handle PWA install prompt
+    // Handle PWA install prompt (capture but don't show UI)
     window.addEventListener('beforeinstallprompt', (e) => {
         console.log('PWA install prompt triggered');
         
         // Prevent the mini-infobar from appearing on mobile
         e.preventDefault();
         
-        // Save the event for later use
+        // Save the event for later use (browser can still show its own install UI)
         deferredPrompt = e;
         
-        // Only show install button if not already in standalone mode
-        if (!isStandalone()) {
-            // Show install button after a short delay
-            setTimeout(showInstallButton, 3000);
-        }
+        console.log('[PWA] Install prompt available - browser will handle installation UI');
     });
 
     // Handle successful installation
     window.addEventListener('appinstalled', () => {
         console.log('PWA successfully installed');
-        hideInstallButton();
         deferredPrompt = null;
         
-        // Optional: Show success message
+        // Optional: Save installation status
         if (window.StorageManager) {
             window.StorageManager.set('pwa-installed', 'true');
         }
@@ -121,7 +39,6 @@
     window.matchMedia('(display-mode: standalone)').addEventListener('change', (e) => {
         if (e.matches) {
             console.log('App is now running in standalone mode');
-            hideInstallButton();
         }
     });
 
@@ -132,7 +49,6 @@
         // Check if already installed
         if (isStandalone()) {
             console.log('[PWA] App is running in standalone mode');
-            hideInstallButton();
         }
 
         // Add beforeunload handler for standalone mode
@@ -187,12 +103,9 @@
         updateNetworkStatus(); // Initial check
     }
 
-    // Public API
+    // Public API (minimal - no install button functions)
     window.PWA = {
-        install: installApp,
-        isStandalone: isStandalone,
-        showInstallButton: showInstallButton,
-        hideInstallButton: hideInstallButton
+        isStandalone: isStandalone
     };
 
     // Initialize when DOM is ready

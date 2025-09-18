@@ -74,6 +74,99 @@ window.StorageManager = (function() {
             return removeStored(key);
         },
 
+        // Cache and data management
+        clearCache: function() {
+            console.log('[StorageManager] Clearing application cache...');
+            
+            // Clear all caches
+            if ('caches' in window) {
+                return caches.keys().then(function(cacheNames) {
+                    return Promise.all(
+                        cacheNames.map(function(cacheName) {
+                            console.log('[StorageManager] Deleting cache:', cacheName);
+                            return caches.delete(cacheName);
+                        })
+                    );
+                }).then(function() {
+                    console.log('[StorageManager] All caches cleared successfully');
+                    return true;
+                }).catch(function(error) {
+                    console.error('[StorageManager] Cache clearing failed:', error);
+                    return false;
+                });
+            }
+            
+            return Promise.resolve(true);
+        },
+
+        clearAllData: function() {
+            console.log('[StorageManager] Clearing all application data...');
+            
+            try {
+                // Clear localStorage
+                localStorage.clear();
+                console.log('[StorageManager] localStorage cleared');
+                
+                // Clear sessionStorage
+                sessionStorage.clear();
+                console.log('[StorageManager] sessionStorage cleared');
+                
+                // Clear IndexedDB
+                if ('indexedDB' in window) {
+                    const dbNames = ['DriveWise', 'vehicles', 'settings', 'cache', 'weather'];
+                    dbNames.forEach(dbName => {
+                        const deleteReq = indexedDB.deleteDatabase(dbName);
+                        deleteReq.onsuccess = () => console.log('[StorageManager] IndexedDB cleared:', dbName);
+                        deleteReq.onerror = (e) => console.warn('[StorageManager] IndexedDB clear failed:', dbName, e);
+                    });
+                }
+                
+                // Clear caches
+                this.clearCache();
+                
+                return true;
+            } catch (error) {
+                console.error('[StorageManager] Data clearing failed:', error);
+                return false;
+            }
+        },
+
+        // Get storage usage info
+        getStorageInfo: function() {
+            const info = {
+                localStorage: 0,
+                sessionStorage: 0,
+                keys: []
+            };
+            
+            try {
+                // Calculate localStorage usage
+                let localStorageSize = 0;
+                for (let key in localStorage) {
+                    if (localStorage.hasOwnProperty(key)) {
+                        localStorageSize += localStorage[key].length + key.length;
+                        info.keys.push(key);
+                    }
+                }
+                info.localStorage = localStorageSize;
+                
+                // Calculate sessionStorage usage
+                let sessionStorageSize = 0;
+                for (let key in sessionStorage) {
+                    if (sessionStorage.hasOwnProperty(key)) {
+                        sessionStorageSize += sessionStorage[key].length + key.length;
+                    }
+                }
+                info.sessionStorage = sessionStorageSize;
+                
+                console.log('[StorageManager] Storage info:', info);
+                return info;
+            } catch (error) {
+                console.warn('[StorageManager] Failed to get storage info:', error);
+                return info;
+            }
+        },
+
         // Array operations (for managing lists like vehicles)
         getArray: function(key, defaultArray = []) {
             const stored = this.get(key, defaultArray);

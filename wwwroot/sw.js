@@ -1,5 +1,5 @@
 // DriveWise Service Worker
-const CACHE_NAME = 'driveWise-v1.0.0';
+const CACHE_NAME = 'driveWise-v1.0.1';
 const OFFLINE_URL = '/offline.html';
 
 // Essential files to cache for offline functionality
@@ -9,6 +9,7 @@ const ESSENTIAL_FILES = [
   '/css/modal-manager.css',
   '/css/map.css',
   '/css/weather-widget.css',
+  '/css/pwa.css',
   '/js/storage-manager.js',
   '/js/theme-manager.js',
   '/js/map.js',
@@ -16,21 +17,48 @@ const ESSENTIAL_FILES = [
   '/js/bottom-nav.js',
   '/js/modal-manager.js',
   '/js/weather-widget.js',
+  '/js/pwa.js',
   '/manifest.json',
-  '/favicon.ico'
+  '/favicon.ico',
+  '/icons/icon.svg'
 ];
 
-// Install event - cache essential files
+// Install event - cache essential files with error handling
 self.addEventListener('install', event => {
   console.log('[ServiceWorker] Install');
   event.waitUntil(
     caches.open(CACHE_NAME)
       .then(cache => {
         console.log('[ServiceWorker] Caching essential files');
-        return cache.addAll(ESSENTIAL_FILES);
+        // Cache files individually to handle failures better
+        return Promise.allSettled(
+          ESSENTIAL_FILES.map(url => {
+            return fetch(url, {
+              cache: 'no-cache',
+              headers: {
+                'Cache-Control': 'no-cache'
+              }
+            }).then(response => {
+              if (response.ok) {
+                return cache.put(url, response);
+              } else {
+                console.warn('[ServiceWorker] Failed to fetch for cache:', url, response.status);
+              }
+            }).catch(error => {
+              console.warn('[ServiceWorker] Error caching:', url, error);
+            });
+          })
+        );
+      })
+      .then(results => {
+        const failed = results.filter(r => r.status === 'rejected');
+        if (failed.length > 0) {
+          console.warn('[ServiceWorker] Some files failed to cache:', failed.length);
+        }
+        console.log('[ServiceWorker] Cache initialization completed');
       })
       .catch(error => {
-        console.error('[ServiceWorker] Failed to cache essential files:', error);
+        console.error('[ServiceWorker] Failed to open cache:', error);
       })
   );
   // Force the waiting service worker to become the active service worker
@@ -56,7 +84,38 @@ self.addEventListener('activate', event => {
   return self.clients.claim();
 });
 
-// Fetch event - serve from cache when offline
+// Handle messages from the main thread
+self.addEventListener('message', event => {
+  console.log('[ServiceWorker] Message received:', event.data);
+  
+  if (event.data && event.data.action === 'clearCache') {
+    console.log('[ServiceWorker] Clearing all caches...');
+    
+    event.waitUntil(
+      caches.keys().then(cacheNames => {
+        return Promise.all(
+          cacheNames.map(cacheName => {
+            console.log('[ServiceWorker] Deleting cache:', cacheName);
+            return caches.delete(cacheName);
+          })
+        );
+      }).then(() => {
+        console.log('[ServiceWorker] All caches cleared successfully');
+        // Notify the main thread that cache clearing is complete
+        event.ports[0]?.postMessage({ success: true, message: 'Cache cleared' });
+      }).catch(error => {
+        console.error('[ServiceWorker] Cache clearing failed:', error);
+        event.ports[0]?.postMessage({ success: false, error: error.message });
+      })
+    );
+  }
+  
+  if (event.data && event.data.action === 'skipWaiting') {
+    self.skipWaiting();
+  }
+});
+
+// Fetch event - serve from cache when offline with network-first strategy
 self.addEventListener('fetch', event => {
   // Skip non-GET requests
   if (event.request.method !== 'GET') {
@@ -68,41 +127,51 @@ self.addEventListener('fetch', event => {
     return;
   }
 
+  // Skip requests with cache-busting parameters for fresh content
+  const url = new URL(event.request.url);
+  const hasCacheBusting = url.searchParams.has('v') || url.searchParams.has('_t') || url.searchParams.has('_reset');
+
   event.respondWith(
-    caches.match(event.request)
+    // Try network first for fresh content
+    fetch(event.request)
       .then(response => {
-        // Return cached version or fetch from network
-        if (response) {
-          console.log('[ServiceWorker] Serving from cache:', event.request.url);
+        // Don't cache non-successful responses
+        if (!response || response.status !== 200 || response.type !== 'basic') {
           return response;
         }
 
-        return fetch(event.request)
+        // Clone the response for caching
+        const responseToCache = response.clone();
+
+        // Only cache if it's a cacheable resource and doesn't have cache-busting params
+        if (shouldCache(event.request.url) && !hasCacheBusting) {
+          caches.open(CACHE_NAME)
+            .then(cache => {
+              cache.put(event.request, responseToCache);
+            })
+            .catch(error => {
+              console.warn('[ServiceWorker] Failed to cache response:', error);
+            });
+        }
+
+        return response;
+      })
+      .catch(error => {
+        console.log('[ServiceWorker] Network failed, trying cache:', error);
+        
+        // Try to serve from cache
+        return caches.match(event.request)
           .then(response => {
-            // Don't cache non-successful responses
-            if (!response || response.status !== 200 || response.type !== 'basic') {
+            if (response) {
+              console.log('[ServiceWorker] Serving from cache:', event.request.url);
               return response;
             }
-
-            // Clone the response for caching
-            const responseToCache = response.clone();
-
-            caches.open(CACHE_NAME)
-              .then(cache => {
-                // Cache important resources
-                if (shouldCache(event.request.url)) {
-                  cache.put(event.request, responseToCache);
-                }
-              });
-
-            return response;
-          })
-          .catch(error => {
-            console.log('[ServiceWorker] Fetch failed, serving offline page:', error);
+            
             // Return offline page for navigation requests
             if (event.request.destination === 'document') {
               return caches.match(OFFLINE_URL);
             }
+            
             throw error;
           });
       })
@@ -111,7 +180,7 @@ self.addEventListener('fetch', event => {
 
 // Helper function to determine if a URL should be cached
 function shouldCache(url) {
-  // Cache CSS, JS, images, and HTML files
+  // Cache CSS, JS, images, and essential HTML files
   return url.includes('.css') || 
          url.includes('.js') || 
          url.includes('.png') || 
@@ -120,8 +189,9 @@ function shouldCache(url) {
          url.includes('.gif') || 
          url.includes('.svg') || 
          url.includes('.ico') || 
-         url.endsWith('/') ||
-         !url.includes('.');
+         url.includes('manifest.json') ||
+         url.includes('offline.html') ||
+         url.endsWith('/');
 }
 
 // Handle push notifications (for future use)
@@ -130,8 +200,8 @@ self.addEventListener('push', event => {
   
   const options = {
     body: event.data ? event.data.text() : 'DriveWise értesítés',
-    icon: '/icons/icon-192x192.png',
-    badge: '/icons/icon-72x72.png',
+    icon: '/icons/icon.svg',
+    badge: '/icons/icon.svg',
     vibrate: [200, 100, 200],
     data: {
       dateOfArrival: Date.now(),
@@ -141,12 +211,12 @@ self.addEventListener('push', event => {
       {
         action: 'explore',
         title: 'Megnyitás',
-        icon: '/icons/icon-192x192.png'
+        icon: '/icons/icon.svg'
       },
       {
         action: 'close',
         title: 'Bezárás',
-        icon: '/icons/icon-192x192.png'
+        icon: '/icons/icon.svg'
       }
     ]
   };

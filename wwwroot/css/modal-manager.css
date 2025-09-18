@@ -91,7 +91,10 @@
 
 .mm-content{
   padding:16px;
-  overflow:auto;
+  overflow-y:auto;
+  overflow-x:hidden;
+  flex:1;
+  min-height:0;
 }
 
 /* Loading spinner */

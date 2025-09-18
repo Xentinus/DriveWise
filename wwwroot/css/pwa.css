@@ -1,4 +1,4 @@
-/* PWA-specific styles for  */
+/* PWA-specific styles for DriveWise */
 
 /* App offline indicator */
 .app-offline::before {
@@ -53,26 +53,6 @@
         min-height: 44px;
         min-width: 44px;
     }
-}
-
-/* PWA install button styles */
-#pwa-install-btn {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    border: none;
-    color: white;
-    font-weight: 600;
-    transition: all 0.3s ease;
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-}
-
-#pwa-install-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(0,0,0,0.4) !important;
-}
-
-#pwa-install-btn:active {
-    transform: translateY(0);
 }
 
 /* Fullscreen mode adjustments */
@@ -135,18 +115,8 @@ button:active {
     100% { transform: rotate(360deg); }
 }
 
-/* High contrast mode support */
-@media (prefers-contrast: high) {
-    #pwa-install-btn {
-        background: #000;
-        color: #fff;
-        border: 2px solid #fff;
-    }
-}
-
 /* Reduced motion support */
 @media (prefers-reduced-motion: reduce) {
-    #pwa-install-btn,
     .nav-btn,
     .zoom-btn {
         transition: none;

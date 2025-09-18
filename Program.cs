@@ -66,6 +66,57 @@ else
 }
 
 var app = builder.Build();
+
+// Selective cache control middleware
+app.Use(async (context, next) =>
+{
+    var path = context.Request.Path.Value?.ToLower() ?? "";
+    
+    // Check if this is a static file that Service Worker might want to cache
+    var isStaticFile = path.EndsWith(".css") || path.EndsWith(".js") || 
+                      path.EndsWith(".png") || path.EndsWith(".jpg") || 
+                      path.EndsWith(".svg") || path.EndsWith(".ico") ||
+                      path.EndsWith(".json") || path.Contains("/icons/");
+    
+    var isServiceWorker = path.EndsWith("sw.js");
+    var isManifest = path.EndsWith("manifest.json");
+    var isOfflinePage = path.EndsWith("offline.html");
+    
+    if (isServiceWorker || isManifest || isOfflinePage)
+    {
+        // Allow these to be cached by Service Worker but force revalidation
+        context.Response.Headers.Append("Cache-Control", "public, max-age=0, must-revalidate");
+    }
+    else if (isStaticFile)
+    {
+        // For static files, use moderate cache prevention that doesn't break Service Worker
+        context.Response.Headers.Append("Cache-Control", "no-cache, must-revalidate");
+        context.Response.Headers.Append("Pragma", "no-cache");
+        context.Response.Headers.Append("Expires", "0");
+    }
+    else
+    {
+        // For HTML pages and API endpoints, use aggressive cache prevention
+        context.Response.Headers.Append("Cache-Control", "no-cache, no-store, must-revalidate, max-age=0, private");
+        context.Response.Headers.Append("Pragma", "no-cache");
+        context.Response.Headers.Append("Expires", "Thu, 01 Jan 1970 00:00:00 GMT");
+        context.Response.Headers.Append("Last-Modified", DateTime.UtcNow.ToString("R"));
+        context.Response.Headers.Append("Etag", Guid.NewGuid().ToString());
+        context.Response.Headers.Append("Surrogate-Control", "no-store");
+        // Only add Vary header to non-static content to avoid Service Worker issues
+        context.Response.Headers.Append("Vary", "Accept-Encoding");
+    }
+    
+    // Set timestamp parameter for cache busting on dynamic content only
+    if (!context.Request.Query.ContainsKey("v") && !isStaticFile)
+    {
+        var timestamp = DateTimeOffset.UtcNow.ToUnixTimeSeconds().ToString();
+        context.Request.QueryString = context.Request.QueryString.Add("v", timestamp);
+    }
+    
+    await next();
+});
+
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");

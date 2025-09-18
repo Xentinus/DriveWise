@@ -4,6 +4,14 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover" />
     
+    <!-- Enhanced Cache Control - Prevent All Caching -->
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate, max-age=0" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+    <meta http-equiv="Last-Modified" content="0" />
+    <meta http-equiv="If-Modified-Since" content="0" />
+    <meta http-equiv="Etag" content="0" />
+    
     <!-- Primary Meta Tags -->
     <title>DriveWise - Intelligens Útitárs</title>
     <meta name="title" content="DriveWise - Intelligens Útitárs" />
@@ -30,23 +38,17 @@
     <!-- Icons -->
     <link rel="icon" type="image/svg+xml" href="/icons/icon.svg" />
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon.ico" />
-    <link rel="apple-touch-icon" sizes="180x180" href="/icons/icon-192x192.png" />
-    <link rel="icon" type="image/png" sizes="192x192" href="/icons/icon-192x192.png" />
-    <link rel="icon" type="image/png" sizes="512x512" href="/icons/icon-512x512.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/icons/icon.svg" />
     
     <!-- Microsoft Tiles -->
-    <meta name="msapplication-TileImage" content="/icons/icon-144x144.png" />
-    <meta name="msapplication-square70x70logo" content="/icons/icon-72x72.png" />
-    <meta name="msapplication-square150x150logo" content="/icons/icon-152x152.png" />
-    <meta name="msapplication-wide310x150logo" content="/icons/icon-384x384.png" />
-    <meta name="msapplication-square310x310logo" content="/icons/icon-512x512.png" />
+    <meta name="msapplication-TileImage" content="/icons/icon.svg" />
     
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
     <meta property="og:url" content="/" />
     <meta property="og:title" content="DriveWise - Intelligens Útitárs" />
     <meta property="og:description" content="Intelligens térképes navigációs alkalmazás időjárás előrejelzéssel és járműkezeléssel" />
-    <meta property="og:image" content="/icons/icon-512x512.png" />
+    <meta property="og:image" content="/icons/icon.svg" />
     <meta property="og:site_name" content="DriveWise" />
     <meta property="og:locale" content="hu_HU" />
     
@@ -55,9 +57,9 @@
     <meta property="twitter:url" content="/" />
     <meta property="twitter:title" content="DriveWise - Intelligens Útitárs" />
     <meta property="twitter:description" content="Intelligens térképes navigációs alkalmazás időjárás előrejelzéssel és járműkezeléssel" />
-    <meta property="twitter:image" content="/icons/icon-512x512.png" />
+    <meta property="twitter:image" content="/icons/icon.svg" />
     
-    <!-- Bootstrap CSS (design framework) -->
+    <!-- Bootstrap CSS (design framework) with cache busting -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="" crossorigin="anonymous">
     <!-- Bootstrap Icons (for modern icons) -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
@@ -65,11 +67,29 @@
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;800&display=swap" rel="stylesheet">
     <!-- Leaflet (OpenStreetMap) CSS from CDN to avoid missing local files -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="" crossorigin="" />
+    
+    <!-- Local CSS files with cache busting parameters -->
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/modal-manager.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/map.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/weather-widget.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/pwa.css" asp-append-version="true" />
+    
+    <!-- Cache busting script -->
+    <script>
+        // Add cache busting timestamp to all local resource requests
+        (function() {
+            const timestamp = new Date().getTime();
+            const links = document.querySelectorAll('link[href*="~/"]');
+            links.forEach(link => {
+                if (link.href.indexOf('?') === -1) {
+                    link.href += '?v=' + timestamp;
+                } else {
+                    link.href += '&v=' + timestamp;
+                }
+            });
+        })();
+    </script>
 </head>
 <body>
     <div id="map"></div>
@@ -144,6 +164,8 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="" crossorigin="anonymous"></script>
     <!-- Leaflet JS (must load before map.js) -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="" crossorigin=""></script>
+    
+    <!-- Local JS files with cache busting parameters -->
     <script src="~/js/storage-manager.js" asp-append-version="true"></script>
     <script src="~/js/theme-manager.js" asp-append-version="true"></script>
     <script src="~/js/pwa.js" asp-append-version="true"></script>
@@ -158,7 +180,7 @@
         // Register Service Worker for PWA functionality
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
-                navigator.serviceWorker.register('/sw.js')
+                navigator.serviceWorker.register('/sw.js?v=' + new Date().getTime())
                     .then(registration => {
                         console.log('ServiceWorker registration successful');
                     })
@@ -167,6 +189,19 @@
                     });
             });
         }
+        
+        // Add cache busting to dynamically loaded scripts
+        (function() {
+            const timestamp = new Date().getTime();
+            const scripts = document.querySelectorAll('script[src*="~/"]');
+            scripts.forEach(script => {
+                if (script.src.indexOf('?') === -1) {
+                    script.src += '?v=' + timestamp;
+                } else {
+                    script.src += '&v=' + timestamp;
+                }
+            });
+        })();
     </script>
     
     @await RenderSectionAsync("Scripts", required: false)
