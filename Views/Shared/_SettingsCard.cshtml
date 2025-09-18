@@ -107,36 +107,70 @@
         // Initialize data management functionality
         initDataManagement();
         
-        // Special event dispatching for theme and unit changes
+        // Special event dispatching for theme and unit changes - with extension conflict protection
         window.addEventListener('storageChanged', function(event) {
-            const { key, value } = event.detail;
-            
-            if (key === 'unit') {
-                try {
-                    // Create a serializable event detail for external listeners
-                    const unitEvent = new CustomEvent('unitChanged', { 
-                        detail: JSON.stringify({ unit: Number(value) })
-                    });
-                    window.dispatchEvent(unitEvent);
-                } catch (e) { 
-                    console.warn('[settings] dispatch unitChanged failed', e); 
+            try {
+                // Only handle events from our own StorageManager to avoid extension conflicts
+                if (!event.detail || event.detail.source !== 'StorageManager') {
+                    console.log('[settings] Ignoring non-StorageManager storage event');
+                    return;
                 }
-            }
-            
-            if (key === 'theme') {
-                try {
-                    // Notify ThemeManager about theme change
-                    if (window.ThemeManager) {
-                        window.ThemeManager.setTheme(value);
+                
+                const { key, value } = event.detail;
+                
+                if (key === 'unit') {
+                    try {
+                        // Handle both string and pre-stringified values
+                        let unitValue = value;
+                        if (typeof value === 'string' && (value.startsWith('{') || value.startsWith('['))) {
+                            try {
+                                unitValue = JSON.parse(value);
+                            } catch (parseError) {
+                                console.warn('[settings] Could not parse unit value:', value);
+                                unitValue = value;
+                            }
+                        }
+                        
+                        // Create a serializable event detail for external listeners
+                        const unitEvent = new CustomEvent('unitChanged', { 
+                            detail: JSON.stringify({ unit: Number(unitValue) })
+                        });
+                        window.dispatchEvent(unitEvent);
+                        console.log('[settings] Dispatched unitChanged event for value:', unitValue);
+                    } catch (e) { 
+                        console.warn('[settings] dispatch unitChanged failed:', e); 
                     }
-                    // Create a serializable event detail for external listeners
-                    const themeEvent = new CustomEvent('themeChanged', { 
-                        detail: JSON.stringify({ theme: value })
-                    });
-                    window.dispatchEvent(themeEvent);
-                } catch (e) { 
-                    console.warn('[settings] dispatch themeChanged failed', e); 
                 }
+                
+                if (key === 'theme') {
+                    try {
+                        // Handle both string and pre-stringified values
+                        let themeValue = value;
+                        if (typeof value === 'string' && (value.startsWith('{') || value.startsWith('['))) {
+                            try {
+                                themeValue = JSON.parse(value);
+                            } catch (parseError) {
+                                console.warn('[settings] Could not parse theme value:', value);
+                                themeValue = value;
+                            }
+                        }
+                        
+                        // Notify ThemeManager about theme change
+                        if (window.ThemeManager) {
+                            window.ThemeManager.setTheme(themeValue);
+                        }
+                        // Create a serializable event detail for external listeners
+                        const themeEvent = new CustomEvent('themeChanged', { 
+                            detail: JSON.stringify({ theme: themeValue })
+                        });
+                        window.dispatchEvent(themeEvent);
+                        console.log('[settings] Dispatched themeChanged event for value:', themeValue);
+                    } catch (e) { 
+                        console.warn('[settings] dispatch themeChanged failed:', e); 
+                    }
+                }
+            } catch (e) {
+                console.warn('[settings] storageChanged event handler failed:', e);
             }
         });
     }

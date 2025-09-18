@@ -5,6 +5,9 @@
 window.StorageManager = (function() {
     'use strict';
 
+    // Storage change suppression flag to reduce extension conflicts
+    let suppressStorageEvents = false;
+
     // Private methods
     function readStored(key) {
         try {
@@ -32,29 +35,66 @@ window.StorageManager = (function() {
 
     function writeStored(key, value) {
         try {
+            // Validate input
+            if (typeof key !== 'string' || key.length === 0) {
+                console.warn('[StorageManager] Invalid key provided:', key);
+                return false;
+            }
+            
+            // Temporarily suppress storage events to prevent extension conflicts
+            suppressStorageEvents = true;
+            
             // Special handling for theme - store as plain string to be compatible with ThemeManager
             if (key === 'theme') {
-                localStorage.setItem(key, value);
-                console.log('[StorageManager] write theme as plain string', key, value);
+                const stringValue = String(value);
+                localStorage.setItem(key, stringValue);
+                console.log('[StorageManager] write theme as plain string', key, stringValue);
             } else {
-                const jsonValue = JSON.stringify(value);
+                // Ensure value is serializable and safe
+                let jsonValue;
+                try {
+                    // First check if value is already a string
+                    if (typeof value === 'string') {
+                        // Store string values as quoted JSON to ensure they can be parsed back
+                        jsonValue = JSON.stringify(value);
+                    } else {
+                        jsonValue = JSON.stringify(value);
+                    }
+                } catch (stringifyError) {
+                    console.warn('[StorageManager] Cannot stringify value for key:', key, 'value:', value, 'error:', stringifyError);
+                    // Fallback to string conversion and then stringify
+                    jsonValue = JSON.stringify(String(value));
+                }
+                
                 localStorage.setItem(key, jsonValue);
                 console.log('[StorageManager] write as JSON', key, typeof value === 'object' ? jsonValue : value);
             }
+            
+            // Re-enable storage events after a brief delay
+            setTimeout(() => {
+                suppressStorageEvents = false;
+            }, 10);
+            
             return true;
         } catch (e) {
-            console.warn('[StorageManager] writeStored failed for key:', key, e);
+            console.warn('[StorageManager] writeStored failed for key:', key, 'error:', e);
+            suppressStorageEvents = false;
             return false;
         }
     }
 
     function removeStored(key) {
         try {
+            suppressStorageEvents = true;
             localStorage.removeItem(key);
             console.log('[StorageManager] removed', key);
+            setTimeout(() => {
+                suppressStorageEvents = false;
+            }, 10);
             return true;
         } catch (e) {
             console.warn('[StorageManager] removeStored failed for key:', key, e);
+            suppressStorageEvents = false;
             return false;
         }
     }
@@ -73,6 +113,11 @@ window.StorageManager = (function() {
 
         remove: function(key) {
             return removeStored(key);
+        },
+
+        // Check if storage events are suppressed (for debugging)
+        isStorageEventsSuppressed: function() {
+            return suppressStorageEvents;
         },
 
         // Cache and data management
@@ -104,6 +149,8 @@ window.StorageManager = (function() {
             console.log('[StorageManager] Clearing all application data...');
             
             try {
+                suppressStorageEvents = true;
+                
                 // Clear localStorage
                 localStorage.clear();
                 console.log('[StorageManager] localStorage cleared');
@@ -125,9 +172,14 @@ window.StorageManager = (function() {
                 // Clear caches
                 this.clearCache();
                 
+                setTimeout(() => {
+                    suppressStorageEvents = false;
+                }, 100);
+                
                 return true;
             } catch (error) {
                 console.error('[StorageManager] Data clearing failed:', error);
+                suppressStorageEvents = false;
                 return false;
             }
         },
@@ -219,18 +271,46 @@ window.StorageManager = (function() {
             return this.removeFromArray('vehicles', index);
         },
 
-        // Event dispatching for storage changes
+        // Event dispatching for storage changes - reduced frequency to avoid extension conflicts
         dispatchStorageChange: function(key, value, operation = 'set') {
+            // Skip dispatching if we're in the middle of storage operations
+            if (suppressStorageEvents) {
+                console.log('[StorageManager] Skipping storage event dispatch due to suppression:', key);
+                return;
+            }
+            
             try {
-                window.dispatchEvent(new CustomEvent('storageChanged', { 
-                    detail: { 
-                        key, 
-                        value, 
-                        operation 
-                    } 
-                }));
+                // Ensure value is properly serializable
+                let serializedValue = value;
+                if (typeof value === 'object' && value !== null) {
+                    try {
+                        serializedValue = JSON.stringify(value);
+                    } catch (stringifyError) {
+                        console.warn('[StorageManager] Cannot stringify value for event dispatch:', key, value);
+                        serializedValue = String(value);
+                    }
+                } else if (typeof value === 'function') {
+                    console.warn('[StorageManager] Cannot dispatch function value:', key);
+                    return;
+                }
+                
+                // Use setTimeout to ensure async dispatch and reduce conflicts
+                setTimeout(() => {
+                    if (!suppressStorageEvents) {
+                        window.dispatchEvent(new CustomEvent('storageChanged', { 
+                            detail: { 
+                                key, 
+                                value: serializedValue, 
+                                operation,
+                                timestamp: Date.now(),
+                                source: 'StorageManager'
+                            } 
+                        }));
+                        console.log('[StorageManager] Dispatched storageChanged event for key:', key, 'value:', serializedValue);
+                    }
+                }, 5);
             } catch (e) {
-                console.warn('[StorageManager] dispatch storageChanged failed', e);
+                console.warn('[StorageManager] dispatch storageChanged failed for key:', key, 'error:', e);
             }
         },
 
@@ -263,10 +343,16 @@ window.StorageManager = (function() {
                         this.set(key, el.checked);
                         console.log('[StorageManager] saved checkbox current state as default', key, '=', el.checked);
                     }
+                    
+                    // Debounced event handler to reduce noise
+                    let changeTimeout;
                     el.addEventListener('change', () => {
-                        const val = el.checked;
-                        this.set(key, val);
-                        this.dispatchStorageChange(key, val);
+                        clearTimeout(changeTimeout);
+                        changeTimeout = setTimeout(() => {
+                            const val = el.checked;
+                            this.set(key, val);
+                            this.dispatchStorageChange(key, val);
+                        }, 100);
                     });
 
                 } else if (el.tagName === 'SELECT' || el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
@@ -290,10 +376,16 @@ window.StorageManager = (function() {
                         this.set(key, el.value);
                         console.log('[StorageManager] saved select/input current state as default', key, '=', el.value);
                     }
+                    
+                    // Debounced event handler to reduce noise
+                    let changeTimeout;
                     el.addEventListener('change', () => {
-                        const val = el.value;
-                        this.set(key, val);
-                        this.dispatchStorageChange(key, val);
+                        clearTimeout(changeTimeout);
+                        changeTimeout = setTimeout(() => {
+                            const val = el.value;
+                            this.set(key, val);
+                            this.dispatchStorageChange(key, val);
+                        }, 100);
                     });
                 }
             });
