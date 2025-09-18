@@ -37,8 +37,9 @@ window.StorageManager = (function() {
                 localStorage.setItem(key, value);
                 console.log('[StorageManager] write theme as plain string', key, value);
             } else {
-                localStorage.setItem(key, JSON.stringify(value));
-                console.log('[StorageManager] write as JSON', key, value);
+                const jsonValue = JSON.stringify(value);
+                localStorage.setItem(key, jsonValue);
+                console.log('[StorageManager] write as JSON', key, typeof value === 'object' ? jsonValue : value);
             }
             return true;
         } catch (e) {
@@ -222,7 +223,11 @@ window.StorageManager = (function() {
         dispatchStorageChange: function(key, value, operation = 'set') {
             try {
                 window.dispatchEvent(new CustomEvent('storageChanged', { 
-                    detail: { key, value, operation } 
+                    detail: { 
+                        key, 
+                        value, 
+                        operation 
+                    } 
                 }));
             } catch (e) {
                 console.warn('[StorageManager] dispatch storageChanged failed', e);
@@ -230,7 +235,7 @@ window.StorageManager = (function() {
         },
 
         // Initialize storage for form elements (similar to SettingsCard)
-        initFormStorage: function(container = document) {
+        initFormStorage: function(container = document, defaults = {}) {
             const elems = container.querySelectorAll('[data-storage-key]');
             console.log('[StorageManager] initializing form storage for', elems.length, 'elements');
 
@@ -239,17 +244,24 @@ window.StorageManager = (function() {
                 if (!key) return;
 
                 const stored = this.get(key);
-                console.log('[StorageManager] init form element key=', key, 'stored=', stored, 'current value=', el.value || el.checked);
+                const defaultValue = defaults[key];
+                
+                console.log('[StorageManager] init form element key=', key, 'stored=', stored, 'default=', defaultValue, 'current value=', el.value || el.checked);
 
                 // Initialize based on element type
                 if (el.type === 'checkbox') {
                     if (stored !== null) {
                         el.checked = stored === true || stored === '1' || stored === 'true';
                         console.log('[StorageManager] loaded checkbox', key, '=', el.checked);
+                    } else if (defaultValue !== undefined) {
+                        // Use provided default
+                        el.checked = defaultValue;
+                        this.set(key, defaultValue);
+                        console.log('[StorageManager] set checkbox default', key, '=', defaultValue);
                     } else {
-                        // persist default state
+                        // Use element's current state as default
                         this.set(key, el.checked);
-                        console.log('[StorageManager] saved checkbox default', key, '=', el.checked);
+                        console.log('[StorageManager] saved checkbox current state as default', key, '=', el.checked);
                     }
                     el.addEventListener('change', () => {
                         const val = el.checked;
@@ -265,13 +277,18 @@ window.StorageManager = (function() {
                         } catch (e) { 
                             console.warn('[StorageManager] set form value failed', key, stored); 
                         }
+                    } else if (defaultValue !== undefined) {
+                        // Use provided default
+                        el.value = defaultValue;
+                        this.set(key, defaultValue);
+                        console.log('[StorageManager] set select/input default', key, '=', defaultValue);
                     } else {
                         // For selects, if no option is naturally selected, select the first one as default
                         if (el.tagName === 'SELECT' && el.selectedIndex === -1) {
                             el.selectedIndex = 0;
                         }
                         this.set(key, el.value);
-                        console.log('[StorageManager] saved select/input default', key, '=', el.value);
+                        console.log('[StorageManager] saved select/input current state as default', key, '=', el.value);
                     }
                     el.addEventListener('change', () => {
                         const val = el.value;

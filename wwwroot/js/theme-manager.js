@@ -57,7 +57,7 @@
         // Dispatch event to map to change tiles if needed
         try {
             window.dispatchEvent(new CustomEvent('mapThemeChanged', { 
-                detail: { theme: theme } 
+                detail: JSON.stringify({ theme: theme })
             }));
         } catch (e) {
             console.warn('[theme] Failed to dispatch map theme change', e);
@@ -65,8 +65,17 @@
     }
 
     function handleThemeChanged(event) {
-        if (event.detail && event.detail.theme) {
-            applyTheme(event.detail.theme);
+        if (event.detail) {
+            let themeData;
+            try {
+                // Handle both object and string details
+                themeData = typeof event.detail === 'string' ? JSON.parse(event.detail) : event.detail;
+                if (themeData.theme) {
+                    applyTheme(themeData.theme);
+                }
+            } catch (e) {
+                console.warn('[theme] Failed to parse theme change event', e);
+            }
         }
     }
 

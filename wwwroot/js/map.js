@@ -43,8 +43,16 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Listen for theme changes
     window.addEventListener('mapThemeChanged', function(event) {
-        if (event.detail && event.detail.theme) {
-            switchMapTheme(event.detail.theme);
+        if (event.detail) {
+            try {
+                // Handle both object and string details
+                let themeData = typeof event.detail === 'string' ? JSON.parse(event.detail) : event.detail;
+                if (themeData.theme) {
+                    switchMapTheme(themeData.theme);
+                }
+            } catch (e) {
+                console.warn('[map] Failed to parse map theme change event', e);
+            }
         }
     });
 

@@ -85,29 +85,21 @@
 (function() {
     function init() {
         console.log('[settings] init');
-        
-        // Set sensible defaults before storage initialization
-        setDefaults();
-        
+
         // Sync with current theme state
         syncCurrentTheme();
+       
         
-        // Debug: Check what's in storage before initialization
-        console.log('[settings] Storage contents before init:');
-        console.log('[settings] theme:', StorageManager.get('theme'));
-        console.log('[settings] unit:', StorageManager.get('unit'));
-        console.log('[settings] currency:', StorageManager.get('currency'));
-        console.log('[settings] notifications:', StorageManager.get('notifications'));
+        // Define default values
+        const defaults = {
+            'notifications': true,
+            'theme': window.ThemeManager ? window.ThemeManager.getCurrentTheme() : 'light',
+            'unit': '0',  // Metrikus
+            'currency': 'HUF'
+        };
         
-        // Use the global StorageManager for form element initialization
-        StorageManager.initFormStorage();
-        
-        // Debug: Check what's in storage after initialization
-        console.log('[settings] Storage contents after init:');
-        console.log('[settings] theme:', StorageManager.get('theme'));
-        console.log('[settings] unit:', StorageManager.get('unit'));
-        console.log('[settings] currency:', StorageManager.get('currency'));
-        console.log('[settings] notifications:', StorageManager.get('notifications'));
+        // Use the global StorageManager for form element initialization with defaults
+        StorageManager.initFormStorage(document, defaults);
         
         // Update map attribution text in settings
         updateMapAttribution();
@@ -121,7 +113,11 @@
             
             if (key === 'unit') {
                 try {
-                    window.dispatchEvent(new CustomEvent('unitChanged', { detail: { unit: Number(value) } }));
+                    // Create a serializable event detail for external listeners
+                    const unitEvent = new CustomEvent('unitChanged', { 
+                        detail: JSON.stringify({ unit: Number(value) })
+                    });
+                    window.dispatchEvent(unitEvent);
                 } catch (e) { 
                     console.warn('[settings] dispatch unitChanged failed', e); 
                 }
@@ -133,7 +129,11 @@
                     if (window.ThemeManager) {
                         window.ThemeManager.setTheme(value);
                     }
-                    window.dispatchEvent(new CustomEvent('themeChanged', { detail: { theme: value } }));
+                    // Create a serializable event detail for external listeners
+                    const themeEvent = new CustomEvent('themeChanged', { 
+                        detail: JSON.stringify({ theme: value })
+                    });
+                    window.dispatchEvent(themeEvent);
                 } catch (e) { 
                     console.warn('[settings] dispatch themeChanged failed', e); 
                 }
@@ -233,34 +233,6 @@
                 console.log('[settings] synced current theme:', currentTheme);
             }
         }
-    }
-
-    function setDefaults() {
-        // Set sensible default values for form elements if none exist in storage
-        const defaults = {
-            'notifications': true,
-            'theme': 'light',
-            'unit': '0',  // Metrikus
-            'currency': 'HUF'
-        };
-
-        // Special handling for theme - get current theme from ThemeManager if available
-        if (window.ThemeManager) {
-            defaults.theme = window.ThemeManager.getCurrentTheme();
-            console.log('[settings] Using current theme from ThemeManager:', defaults.theme);
-        }
-
-        Object.keys(defaults).forEach(key => {
-            const element = document.querySelector(`[data-storage-key="${key}"]`);
-            if (element) {
-                if (element.type === 'checkbox') {
-                    element.checked = defaults[key];
-                } else {
-                    element.value = defaults[key];
-                }
-                console.log('[settings] set default for', key, '=', defaults[key]);
-            }
-        });
     }
 
     function updateMapAttribution() {

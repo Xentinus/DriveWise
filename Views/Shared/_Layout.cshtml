@@ -92,6 +92,13 @@
     </script>
 </head>
 <body>
+    <!-- Cache Clear Notification -->
+    <div id="cacheNotification" class="cache-notification" style="display: none;">
+        <div class="cache-notification-content">
+            <i class="bi bi-arrow-clockwise spin"></i>
+        </div>
+    </div>
+
     <div id="map"></div>
     
     <!-- Unified Top-Left Widget -->
@@ -174,6 +181,114 @@
     <script src="~/js/bottom-nav.js" asp-append-version="true"></script>
     <script src="~/js/modal-manager.js" asp-append-version="true"></script>
     <script src="~/js/weather-widget.js" asp-append-version="true"></script>
+    
+    <!-- F5 Cache Clear Handler -->
+    <script>
+        // Global F5 cache clearing functionality
+        (function() {
+            let lastF5Press = 0;
+            const F5_COOLDOWN = 2000; // 2 seconds cooldown to prevent spam
+            
+            document.addEventListener('keydown', function(event) {
+                // Check if F5 (key code 116) is pressed
+                if (event.key === 'F5' || event.keyCode === 116) {
+                    const now = Date.now();
+                    
+                    // Prevent spam pressing
+                    if (now - lastF5Press < F5_COOLDOWN) {
+                        return;
+                    }
+                    
+                    lastF5Press = now;
+                    
+                    // Prevent default F5 behavior temporarily
+                    event.preventDefault();
+                    
+                    console.log('[F5Handler] F5 pressed - clearing cache...');
+                    
+                    // Show notification only during clearing
+                    showCacheNotification();
+                    
+                    // Clear cache using StorageManager
+                    if (window.StorageManager) {
+                        Promise.all([
+                            window.StorageManager.clearCache(),
+                            // Also clear service worker cache if available
+                            clearServiceWorkerCache()
+                        ]).then(function() {
+                            console.log('[F5Handler] Cache cleared successfully');
+                            
+                            // Hide notification immediately and refresh
+                            hideCacheNotification();
+                            
+                            // Refresh the page with cache busting immediately
+                            setTimeout(function() {
+                                window.location.href = window.location.protocol + '//' + 
+                                    window.location.host + window.location.pathname + 
+                                    '?_cache_clear=' + Date.now();
+                            }, 200);
+                            
+                        }).catch(function(error) {
+                            console.error('[F5Handler] Cache clearing failed:', error);
+                            hideCacheNotification();
+                            
+                            // Still refresh the page even if cache clear failed
+                            setTimeout(function() {
+                                window.location.reload(true);
+                            }, 300);
+                        });
+                    } else {
+                        console.warn('[F5Handler] StorageManager not available, performing regular refresh');
+                        hideCacheNotification();
+                        window.location.reload(true);
+                    }
+                }
+            });
+            
+            function clearServiceWorkerCache() {
+                return new Promise(function(resolve) {
+                    if ('serviceWorker' in navigator && 'caches' in window) {
+                        navigator.serviceWorker.getRegistrations().then(function(registrations) {
+                            const updatePromises = registrations.map(function(registration) {
+                                // Force update the service worker
+                                return registration.update().catch(function(error) {
+                                    console.warn('[F5Handler] Service worker update failed:', error);
+                                });
+                            });
+                            
+                            return Promise.all(updatePromises);
+                        }).then(function() {
+                            console.log('[F5Handler] Service worker cache cleared');
+                            resolve();
+                        }).catch(function(error) {
+                            console.warn('[F5Handler] Service worker cache clear failed:', error);
+                            resolve(); // Don't fail the whole operation
+                        });
+                    } else {
+                        resolve();
+                    }
+                });
+            }
+            
+            function showCacheNotification() {
+                const notification = document.getElementById('cacheNotification');
+                if (notification) {
+                    notification.style.display = 'flex';
+                    notification.style.opacity = '1';
+                }
+            }
+            
+            function hideCacheNotification() {
+                const notification = document.getElementById('cacheNotification');
+                if (notification) {
+                    notification.style.opacity = '0';
+                    setTimeout(function() {
+                        notification.style.display = 'none';
+                    }, 200);
+                }
+            }
+        })();
+    </script>
     
     <!-- PWA Service Worker Registration -->
     <script>
