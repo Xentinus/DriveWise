@@ -14,6 +14,7 @@
   card.className = 'mm-card';
   card.setAttribute('role','dialog');
   card.setAttribute('aria-modal','true');
+  // Initialize with aria-hidden="true" since modal starts closed
   card.setAttribute('aria-hidden','true');
 
   const handle = document.createElement('div');
@@ -45,10 +46,15 @@
   document.body.appendChild(card);
 
   let currentOpen = null;
+  let lastFocusedElement = null;
 
   function openCard(key){
     const cfg = ids.find(x=>x.id===key);
     if(!cfg) return;
+    
+    // Store the currently focused element to restore later
+    lastFocusedElement = document.activeElement;
+    
     title.textContent = cfg.title;
     // show loading state then fetch partial view from server
     // show spinner and mark busy for accessibility
@@ -96,19 +102,37 @@
       content.innerHTML = '<p style="color:#c00">Hiba a tartalom betöltésekor.</p>';
       console.error(err);
     });
+    
     backdrop.classList.add('visible');
     card.classList.add('open');
+    // Remove aria-hidden when modal is open so assistive technology can access it
     card.setAttribute('aria-hidden','false');
     currentOpen = key;
-    // trap focus minimally
-    close.focus();
+    
+    // Focus management - focus the close button after modal opens
+    // Use setTimeout to ensure the modal animation has started
+    setTimeout(() => {
+      close.focus();
+    }, 50);
   }
 
   function closeCard(){
     backdrop.classList.remove('visible');
     card.classList.remove('open');
+    // Set aria-hidden="true" when modal is closed
     card.setAttribute('aria-hidden','true');
     currentOpen = null;
+    
+    // Restore focus to the element that was focused before opening the modal
+    if (lastFocusedElement && typeof lastFocusedElement.focus === 'function') {
+      try {
+        lastFocusedElement.focus();
+      } catch (e) {
+        // In case the element is no longer in the DOM or focusable
+        console.warn('Could not restore focus to previous element:', e);
+      }
+    }
+    lastFocusedElement = null;
   }
 
   function renderContent(id){
@@ -157,9 +181,35 @@
   backdrop.addEventListener('click', closeCard);
   close.addEventListener('click', closeCard);
 
-  // keyboard: Esc closes
+  // keyboard: Esc closes modal and Tab traps focus within modal
   document.addEventListener('keydown', function(e){
-    if(e.key==='Escape' && currentOpen) closeCard();
+    if(e.key==='Escape' && currentOpen) {
+      closeCard();
+      return;
+    }
+    
+    // Focus trapping within modal when open
+    if (currentOpen && e.key === 'Tab') {
+      const focusableElements = card.querySelectorAll(
+        'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+      );
+      const firstFocusable = focusableElements[0];
+      const lastFocusable = focusableElements[focusableElements.length - 1];
+      
+      if (e.shiftKey) {
+        // Shift + Tab
+        if (document.activeElement === firstFocusable) {
+          e.preventDefault();
+          lastFocusable.focus();
+        }
+      } else {
+        // Tab
+        if (document.activeElement === lastFocusable) {
+          e.preventDefault();
+          firstFocusable.focus();
+        }
+      }
+    }
   });
 
   // touch drag to dismiss (small swipe up to close)
