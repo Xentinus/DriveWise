@@ -6,7 +6,7 @@
         <div class="settings-label">Értesítések</div>
         <div class="settings-value">
             <label class="switch">
-                <input type="checkbox" data-storage-key="notifications" />
+                <input type="checkbox" id="notificationsToggle" />
                 <span class="switch-slider" aria-hidden="true"></span>
             </label>
         </div>
@@ -88,11 +88,12 @@
 
         // Sync with current theme state
         syncCurrentTheme();
-       
         
-        // Define default values
+        // Initialize notification permission handling
+        initNotificationToggle();
+        
+        // Define default values (removed notifications as it's handled by browser permission)
         const defaults = {
-            'notifications': true,
             'theme': window.ThemeManager ? window.ThemeManager.getCurrentTheme() : 'light',
             'unit': '0',  // Metrikus
             'currency': 'HUF'
@@ -175,6 +176,133 @@
         });
     }
 
+    function initNotificationToggle() {
+        const notificationsToggle = document.getElementById('notificationsToggle');
+        
+        if (!notificationsToggle) {
+            console.warn('[settings] Notifications toggle not found');
+            return;
+        }
+
+        // Check if browser supports notifications
+        if (!('Notification' in window)) {
+            console.log('[settings] Browser does not support notifications');
+            notificationsToggle.disabled = true;
+            notificationsToggle.checked = false;
+            return;
+        }
+
+        // Set initial state based on current permission
+        updateNotificationToggleState();
+
+        // Handle toggle changes
+        notificationsToggle.addEventListener('change', function() {
+            if (this.checked) {
+                // User wants to enable notifications
+                requestNotificationPermission();
+            } else {
+                // User wants to disable notifications
+                // Note: We can't revoke permissions programmatically, 
+                // but we can advise user to do it manually
+                showNotificationDisableInfo();
+            }
+        });
+
+        // Listen for permission changes (some browsers support this)
+        if ('permissions' in navigator) {
+            navigator.permissions.query({name: 'notifications'}).then(function(permissionStatus) {
+                permissionStatus.addEventListener('change', function() {
+                    console.log('[settings] Notification permission changed to:', this.state);
+                    updateNotificationToggleState();
+                });
+            }).catch(function(error) {
+                console.log('[settings] Permission query not supported:', error);
+            });
+        }
+    }
+
+    function updateNotificationToggleState() {
+        const notificationsToggle = document.getElementById('notificationsToggle');
+        
+        if (!notificationsToggle || !('Notification' in window)) {
+            return;
+        }
+
+        const permission = Notification.permission;
+        console.log('[settings] Current notification permission:', permission);
+
+        switch (permission) {
+            case 'granted':
+                notificationsToggle.checked = true;
+                notificationsToggle.disabled = false;
+                break;
+            case 'denied':
+                notificationsToggle.checked = false;
+                notificationsToggle.disabled = true; // Can't request again if denied
+                break;
+            case 'default':
+            default:
+                notificationsToggle.checked = false;
+                notificationsToggle.disabled = false;
+                break;
+        }
+    }
+
+    function requestNotificationPermission() {
+        console.log('[settings] Requesting notification permission');
+        
+        Notification.requestPermission().then(function(permission) {
+            console.log('[settings] Notification permission result:', permission);
+            
+            if (permission === 'granted') {
+                console.log('[settings] Notification permission granted');
+                // Show a test notification
+                showTestNotification();
+            } else if (permission === 'denied') {
+                console.log('[settings] Notification permission denied');
+                showNotificationDeniedInfo();
+            }
+            
+            // Update toggle state based on new permission
+            updateNotificationToggleState();
+        }).catch(function(error) {
+            console.error('[settings] Error requesting notification permission:', error);
+            updateNotificationToggleState();
+        });
+    }
+
+    function showTestNotification() {
+        try {
+            const notification = new Notification('DriveWise', {
+                body: 'Értesítések sikeresen engedélyezve!',
+                icon: '/icons/icon.svg',
+                badge: '/icons/icon.svg',
+                tag: 'settings-test',
+                requireInteraction: false
+            });
+
+            // Auto close after 4 seconds
+            setTimeout(() => {
+                notification.close();
+            }, 4000);
+        } catch (error) {
+            console.warn('[settings] Failed to show test notification:', error);
+        }
+    }
+
+    function showNotificationDeniedInfo() {
+        alert('Az értesítések le vannak tiltva. Az engedélyezéshez:\n\n1. Kattints a böngésző címsorában a lakat ikonra\n2. Válaszd az "Értesítések" opciót\n3. Állítsd "Engedélyezés" állapotba\n4. Frissítsd az oldalt');
+    }
+
+    function showNotificationDisableInfo() {
+        const notificationsToggle = document.getElementById('notificationsToggle');
+        
+        // Reset the toggle since we can't programmatically disable
+        notificationsToggle.checked = true;
+        
+        alert('Az értesítések letiltásához:\n\n1. Kattints a böngésző címsorában a lakat ikonra\n2. Válaszd az "Értesítések" opciót\n3. Állítsd "Letiltás" állapotba\n4. Frissítsd az oldalt');
+    }
+
     function initDataManagement() {
         const clearAllDataBtn = document.getElementById('clearAllDataBtn');
         
@@ -187,7 +315,7 @@
 
     function clearAllData() {
         // Show confirmation dialog
-        const confirmed = confirm('Biztosan törölni szeretnéd az összes mentett adatot? Ez visszaállítja az alkalmazást az alapértelmezett állapotba.\n\nTörölve lesz:\n- Beállítások\n- Járművek\n- Keresési előzmények\n- Tárolt adatok');
+        const confirmed = confirm('Biztosan törölni szeretnéd az összes mentett adatot? Ez visszaállítja az alkalmazást az alapértelmezett állapotba.\n\nTörölve lesz:\n- Beállítások\n- Járművek\n- Keresési előzmények\n- Tárolt adatok\n\nMegjegyzés: Az értesítési engedélyek a böngésző beállításaiban maradnak.');
         
         if (!confirmed) {
             return;
