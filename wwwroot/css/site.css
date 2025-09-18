@@ -451,6 +451,26 @@ h1, h2, h3, h4, h5, h6 {
     right: 0;
     bottom: 0;
     z-index: 0;
+    
+    /* Allow touch events for map interaction */
+    touch-action: manipulation;
+    
+    /* Prevent text selection on touch devices but allow map interaction */
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    
+    /* Prevent iOS touch callouts but allow map interaction */
+    -webkit-touch-callout: none;
+    -webkit-tap-highlight-color: transparent;
+    
+    /* Prevent context menu on long press */
+    -webkit-user-drag: none;
+    -khtml-user-drag: none;
+    -moz-user-drag: none;
+    -o-user-drag: none;
+    user-drag: none;
 }
 
 /* Bottom navigation styling */

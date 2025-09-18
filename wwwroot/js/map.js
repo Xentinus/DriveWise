@@ -69,6 +69,8 @@ document.addEventListener('DOMContentLoaded', function () {
     var isLongPressing = false;
     var longPressThreshold = 800; // ms
     var moveThreshold = 10; // pixels
+    var touchStartTime = null; // Track touch start time
+    var isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent); // Detect mobile
 
     // Check if geolocation is supported and get user's location
     if (navigator.geolocation) {
@@ -160,27 +162,54 @@ document.addEventListener('DOMContentLoaded', function () {
             });
     }
 
-    // Long-press functionality for location queries
+    // Long-press functionality for location queries - improved for mobile
     function startLongPress(e) {
         var position = e.latlng || (e.originalEvent && L.latLng(e.originalEvent.latlng));
-        if (!position) return;
+        if (!position) {
+            console.log('[map] No position found in long press event');
+            return;
+        }
+        
+        console.log('[map] Starting long press at:', position.lat, position.lng);
         
         longPressPosition = position;
         isLongPressing = false;
+        touchStartTime = Date.now();
+        
+        // Cancel any existing timer
+        if (longPressTimer) {
+            clearTimeout(longPressTimer);
+        }
         
         longPressTimer = setTimeout(function() {
-            isLongPressing = true;
-            handleLongPress(longPressPosition);
+            // Double check that we're still in the same position and enough time has passed
+            if (longPressPosition && Date.now() - touchStartTime >= longPressThreshold) {
+                isLongPressing = true;
+                console.log('[map] Long press confirmed after', Date.now() - touchStartTime, 'ms');
+                handleLongPress(longPressPosition);
+            } else {
+                console.log('[map] Long press validation failed');
+            }
         }, longPressThreshold);
+        
+        console.log('[map] Long press timer set for', longPressThreshold, 'ms');
     }
 
     function cancelLongPress() {
+        console.log('[map] Canceling long press timer - had timer:', !!longPressTimer, 'was long pressing:', isLongPressing, 'is mobile:', isMobile);
+        
+        // Only cancel the timer, don't clear mobile tap data yet
         if (longPressTimer) {
             clearTimeout(longPressTimer);
             longPressTimer = null;
         }
-        longPressPosition = null;
-        isLongPressing = false;
+        
+        // Only clear position data for desktop, mobile handles it in touchend
+        if (!isMobile) {
+            longPressPosition = null;
+            touchStartTime = null;
+            isLongPressing = false;
+        }
     }
 
     function handleLongPress(position) {
@@ -204,7 +233,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 html: '<div class="long-press-icon success"></div>',
                 iconSize: [30, 30],
                 iconAnchor: [15, 15]
-            }));
+            }))
             
             // Show location info popup
             showLocationInfo(data, position, longPressMarker);
@@ -246,25 +275,106 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
-    // Touch events for mobile
+    // Touch events for mobile - simple tap for location query
     map.on('touchstart', function(e) {
         if (e.originalEvent.touches.length === 1) { // Single touch
-            startLongPress(e);
+            console.log('[map] Touch start detected - isMobile:', isMobile);
+            
+            if (isMobile) {
+                // On mobile, just store the position and time for tap detection
+                var position = e.latlng;
+                if (position) {
+                    longPressPosition = position;
+                    touchStartTime = Date.now();
+                    console.log('[map] Mobile tap start at:', position.lat, position.lng, 'time:', touchStartTime);
+                } else {
+                    console.log('[map] No position found in touch event');
+                }
+            } else {
+                // On desktop/non-mobile, use long press
+                console.log('[map] Desktop detected, using long press');
+                startLongPress(e);
+            }
+        } else {
+            console.log('[map] Multi-touch detected, ignoring');
         }
     });
 
-    map.on('touchend', cancelLongPress);
-    map.on('touchcancel', cancelLongPress);
+    map.on('touchend', function(e) {
+        console.log('[map] Touch end - was long pressing:', isLongPressing, 'is mobile:', isMobile);
+        
+        if (isMobile && longPressPosition && touchStartTime) {
+            var touchDuration = Date.now() - touchStartTime;
+            console.log('[map] Mobile touch duration:', touchDuration, 'ms');
+            
+            // On mobile, if it's a quick tap (less than 300ms), treat it as location query
+            if (touchDuration < 300) {
+                console.log('[map] Mobile tap detected, querying location');
+                handleLongPress(longPressPosition);
+            }
+            
+            // Clear mobile tap data immediately after processing
+            longPressPosition = null;
+            touchStartTime = null;
+        }
+        
+        // Only prevent default if we actually detected a long press
+        if (isLongPressing) {
+            e.originalEvent.preventDefault();
+        }
+        
+        // Cancel any remaining long press timer
+        if (longPressTimer) {
+            clearTimeout(longPressTimer);
+            longPressTimer = null;
+        }
+        
+        isLongPressing = false;
+    });
+    
+    map.on('touchcancel', function(e) {
+        console.log('[map] Touch cancel');
+        cancelLongPress();
+    });
+    
     map.on('touchmove', function(e) {
-        if (longPressTimer && longPressPosition && e.originalEvent.touches.length === 1) {
+        if (longPressPosition && e.originalEvent.touches.length === 1) {
             var touch = e.originalEvent.touches[0];
             var touchLatLng = map.containerPointToLatLng([touch.clientX, touch.clientY]);
             var distance = map.distance(longPressPosition, touchLatLng);
             if (distance > moveThreshold) {
+                console.log('[map] Touch moved too far, canceling');
                 cancelLongPress();
             }
         }
     });
+
+    // Add a simple click handler for mobile as backup
+    map.on('click', function(e) {
+        console.log('[map] Click event detected - isMobile:', isMobile);
+        
+        if (isMobile) {
+            console.log('[map] Mobile click at:', e.latlng.lat, e.latlng.lng);
+            // Small delay to avoid conflicts with touch events
+            setTimeout(function() {
+                handleLongPress(e.latlng);
+            }, 50);
+        }
+    });
+
+    // Add debug logging for map interaction
+    var mapContainer = document.getElementById('map');
+    if (mapContainer) {
+        console.log('[map] Map container found, setting up basic protection');
+        
+        // Only prevent context menu, allow other interactions
+        mapContainer.addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+            return false;
+        });
+        
+        console.log('[map] Context menu prevention added to map container');
+    }
 
     // If map is in a container with dynamic size, call invalidateSize after a short delay
     setTimeout(function () { map.invalidateSize(); }, 200);
@@ -523,4 +633,26 @@ document.addEventListener('DOMContentLoaded', function () {
     
     // Initialize custom zoom controls
     setupCustomZoomControls();
+    
+    // Debug function for long press testing
+    window.testLongPress = function() {
+        console.log('[map] Testing long press manually');
+        var testPosition = map.getCenter();
+        handleLongPress(testPosition);
+    };
+    
+    // Debug function to check long press state
+    window.debugLongPress = function() {
+        console.log('=== INTERACTION DEBUG ===');
+        console.log('isMobile:', isMobile);
+        console.log('longPressTimer:', !!longPressTimer);
+        console.log('longPressPosition:', longPressPosition);
+        console.log('isLongPressing:', isLongPressing);
+        console.log('touchStartTime:', touchStartTime);
+        console.log('longPressThreshold:', longPressThreshold);
+        console.log('moveThreshold:', moveThreshold);
+        console.log('========================');
+    };
+    
+    console.log('[map] Long press debug functions available: testLongPress(), debugLongPress()');
 });
