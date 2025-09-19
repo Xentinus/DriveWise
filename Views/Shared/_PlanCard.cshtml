@@ -1,5 +1,52 @@
 @* Partial for Plan card *@
 <div class="plan-card">
-    <p>Tervezési eszközök és opciók ide kerülnek.</p>
-    <button class="btn btn-primary">Útvonal indítása</button>
+    <div class="plan-card-header">
+        <h5><i class="bi bi-signpost"></i> Útvonal tervezése</h5>
+    </div>
+    
+    <div class="plan-card-body">
+        <!-- Origin Location -->
+        <div class="location-input-group mb-3">
+            <label for="originLocation" class="form-label">
+                <i class="bi bi-geo-alt text-success"></i> Induló helyszín
+            </label>
+            <div class="location-search-container">
+                <input type="text" class="form-control location-input" id="originLocation" 
+                       placeholder="Adja meg az induló helyszínt...">
+                <div class="location-results" id="originResults"></div>
+            </div>
+        </div>
+
+        <!-- Destination Location -->
+        <div class="location-input-group mb-3">
+            <label for="destinationLocation" class="form-label">
+                <i class="bi bi-flag text-danger"></i> Cél helyszín
+            </label>
+            <div class="location-search-container">
+                <input type="text" class="form-control location-input" id="destinationLocation" 
+                       placeholder="Adja meg a cél helyszínt...">
+                <div class="location-results" id="destinationResults"></div>
+            </div>
+        </div>
+
+        <!-- Vehicle Selection -->
+        <div class="vehicle-selection-group mb-3">
+            <label for="vehicleSelect" class="form-label">
+                <i class="bi bi-car-front"></i> Jármű (opcionális)
+            </label>
+            <select class="form-select" id="vehicleSelect">
+                <option value="">Alapértelmezett jármű használata</option>
+            </select>
+            <small class="form-text text-muted">
+                Ha nem választ járművet, alapértelmezett fogyasztási értékek kerülnek felhasználásra.
+            </small>
+        </div>
+
+        <!-- Route Planning Button -->
+        <div class="d-grid gap-2">
+            <button class="btn btn-primary btn-lg" id="planRouteBtn" disabled>
+                <i class="bi bi-signpost"></i> Útvonal megtervezése
+            </button>
+        </div>
+    </div>
 </div>

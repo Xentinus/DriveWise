@@ -1,0 +1,232 @@
+/* Plan Card Styles */
+.plan-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+    transition: all 0.3s ease;
+}
+
+.plan-card:hover {
+    box-shadow: var(--shadow-md);
+    transform: translateY(-2px);
+}
+
+.plan-card-header {
+    background: var(--primary-gradient, linear-gradient(135deg, #007bff, #0056b3));
+    color: white;
+    padding: 1rem 1.25rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.plan-card-header h5 {
+    margin: 0;
+    font-weight: 600;
+    font-size: 1.1rem;
+}
+
+.plan-card-header i {
+    margin-right: 0.5rem;
+}
+
+.plan-card-body {
+    padding: 1.25rem;
+}
+
+/* Location Input Styles */
+.location-input-group {
+    position: relative;
+}
+
+.location-input-group .form-label {
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: var(--text-primary);
+}
+
+.location-input-group .form-label i {
+    margin-right: 0.5rem;
+    width: 16px;
+    text-align: center;
+}
+
+.location-search-container {
+    position: relative;
+}
+
+.location-input {
+    border: 2px solid var(--border-color);
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+    font-size: 0.95rem;
+    transition: all 0.3s ease;
+    background: var(--input-bg, white);
+    color: var(--text-primary);
+}
+
+.location-input:focus {
+    border-color: var(--primary-color, #007bff);
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+    outline: none;
+}
+
+.location-input::placeholder {
+    color: var(--text-muted);
+}
+
+/* Location Results Dropdown */
+.location-results {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: var(--dropdown-bg, white);
+    border: 1px solid var(--border-color);
+    border-top: none;
+    border-radius: 0 0 8px 8px;
+    max-height: 200px;
+    overflow-y: auto;
+    z-index: 1000;
+    display: none;
+    box-shadow: var(--shadow-md);
+}
+
+.location-results.show {
+    display: block;
+}
+
+.location-result-item {
+    padding: 0.75rem 1rem;
+    cursor: pointer;
+    border-bottom: 1px solid var(--border-light);
+    transition: background-color 0.2s ease;
+    color: var(--text-primary);
+}
+
+.location-result-item:hover,
+.location-result-item.selected {
+    background-color: var(--hover-bg, #f8f9fa);
+}
+
+.location-result-item:last-child {
+    border-bottom: none;
+}
+
+.location-result-item .result-name {
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+}
+
+.location-result-item .result-address {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+}
+
+/* Vehicle Selection Styles */
+.vehicle-selection-group .form-label {
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: var(--text-primary);
+}
+
+.vehicle-selection-group .form-label i {
+    margin-right: 0.5rem;
+    width: 16px;
+    text-align: center;
+}
+
+.vehicle-selection-group .form-select {
+    border: 2px solid var(--border-color);
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+    font-size: 0.95rem;
+    transition: all 0.3s ease;
+    background: var(--input-bg, white);
+    color: var(--text-primary);
+}
+
+.vehicle-selection-group .form-select:focus {
+    border-color: var(--primary-color, #007bff);
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+    outline: none;
+}
+
+.vehicle-selection-group .form-text {
+    margin-top: 0.5rem;
+    font-size: 0.85rem;
+}
+
+/* Route Planning Button */
+#planRouteBtn {
+    border-radius: 8px;
+    padding: 0.875rem 1.5rem;
+    font-weight: 600;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    background: var(--primary-gradient, linear-gradient(135deg, #007bff, #0056b3));
+    border: none;
+}
+
+#planRouteBtn:not(:disabled):hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+}
+
+#planRouteBtn:disabled {
+    background: var(--gray-400, #6c757d);
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+#planRouteBtn i {
+    margin-right: 0.5rem;
+}
+
+/* Dark theme support */
+[data-theme="dark"] .plan-card {
+    --card-bg: #2d3338;
+    --border-color: #495057;
+    --text-primary: #f8f9fa;
+    --text-muted: #adb5bd;
+    --input-bg: #343a40;
+    --dropdown-bg: #343a40;
+    --hover-bg: #495057;
+    --border-light: #495057;
+}
+
+[data-theme="dark"] .location-input,
+[data-theme="dark"] .form-select {
+    background-color: var(--input-bg);
+    color: var(--text-primary);
+    border-color: var(--border-color);
+}
+
+[data-theme="dark"] .location-input::placeholder {
+    color: var(--text-muted);
+}
+
+[data-theme="dark"] .plan-card.loading .plan-card-body::after {
+    background: rgba(45, 51, 56, 0.8);
+}
+
+/* Responsive design */
+@media (max-width: 576px) {
+    .plan-card-body {
+        padding: 1rem;
+    }
+    
+    .plan-card-header {
+        padding: 0.75rem 1rem;
+    }
+    
+    .plan-card-header h5 {
+        font-size: 1rem;
+    }
+    
+    #planRouteBtn {
+        padding: 0.75rem 1.25rem;
+        font-size: 0.95rem;
+    }
+}

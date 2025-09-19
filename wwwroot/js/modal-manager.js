@@ -230,4 +230,12 @@
     startY = null;
   });
 
+  // Export ModalManager globally
+  window.ModalManager = {
+    openModal: openCard,
+    closeModal: closeCard,
+    isOpen: () => currentOpen !== null,
+    getCurrentModal: () => currentOpen
+  };
+
 })();

@@ -348,6 +348,7 @@
     // Export functions to global scope
     window.NavigationManager = {
         navigateToLocation: navigateToLocation,
+        displayRoute: displayRoute,
         clearRoute: clearRoute,
         getCurrentPosition: getCurrentPosition,
         updateUserPosition: function(lat, lng) {

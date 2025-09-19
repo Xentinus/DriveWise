@@ -260,15 +260,38 @@ window.StorageManager = (function() {
             if (!vehicle.id) {
                 vehicle.id = 'vehicle_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
             }
-            return this.addToArray('vehicles', vehicle);
+            const result = this.addToArray('vehicles', vehicle);
+            if (result) {
+                // Dispatch vehicles updated event
+                window.dispatchEvent(new CustomEvent('vehiclesUpdated', {
+                    detail: { action: 'add', vehicle: vehicle }
+                }));
+            }
+            return result;
         },
 
         updateVehicle: function(index, vehicle) {
-            return this.updateInArray('vehicles', index, vehicle);
+            const result = this.updateInArray('vehicles', index, vehicle);
+            if (result) {
+                // Dispatch vehicles updated event
+                window.dispatchEvent(new CustomEvent('vehiclesUpdated', {
+                    detail: { action: 'update', vehicle: vehicle, index: index }
+                }));
+            }
+            return result;
         },
 
         deleteVehicle: function(index) {
-            return this.removeFromArray('vehicles', index);
+            const vehicles = this.getVehicles();
+            const deletedVehicle = vehicles[index];
+            const result = this.removeFromArray('vehicles', index);
+            if (result) {
+                // Dispatch vehicles updated event
+                window.dispatchEvent(new CustomEvent('vehiclesUpdated', {
+                    detail: { action: 'delete', vehicle: deletedVehicle, index: index }
+                }));
+            }
+            return result;
         },
 
         // Selected vehicle operations
