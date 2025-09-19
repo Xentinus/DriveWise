@@ -9,6 +9,19 @@
             </button>
         </div>
 
+        <!-- Selected Vehicle Info -->
+        <div id="selectedVehicleInfo" class="alert alert-info d-none mb-3">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <strong>Kiválasztott jármű:</strong>
+                    <span id="selectedVehicleName">-</span>
+                </div>
+                <button type="button" class="btn btn-outline-secondary btn-sm" id="clearSelectionBtn">
+                    <i class="bi bi-x"></i> Alapértelmezett
+                </button>
+            </div>
+        </div>
+
         <!-- Vehicle List -->
         <div id="vehiclesList" class="vehicles-list">
             <!-- Vehicles will be loaded here dynamically -->
@@ -135,17 +148,25 @@
         
         // Load vehicles on page load
         loadVehicles();
+        loadSelectedVehicle();
         
         // Event listeners
         document.getElementById('addVehicleBtn').addEventListener('click', showAddVehicleForm);
         document.getElementById('backToVehiclesBtn').addEventListener('click', goBackToVehicles);
         document.getElementById('cancelVehicleBtn').addEventListener('click', goBackToVehicles);
         document.getElementById('saveVehicleBtn').addEventListener('click', saveVehicle);
+        document.getElementById('clearSelectionBtn').addEventListener('click', clearVehicleSelection);
         
         // Listen for unit changes to update consumption labels and refresh display
         window.addEventListener('unitChanged', function() {
             updateConsumptionUnits();
             loadVehicles();
+        });
+
+        // Listen for vehicle selection changes
+        window.addEventListener('vehicleSelectionChanged', function(event) {
+            console.log('[vehicles] Vehicle selection changed:', event.detail);
+            loadSelectedVehicle();
         });
         
         // Initialize with current unit setting
@@ -171,6 +192,7 @@
         const vehicles = StorageManager.getVehicles();
         const vehiclesList = document.getElementById('vehiclesList');
         const emptyState = document.getElementById('emptyState');
+        const selectedVehicle = StorageManager.getSelectedVehicle();
         
         if (vehicles.length === 0) {
             vehiclesList.innerHTML = '';
@@ -179,9 +201,9 @@
         }
         
         emptyState.style.display = 'none';
-        vehiclesList.innerHTML = vehicles.map((vehicle, index) => createVehicleCard(vehicle, index)).join('');
+        vehiclesList.innerHTML = vehicles.map((vehicle, index) => createVehicleCard(vehicle, index, selectedVehicle)).join('');
         
-        // Add event listeners to edit and delete buttons
+        // Add event listeners to edit, delete, and select buttons
         vehiclesList.querySelectorAll('.edit-vehicle-btn').forEach((btn, index) => {
             btn.addEventListener('click', () => editVehicle(index));
         });
@@ -189,17 +211,26 @@
         vehiclesList.querySelectorAll('.delete-vehicle-btn').forEach((btn, index) => {
             btn.addEventListener('click', () => deleteVehicle(index));
         });
+
+        vehiclesList.querySelectorAll('.select-vehicle-btn').forEach((btn, index) => {
+            btn.addEventListener('click', () => selectVehicle(index));
+        });
     }
 
-    function createVehicleCard(vehicle, index) {
+    function createVehicleCard(vehicle, index, selectedVehicle) {
         const consumptionInfo = getConsumptionInfo(vehicle);
         const displayName = vehicle.name || `${vehicle.brand} ${vehicle.model}`;
+        const isSelected = selectedVehicle && selectedVehicle.id === vehicle.id;
+        const cardClass = isSelected ? 'vehicle-item border rounded p-3 mb-2 bg-light border-primary' : 'vehicle-item border rounded p-3 mb-2';
         
         return `
-            <div class="vehicle-item border rounded p-3 mb-2">
+            <div class="${cardClass}">
                 <div class="d-flex justify-content-between align-items-start">
                     <div class="flex-grow-1">
-                        <h6 class="mb-1">${escapeHtml(displayName)}</h6>
+                        <div class="d-flex align-items-center mb-1">
+                            <h6 class="mb-0">${escapeHtml(displayName)}</h6>
+                            ${isSelected ? '<span class="badge bg-primary ms-2">Kiválasztva</span>' : ''}
+                        </div>
                         <div class="small text-muted">
                             <div><strong>Márka:</strong> ${escapeHtml(vehicle.brand)} ${escapeHtml(vehicle.model)}</div>
                             <div><strong>Üzemanyag:</strong> ${getFuelTypeLabel(vehicle.fuelType)}</div>
@@ -209,6 +240,9 @@
                         </div>
                     </div>
                     <div class="d-flex gap-1">
+                        ${!isSelected ? `<button type="button" class="btn btn-outline-success btn-sm select-vehicle-btn" title="Kiválasztás">
+                            <i class="bi bi-check-circle"></i>
+                        </button>` : ''}
                         <button type="button" class="btn btn-outline-primary btn-sm edit-vehicle-btn" title="Szerkesztés">
                             <i class="bi bi-pencil"></i>
                         </button>
@@ -315,8 +349,53 @@
 
     function deleteVehicle(index) {
         if (confirm('Biztosan törölni szeretnéd ezt a járművet?')) {
+            const vehicles = StorageManager.getVehicles();
+            const vehicleToDelete = vehicles[index];
+            const selectedVehicle = StorageManager.getSelectedVehicle();
+            
+            // If the vehicle being deleted is currently selected, clear the selection
+            if (selectedVehicle && selectedVehicle.id === vehicleToDelete.id) {
+                StorageManager.clearSelectedVehicle();
+            }
+            
             StorageManager.deleteVehicle(index);
             loadVehicles();
+            loadSelectedVehicle();
+        }
+    }
+
+    function selectVehicle(index) {
+        const vehicles = StorageManager.getVehicles();
+        const vehicle = vehicles[index];
+        
+        if (vehicle && vehicle.id) {
+            StorageManager.setSelectedVehicle(vehicle.id);
+            loadVehicles(); // Refresh the vehicle list to show selection
+            loadSelectedVehicle(); // Update the selection info
+            
+            console.log('[vehicles] Vehicle selected:', vehicle.name || `${vehicle.brand} ${vehicle.model}`);
+        }
+    }
+
+    function clearVehicleSelection() {
+        StorageManager.clearSelectedVehicle();
+        loadVehicles(); // Refresh the vehicle list
+        loadSelectedVehicle(); // Update the selection info
+        
+        console.log('[vehicles] Vehicle selection cleared');
+    }
+
+    function loadSelectedVehicle() {
+        const selectedVehicle = StorageManager.getSelectedVehicle();
+        const selectedInfo = document.getElementById('selectedVehicleInfo');
+        const selectedNameSpan = document.getElementById('selectedVehicleName');
+        
+        if (selectedVehicle) {
+            const displayName = selectedVehicle.name || `${selectedVehicle.brand} ${selectedVehicle.model}`;
+            selectedNameSpan.textContent = displayName;
+            selectedInfo.classList.remove('d-none');
+        } else {
+            selectedInfo.classList.add('d-none');
         }
     }
 

@@ -43,6 +43,26 @@
                     <div class="route-detail-value" id="routeDistance">-</div>
                 </div>
             </div>
+
+            <div class="route-detail-row" id="fuelConsumptionRow" style="display: none;">
+                <div class="route-detail-icon">
+                    <i class="bi bi-fuel-pump"></i>
+                </div>
+                <div class="route-detail-info">
+                    <div class="route-detail-label">Üzemanyag</div>
+                    <div class="route-detail-value" id="routeFuelConsumption">-</div>
+                </div>
+            </div>
+
+            <div class="route-detail-row" id="vehicleUsedRow" style="display: none;">
+                <div class="route-detail-icon">
+                    <i class="bi bi-car-front"></i>
+                </div>
+                <div class="route-detail-info">
+                    <div class="route-detail-label">Jármű</div>
+                    <div class="route-detail-value" id="routeVehicleUsed">-</div>
+                </div>
+            </div>
         </div>
         
         <div class="route-actions">
@@ -280,6 +300,10 @@
         const destinationEl = document.getElementById('routeDestination');
         const durationEl = document.getElementById('routeDuration');
         const distanceEl = document.getElementById('routeDistance');
+        const fuelConsumptionEl = document.getElementById('routeFuelConsumption');
+        const vehicleUsedEl = document.getElementById('routeVehicleUsed');
+        const fuelConsumptionRow = document.getElementById('fuelConsumptionRow');
+        const vehicleUsedRow = document.getElementById('vehicleUsedRow');
         
         if (destinationEl && routeData.destination) {
             destinationEl.textContent = routeData.destination;
@@ -291,6 +315,22 @@
         
         if (distanceEl && routeData.distance !== undefined) {
             distanceEl.textContent = formatDistance(routeData.distance);
+        }
+
+        // Display fuel consumption if available
+        if (fuelConsumptionEl && fuelConsumptionRow && routeData.fuelConsumption !== undefined) {
+            fuelConsumptionEl.textContent = formatFuelConsumption(routeData.fuelConsumption);
+            fuelConsumptionRow.style.display = 'flex';
+        } else if (fuelConsumptionRow) {
+            fuelConsumptionRow.style.display = 'none';
+        }
+
+        // Display vehicle used if available
+        if (vehicleUsedEl && vehicleUsedRow && routeData.vehicleUsed) {
+            vehicleUsedEl.textContent = routeData.vehicleUsed;
+            vehicleUsedRow.style.display = 'flex';
+        } else if (vehicleUsedRow) {
+            vehicleUsedRow.style.display = 'none';
         }
     }
     
@@ -334,6 +374,16 @@
             return `${hours} óra ${minutes} perc`;
         } else {
             return `${minutes} perc`;
+        }
+    }
+
+    function formatFuelConsumption(liters) {
+        if (liters < 0.1) {
+            return (liters * 1000).toFixed(0) + ' ml';
+        } else if (liters < 1) {
+            return (liters).toFixed(2) + ' l';
+        } else {
+            return (liters).toFixed(1) + ' l';
         }
     }
     

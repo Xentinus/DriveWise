@@ -4,6 +4,6 @@ namespace DriveWise.Services
 {
     public interface IRoutingService
     {
-        Task<RouteResult?> CalculateRouteAsync(double fromLat, double fromLon, double toLat, double toLon);
+        Task<RouteResult?> CalculateRouteAsync(double fromLat, double fromLon, double toLat, double toLon, Vehicle? vehicle = null);
     }
 }

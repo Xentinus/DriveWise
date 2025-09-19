@@ -271,6 +271,52 @@ window.StorageManager = (function() {
             return this.removeFromArray('vehicles', index);
         },
 
+        // Selected vehicle operations
+        getSelectedVehicle: function() {
+            const selectedId = this.get('selectedVehicleId', null);
+            if (!selectedId) return null;
+            
+            const vehicles = this.getVehicles();
+            return vehicles.find(v => v.id === selectedId) || null;
+        },
+
+        setSelectedVehicle: function(vehicleId) {
+            const result = this.set('selectedVehicleId', vehicleId);
+            if (result) {
+                this.dispatchStorageChange('selectedVehicleId', vehicleId);
+                // Also dispatch a vehicle selection changed event
+                window.dispatchEvent(new CustomEvent('vehicleSelectionChanged', {
+                    detail: { vehicleId: vehicleId }
+                }));
+            }
+            return result;
+        },
+
+        clearSelectedVehicle: function() {
+            const result = this.remove('selectedVehicleId');
+            if (result) {
+                this.dispatchStorageChange('selectedVehicleId', null, 'remove');
+                window.dispatchEvent(new CustomEvent('vehicleSelectionChanged', {
+                    detail: { vehicleId: null }
+                }));
+            }
+            return result;
+        },
+
+        // Get the effective vehicle for fuel calculation (selected or default)
+        getEffectiveVehicle: function() {
+            const selected = this.getSelectedVehicle();
+            if (selected) return selected;
+            
+            // Return default vehicle data if no vehicle selected
+            return {
+                id: 'default',
+                name: 'Alapértelmezett jármű',
+                consumption: 7.0,
+                fuelType: 'petrol'
+            };
+        },
+
         // Event dispatching for storage changes - reduced frequency to avoid extension conflicts
         dispatchStorageChange: function(key, value, operation = 'set') {
             // Skip dispatching if we're in the middle of storage operations

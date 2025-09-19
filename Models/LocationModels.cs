@@ -35,6 +35,8 @@ namespace DriveWise.Models
         public double Distance { get; set; } // in meters
         public double Duration { get; set; } // in seconds
         public List<RouteStep> Steps { get; set; } = new List<RouteStep>();
+        public double? FuelConsumption { get; set; } // in liters
+        public string? VehicleUsed { get; set; } // vehicle name or "default"
     }
 
     public class RouteGeometry

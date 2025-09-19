@@ -110,9 +110,40 @@
         }
         
         // Calculate route using our API
-        const routeUrl = `/api/routing/route?fromLat=${currentUserPosition.lat}&fromLon=${currentUserPosition.lng}&toLat=${destinationLat}&toLon=${destinationLng}`;
+        const selectedVehicle = window.StorageManager ? window.StorageManager.getSelectedVehicle() : null;
         
-        return fetch(routeUrl)
+        let fetchPromise;
+        
+        if (selectedVehicle) {
+            console.log('[navigation] Using selected vehicle for route calculation:', selectedVehicle.name || `${selectedVehicle.brand} ${selectedVehicle.model}`);
+            
+            // Use POST endpoint with vehicle data
+            const routeData = {
+                fromLat: currentUserPosition.lat,
+                fromLon: currentUserPosition.lng,
+                toLat: destinationLat,
+                toLon: destinationLng,
+                vehicle: selectedVehicle
+            };
+            
+            console.log('[navigation] Sending POST request with data:', JSON.stringify(routeData, null, 2));
+            
+            fetchPromise = fetch('/api/routing/route', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(routeData)
+            });
+        } else {
+            console.log('[navigation] No vehicle selected, using default consumption');
+            
+            // Use GET endpoint (default behavior)
+            const routeUrl = `/api/routing/route?fromLat=${currentUserPosition.lat}&fromLon=${currentUserPosition.lng}&toLat=${destinationLat}&toLon=${destinationLng}`;
+            fetchPromise = fetch(routeUrl);
+        }
+        
+        return fetchPromise
             .then(function(response) {
                 if (!response.ok) {
                     throw new Error('Route calculation failed');
@@ -196,6 +227,8 @@
             destination: destinationName,
             distance: route.distance,
             duration: route.duration,
+            fuelConsumption: route.fuelConsumption,
+            vehicleUsed: route.vehicleUsed,
             geometry: route.geometry
         };
         

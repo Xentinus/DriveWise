@@ -7,15 +7,17 @@ namespace DriveWise.Services
     public class RoutingService : IRoutingService
     {
         private readonly HttpClient _httpClient;
+        private readonly IVehicleService _vehicleService;
         private const string OSRM_BASE_URL = "https://router.project-osrm.org/route/v1/driving";
 
-        public RoutingService(HttpClient httpClient)
+        public RoutingService(HttpClient httpClient, IVehicleService vehicleService)
         {
             _httpClient = httpClient;
+            _vehicleService = vehicleService;
             _httpClient.DefaultRequestHeaders.Add("User-Agent", "DriveWise/1.0");
         }
 
-        public async Task<RouteResult?> CalculateRouteAsync(double fromLat, double fromLon, double toLat, double toLon)
+        public async Task<RouteResult?> CalculateRouteAsync(double fromLat, double fromLon, double toLat, double toLon, Vehicle? vehicle = null)
         {
             try
             {
@@ -44,14 +46,21 @@ namespace DriveWise.Services
                 if (osrmResponse?.Routes?.Count > 0)
                 {
                     var route = osrmResponse.Routes[0];
+                    
+                    // Calculate fuel consumption
+                    var effectiveVehicle = vehicle ?? _vehicleService.GetDefaultVehicle();
+                    var fuelConsumption = _vehicleService.CalculateFuelConsumption(route.Distance, effectiveVehicle);
+                    
                     return new RouteResult
                     {
                         Geometry = route.Geometry,
                         Distance = route.Distance,
                         Duration = route.Duration,
+                        FuelConsumption = fuelConsumption,
+                        VehicleUsed = effectiveVehicle.Name ?? "Alapértelmezett jármű",
                         Steps = route.Legs?.SelectMany(leg => leg.Steps?.Select(step => new RouteStep
                         {
-                            Instruction = step.Maneuver?.Instruction ?? "Folytat�s",
+                            Instruction = step.Maneuver?.Instruction ?? "Folytatás",
                             Distance = step.Distance,
                             Duration = step.Duration,
                             Geometry = step.Geometry

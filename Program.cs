@@ -25,6 +25,9 @@ builder.Services.AddScoped<ILocationService, LocationService>();
 // Register routing service
 builder.Services.AddScoped<IRoutingService, RoutingService>();
 
+// Register vehicle service
+builder.Services.AddScoped<IVehicleService, VehicleService>();
+
 // Check if URLs are already configured via launch settings
 var configuredUrls = builder.Configuration["urls"] ?? Environment.GetEnvironmentVariable("ASPNETCORE_URLS");
 
