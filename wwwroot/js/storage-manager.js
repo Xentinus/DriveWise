@@ -260,8 +260,23 @@ window.StorageManager = (function() {
             if (!vehicle.id) {
                 vehicle.id = 'vehicle_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
             }
+            
+            // If this is the first vehicle, make it default
+            const existingVehicles = this.getVehicles();
+            if (existingVehicles.length === 0) {
+                vehicle.isDefault = true;
+            }
+            
             const result = this.addToArray('vehicles', vehicle);
             if (result) {
+                // If this is the first vehicle, set it as default
+                if (existingVehicles.length === 0) {
+                    this.set('defaultVehicleId', vehicle.id);
+                    window.dispatchEvent(new CustomEvent('defaultVehicleChanged', {
+                        detail: { vehicleId: vehicle.id }
+                    }));
+                }
+                
                 // Dispatch vehicles updated event
                 window.dispatchEvent(new CustomEvent('vehiclesUpdated', {
                     detail: { action: 'add', vehicle: vehicle }
@@ -294,20 +309,61 @@ window.StorageManager = (function() {
             return result;
         },
 
-        // Selected vehicle operations
+        // Selected vehicle operations (kept for backward compatibility)
         getSelectedVehicle: function() {
-            const selectedId = this.get('selectedVehicleId', null);
-            if (!selectedId) return null;
-            
-            const vehicles = this.getVehicles();
-            return vehicles.find(v => v.id === selectedId) || null;
+            return this.getDefaultVehicle(); // Redirect to default vehicle
         },
 
         setSelectedVehicle: function(vehicleId) {
-            const result = this.set('selectedVehicleId', vehicleId);
+            return this.setDefaultVehicle(vehicleId); // Redirect to default vehicle
+        },
+
+        clearSelectedVehicle: function() {
+            return this.clearDefaultVehicle(); // Redirect to default vehicle
+        },
+
+        // Default vehicle operations (new primary methods)
+        getDefaultVehicle: function() {
+            const defaultId = this.get('defaultVehicleId', null);
+            if (!defaultId) {
+                // Auto-set first vehicle as default if none is set
+                const vehicles = this.getVehicles();
+                if (vehicles.length > 0) {
+                    this.setDefaultVehicle(vehicles[0].id);
+                    return vehicles[0];
+                }
+                return null;
+            }
+            
+            const vehicles = this.getVehicles();
+            return vehicles.find(v => v.id === defaultId) || null;
+        },
+
+        setDefaultVehicle: function(vehicleId) {
+            // First, clear any existing default flags in vehicle objects
+            const vehicles = this.getVehicles();
+            vehicles.forEach((vehicle, index) => {
+                if (vehicle.isDefault) {
+                    vehicle.isDefault = false;
+                    this.updateVehicle(index, vehicle);
+                }
+            });
+            
+            // Set the new default vehicle
+            const vehicleIndex = vehicles.findIndex(v => v.id === vehicleId);
+            if (vehicleIndex >= 0) {
+                vehicles[vehicleIndex].isDefault = true;
+                this.updateVehicle(vehicleIndex, vehicles[vehicleIndex]);
+            }
+            
+            const result = this.set('defaultVehicleId', vehicleId);
             if (result) {
-                this.dispatchStorageChange('selectedVehicleId', vehicleId);
-                // Also dispatch a vehicle selection changed event
+                this.dispatchStorageChange('defaultVehicleId', vehicleId);
+                // Dispatch a default vehicle changed event
+                window.dispatchEvent(new CustomEvent('defaultVehicleChanged', {
+                    detail: { vehicleId: vehicleId }
+                }));
+                // Also dispatch legacy vehicle selection event for backward compatibility
                 window.dispatchEvent(new CustomEvent('vehicleSelectionChanged', {
                     detail: { vehicleId: vehicleId }
                 }));
@@ -315,10 +371,22 @@ window.StorageManager = (function() {
             return result;
         },
 
-        clearSelectedVehicle: function() {
-            const result = this.remove('selectedVehicleId');
+        clearDefaultVehicle: function() {
+            // Clear default flags in vehicle objects
+            const vehicles = this.getVehicles();
+            vehicles.forEach((vehicle, index) => {
+                if (vehicle.isDefault) {
+                    vehicle.isDefault = false;
+                    this.updateVehicle(index, vehicle);
+                }
+            });
+            
+            const result = this.remove('defaultVehicleId');
             if (result) {
-                this.dispatchStorageChange('selectedVehicleId', null, 'remove');
+                this.dispatchStorageChange('defaultVehicleId', null, 'remove');
+                window.dispatchEvent(new CustomEvent('defaultVehicleChanged', {
+                    detail: { vehicleId: null }
+                }));
                 window.dispatchEvent(new CustomEvent('vehicleSelectionChanged', {
                     detail: { vehicleId: null }
                 }));
@@ -326,12 +394,12 @@ window.StorageManager = (function() {
             return result;
         },
 
-        // Get the effective vehicle for fuel calculation (selected or default)
+        // Get the effective vehicle for fuel calculation (default or fallback)
         getEffectiveVehicle: function() {
-            const selected = this.getSelectedVehicle();
-            if (selected) return selected;
+            const defaultVehicle = this.getDefaultVehicle();
+            if (defaultVehicle) return defaultVehicle;
             
-            // Return default vehicle data if no vehicle selected
+            // Return default vehicle data if no vehicle is set as default
             return {
                 id: 'default',
                 name: 'Alapértelmezett jármű',

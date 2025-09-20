@@ -9,19 +9,6 @@
             </button>
         </div>
 
-        <!-- Selected Vehicle Info -->
-        <div id="selectedVehicleInfo" class="alert alert-info d-none mb-3">
-            <div class="d-flex justify-content-between align-items-center">
-                <div>
-                    <strong>Kiválasztott jármű:</strong>
-                    <span id="selectedVehicleName">-</span>
-                </div>
-                <button type="button" class="btn btn-outline-secondary btn-sm" id="clearSelectionBtn">
-                    <i class="bi bi-x"></i> Alapértelmezett
-                </button>
-            </div>
-        </div>
-
         <!-- Vehicle List -->
         <div id="vehiclesList" class="vehicles-list">
             <!-- Vehicles will be loaded here dynamically -->
@@ -92,22 +79,6 @@
                     <span class="consumption-unit input-group-text">L/100km</span>
                 </div>
             </div>
-            
-            <div class="mb-3">
-                <label for="vehicleCityConsumption" class="form-label">Városban fogyasztás <small class="text-muted">(opciónális)</small></label>
-                <div class="input-group">
-                    <input type="number" class="form-control" id="vehicleCityConsumption" placeholder="8.5" step="0.1" min="0">
-                    <span class="consumption-unit input-group-text">L/100km</span>
-                </div>
-            </div>
-            
-            <div class="mb-3">
-                <label for="vehicleHighwayConsumption" class="form-label">Autópályán fogyasztás <small class="text-muted">(opciónális)</small></label>
-                <div class="input-group">
-                    <input type="number" class="form-control" id="vehicleHighwayConsumption" placeholder="6.5" step="0.1" min="0">
-                    <span class="consumption-unit input-group-text">L/100km</span>
-                </div>
-            </div>
 
             <div class="mb-3">
                 <label for="vehicleYear" class="form-label">Évjárat <span class="text-danger">*</span></label>
@@ -148,14 +119,12 @@
         
         // Load vehicles on page load
         loadVehicles();
-        loadSelectedVehicle();
         
         // Event listeners
         document.getElementById('addVehicleBtn').addEventListener('click', showAddVehicleForm);
         document.getElementById('backToVehiclesBtn').addEventListener('click', goBackToVehicles);
         document.getElementById('cancelVehicleBtn').addEventListener('click', goBackToVehicles);
         document.getElementById('saveVehicleBtn').addEventListener('click', saveVehicle);
-        document.getElementById('clearSelectionBtn').addEventListener('click', clearVehicleSelection);
         
         // Listen for unit changes to update consumption labels and refresh display
         window.addEventListener('unitChanged', function() {
@@ -164,9 +133,9 @@
         });
 
         // Listen for vehicle selection changes
-        window.addEventListener('vehicleSelectionChanged', function(event) {
-            console.log('[vehicles] Vehicle selection changed:', event.detail);
-            loadSelectedVehicle();
+        window.addEventListener('defaultVehicleChanged', function(event) {
+            console.log('[vehicles] Default vehicle changed:', event.detail);
+            loadVehicles(); // Just reload the vehicle list to update badges
         });
         
         // Initialize with current unit setting
@@ -192,7 +161,7 @@
         const vehicles = StorageManager.getVehicles();
         const vehiclesList = document.getElementById('vehiclesList');
         const emptyState = document.getElementById('emptyState');
-        const selectedVehicle = StorageManager.getSelectedVehicle();
+        const defaultVehicle = StorageManager.getDefaultVehicle();
         
         if (vehicles.length === 0) {
             vehiclesList.innerHTML = '';
@@ -201,27 +170,30 @@
         }
         
         emptyState.style.display = 'none';
-        vehiclesList.innerHTML = vehicles.map((vehicle, index) => createVehicleCard(vehicle, index, selectedVehicle)).join('');
+        vehiclesList.innerHTML = vehicles.map((vehicle, index) => createVehicleCard(vehicle, index, defaultVehicle)).join('');
         
-        // Add event listeners to edit, delete, and select buttons
-        vehiclesList.querySelectorAll('.edit-vehicle-btn').forEach((btn, index) => {
+        // Add event listeners to edit, delete, and set default buttons
+        vehiclesList.querySelectorAll('.edit-vehicle-btn').forEach((btn) => {
+            const index = parseInt(btn.getAttribute('data-index'));
             btn.addEventListener('click', () => editVehicle(index));
         });
         
-        vehiclesList.querySelectorAll('.delete-vehicle-btn').forEach((btn, index) => {
+        vehiclesList.querySelectorAll('.delete-vehicle-btn').forEach((btn) => {
+            const index = parseInt(btn.getAttribute('data-index'));
             btn.addEventListener('click', () => deleteVehicle(index));
         });
 
-        vehiclesList.querySelectorAll('.select-vehicle-btn').forEach((btn, index) => {
-            btn.addEventListener('click', () => selectVehicle(index));
+        vehiclesList.querySelectorAll('.set-default-btn').forEach((btn) => {
+            const index = parseInt(btn.getAttribute('data-index'));
+            btn.addEventListener('click', () => setDefaultVehicle(index));
         });
     }
 
-    function createVehicleCard(vehicle, index, selectedVehicle) {
+    function createVehicleCard(vehicle, index, defaultVehicle) {
         const consumptionInfo = getConsumptionInfo(vehicle);
         const displayName = vehicle.name || `${vehicle.brand} ${vehicle.model}`;
-        const isSelected = selectedVehicle && selectedVehicle.id === vehicle.id;
-        const cardClass = isSelected ? 'vehicle-item border rounded p-3 mb-2 bg-light border-primary' : 'vehicle-item border rounded p-3 mb-2';
+        const isDefault = defaultVehicle && defaultVehicle.id === vehicle.id;
+        const cardClass = isDefault ? 'vehicle-item border rounded p-3 mb-2 bg-light border-warning' : 'vehicle-item border rounded p-3 mb-2';
         
         return `
             <div class="${cardClass}">
@@ -229,7 +201,7 @@
                     <div class="flex-grow-1">
                         <div class="d-flex align-items-center mb-1">
                             <h6 class="mb-0">${escapeHtml(displayName)}</h6>
-                            ${isSelected ? '<span class="badge bg-primary ms-2">Kiválasztva</span>' : ''}
+                            ${isDefault ? '<span class="badge bg-warning text-dark ms-2"><i class="bi bi-star-fill me-1"></i>Alapértelmezett</span>' : ''}
                         </div>
                         <div class="small text-muted">
                             <div><strong>Márka:</strong> ${escapeHtml(vehicle.brand)} ${escapeHtml(vehicle.model)}</div>
@@ -240,13 +212,13 @@
                         </div>
                     </div>
                     <div class="d-flex gap-1">
-                        ${!isSelected ? `<button type="button" class="btn btn-outline-success btn-sm select-vehicle-btn" title="Kiválasztás">
-                            <i class="bi bi-check-circle"></i>
+                        ${!isDefault ? `<button type="button" class="btn btn-outline-warning btn-sm set-default-btn" data-index="${index}" title="Alapértelmezetté tétel">
+                            <i class="bi bi-star"></i>
                         </button>` : ''}
-                        <button type="button" class="btn btn-outline-primary btn-sm edit-vehicle-btn" title="Szerkesztés">
+                        <button type="button" class="btn btn-outline-primary btn-sm edit-vehicle-btn" data-index="${index}" title="Szerkesztés">
                             <i class="bi bi-pencil"></i>
                         </button>
-                        <button type="button" class="btn btn-outline-danger btn-sm delete-vehicle-btn" title="Törlés">
+                        <button type="button" class="btn btn-outline-danger btn-sm delete-vehicle-btn" data-index="${index}" title="Törlés">
                             <i class="bi bi-trash"></i>
                         </button>
                     </div>
@@ -266,19 +238,7 @@
             consumption = (235.214 / consumption).toFixed(1);
         }
         
-        if (vehicle.cityConsumption && vehicle.highwayConsumption) {
-            let cityConsumption = parseFloat(vehicle.cityConsumption);
-            let highwayConsumption = parseFloat(vehicle.highwayConsumption);
-            
-            if (!isMetric) {
-                cityConsumption = (235.214 / cityConsumption).toFixed(1);
-                highwayConsumption = (235.214 / highwayConsumption).toFixed(1);
-            }
-            
-            return `${cityConsumption}/${highwayConsumption} ${unitText} (város/autópálya)`;
-        }
-        
-        return `${consumption} ${unitText} (átlag)`;
+        return `${consumption} ${unitText}`;
     }
 
     function getFuelTypeLabel(fuelType) {
@@ -319,8 +279,6 @@
         document.getElementById('vehicleModel').value = vehicle.model || '';
         document.getElementById('vehicleFuelType').value = vehicle.fuelType || '';
         document.getElementById('vehicleConsumption').value = vehicle.consumption || '';
-        document.getElementById('vehicleCityConsumption').value = vehicle.cityConsumption || '';
-        document.getElementById('vehicleHighwayConsumption').value = vehicle.highwayConsumption || '';
         document.getElementById('vehicleYear').value = vehicle.year || '';
         document.getElementById('vehicleLicensePlate').value = vehicle.licensePlate || '';
         
@@ -351,51 +309,27 @@
         if (confirm('Biztosan törölni szeretnéd ezt a járművet?')) {
             const vehicles = StorageManager.getVehicles();
             const vehicleToDelete = vehicles[index];
-            const selectedVehicle = StorageManager.getSelectedVehicle();
+            const defaultVehicle = StorageManager.getDefaultVehicle();
             
-            // If the vehicle being deleted is currently selected, clear the selection
-            if (selectedVehicle && selectedVehicle.id === vehicleToDelete.id) {
-                StorageManager.clearSelectedVehicle();
+            // If the vehicle being deleted is currently default, clear the default
+            if (defaultVehicle && defaultVehicle.id === vehicleToDelete.id) {
+                StorageManager.clearDefaultVehicle();
             }
             
             StorageManager.deleteVehicle(index);
             loadVehicles();
-            loadSelectedVehicle();
         }
     }
 
-    function selectVehicle(index) {
+    function setDefaultVehicle(index) {
         const vehicles = StorageManager.getVehicles();
         const vehicle = vehicles[index];
         
         if (vehicle && vehicle.id) {
-            StorageManager.setSelectedVehicle(vehicle.id);
-            loadVehicles(); // Refresh the vehicle list to show selection
-            loadSelectedVehicle(); // Update the selection info
+            StorageManager.setDefaultVehicle(vehicle.id);
+            loadVehicles(); // Refresh the vehicle list to show default status
             
-            console.log('[vehicles] Vehicle selected:', vehicle.name || `${vehicle.brand} ${vehicle.model}`);
-        }
-    }
-
-    function clearVehicleSelection() {
-        StorageManager.clearSelectedVehicle();
-        loadVehicles(); // Refresh the vehicle list
-        loadSelectedVehicle(); // Update the selection info
-        
-        console.log('[vehicles] Vehicle selection cleared');
-    }
-
-    function loadSelectedVehicle() {
-        const selectedVehicle = StorageManager.getSelectedVehicle();
-        const selectedInfo = document.getElementById('selectedVehicleInfo');
-        const selectedNameSpan = document.getElementById('selectedVehicleName');
-        
-        if (selectedVehicle) {
-            const displayName = selectedVehicle.name || `${selectedVehicle.brand} ${selectedVehicle.model}`;
-            selectedNameSpan.textContent = displayName;
-            selectedInfo.classList.remove('d-none');
-        } else {
-            selectedInfo.classList.add('d-none');
+            console.log('[vehicles] Default vehicle set:', vehicle.name || `${vehicle.brand} ${vehicle.model}`);
         }
     }
 
@@ -424,10 +358,6 @@
             model: document.getElementById('vehicleModel').value.trim(),
             fuelType: document.getElementById('vehicleFuelType').value,
             consumption: parseFloat(document.getElementById('vehicleConsumption').value),
-            cityConsumption: document.getElementById('vehicleCityConsumption').value ? 
-                parseFloat(document.getElementById('vehicleCityConsumption').value) : null,
-            highwayConsumption: document.getElementById('vehicleHighwayConsumption').value ? 
-                parseFloat(document.getElementById('vehicleHighwayConsumption').value) : null,
             year: parseInt(document.getElementById('vehicleYear').value),
             licensePlate: licensePlate
         };

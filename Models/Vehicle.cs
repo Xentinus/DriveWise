@@ -44,24 +44,6 @@ public class Vehicle
         double distanceInKm = distanceInMeters / 1000.0;
         double consumptionPer100Km = Consumption;
         
-        // Use specific consumption based on route type if available
-        switch (routeType.ToLower())
-        {
-            case "city":
-                consumptionPer100Km = CityConsumption ?? Consumption;
-                break;
-            case "highway":
-                consumptionPer100Km = HighwayConsumption ?? Consumption;
-                break;
-            default:
-                // For mixed routes, use average if specific consumptions are available
-                if (CityConsumption.HasValue && HighwayConsumption.HasValue)
-                {
-                    consumptionPer100Km = (CityConsumption.Value + HighwayConsumption.Value) / 2.0;
-                }
-                break;
-        }
-        
         return (distanceInKm * consumptionPer100Km) / 100.0;
     }
 }
