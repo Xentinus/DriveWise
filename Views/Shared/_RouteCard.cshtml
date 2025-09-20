@@ -16,16 +16,6 @@
         <div class="route-summary">
             <div class="route-detail-row">
                 <div class="route-detail-icon">
-                    <i class="bi bi-geo-alt"></i>
-                </div>
-                <div class="route-detail-info">
-                    <div class="route-detail-label">Cél</div>
-                    <div class="route-detail-value" id="routeDestination">-</div>
-                </div>
-            </div>
-            
-            <div class="route-detail-row">
-                <div class="route-detail-icon">
                     <i class="bi bi-clock"></i>
                 </div>
                 <div class="route-detail-info">
@@ -61,16 +51,6 @@
                 <div class="route-detail-info">
                     <div class="route-detail-label">Üzemanyag költség</div>
                     <div class="route-detail-value" id="routeFuelCost">-</div>
-                </div>
-            </div>
-
-            <div class="route-detail-row" id="vehicleUsedRow" style="display: none;">
-                <div class="route-detail-icon">
-                    <i class="bi bi-car-front"></i>
-                </div>
-                <div class="route-detail-info">
-                    <div class="route-detail-label">Jármű</div>
-                    <div class="route-detail-value" id="routeVehicleUsed">-</div>
                 </div>
             </div>
 
@@ -319,13 +299,10 @@
     function updateRouteInfo(routeData) {
         console.log('[route-card] updateRouteInfo called with data:', routeData);
         
-        const destinationEl = document.getElementById('routeDestination');
         const durationEl = document.getElementById('routeDuration');
         const distanceEl = document.getElementById('routeDistance');
         const fuelConsumptionEl = document.getElementById('routeFuelConsumption');
-        const vehicleUsedEl = document.getElementById('routeVehicleUsed');
         const fuelConsumptionRow = document.getElementById('fuelConsumptionRow');
-        const vehicleUsedRow = document.getElementById('vehicleUsedRow');
         const fuelCostEl = document.getElementById('routeFuelCost');
         const fuelCostRow = document.getElementById('fuelCostRow');
         
@@ -336,10 +313,6 @@
             fuelCostEl: !!fuelCostEl,
             fuelCostRow: !!fuelCostRow
         });
-        
-        if (destinationEl && routeData.destination) {
-            destinationEl.textContent = routeData.destination;
-        }
         
         if (durationEl && routeData.duration !== undefined) {
             durationEl.textContent = formatDuration(routeData.duration);
@@ -364,14 +337,6 @@
             fuelCostRow.style.display = 'flex';
         } else if (fuelCostRow) {
             fuelCostRow.style.display = 'none';
-        }
-
-        // Display vehicle used if available
-        if (vehicleUsedEl && vehicleUsedRow && routeData.vehicleUsed) {
-            vehicleUsedEl.textContent = routeData.vehicleUsed;
-            vehicleUsedRow.style.display = 'flex';
-        } else if (vehicleUsedRow) {
-            vehicleUsedRow.style.display = 'none';
         }
 
         // Display elevation data if available
