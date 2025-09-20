@@ -1,6 +1,7 @@
 using System.Net;
 using System.Net.Sockets;
 using DriveWise.Services;
+using DriveWise.BackgroundServices;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,6 +17,9 @@ builder.Services.AddHttpClient<ILocationService, LocationService>();
 // Add HTTP client for routing service
 builder.Services.AddHttpClient<IRoutingService, RoutingService>();
 
+// Add HTTP client for fuel price service
+builder.Services.AddHttpClient<IFuelPriceService, FuelPriceService>();
+
 // Register weather service
 builder.Services.AddScoped<IWeatherService, WeatherService>();
 
@@ -27,6 +31,12 @@ builder.Services.AddScoped<IRoutingService, RoutingService>();
 
 // Register vehicle service
 builder.Services.AddScoped<IVehicleService, VehicleService>();
+
+// Register fuel price service as singleton to maintain price cache
+builder.Services.AddSingleton<IFuelPriceService, FuelPriceService>();
+
+// Register background service for fuel price updates
+builder.Services.AddHostedService<FuelPriceBackgroundService>();
 
 // Check if URLs are already configured via launch settings
 var configuredUrls = builder.Configuration["urls"] ?? Environment.GetEnvironmentVariable("ASPNETCORE_URLS");

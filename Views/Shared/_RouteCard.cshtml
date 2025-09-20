@@ -54,6 +54,16 @@
                 </div>
             </div>
 
+            <div class="route-detail-row" id="fuelCostRow" style="display: none;">
+                <div class="route-detail-icon">
+                    <i class="bi bi-currency-exchange"></i>
+                </div>
+                <div class="route-detail-info">
+                    <div class="route-detail-label">Üzemanyag költség</div>
+                    <div class="route-detail-value" id="routeFuelCost">-</div>
+                </div>
+            </div>
+
             <div class="route-detail-row" id="vehicleUsedRow" style="display: none;">
                 <div class="route-detail-icon">
                     <i class="bi bi-car-front"></i>
@@ -307,6 +317,8 @@
     }
     
     function updateRouteInfo(routeData) {
+        console.log('[route-card] updateRouteInfo called with data:', routeData);
+        
         const destinationEl = document.getElementById('routeDestination');
         const durationEl = document.getElementById('routeDuration');
         const distanceEl = document.getElementById('routeDistance');
@@ -314,6 +326,16 @@
         const vehicleUsedEl = document.getElementById('routeVehicleUsed');
         const fuelConsumptionRow = document.getElementById('fuelConsumptionRow');
         const vehicleUsedRow = document.getElementById('vehicleUsedRow');
+        const fuelCostEl = document.getElementById('routeFuelCost');
+        const fuelCostRow = document.getElementById('fuelCostRow');
+        
+        console.log('[route-card] Fuel cost data:', {
+            fuelCost: routeData.fuelCost,
+            fuelPrice: routeData.fuelPrice,
+            fuelType: routeData.fuelType,
+            fuelCostEl: !!fuelCostEl,
+            fuelCostRow: !!fuelCostRow
+        });
         
         if (destinationEl && routeData.destination) {
             destinationEl.textContent = routeData.destination;
@@ -333,6 +355,15 @@
             fuelConsumptionRow.style.display = 'flex';
         } else if (fuelConsumptionRow) {
             fuelConsumptionRow.style.display = 'none';
+        }
+
+        // Display fuel cost if available
+        if (fuelCostEl && fuelCostRow && routeData.fuelCost !== undefined && routeData.fuelCost !== null) {
+            const costText = formatFuelCost(routeData.fuelCost, routeData.fuelPrice, routeData.fuelType);
+            fuelCostEl.innerHTML = costText;
+            fuelCostRow.style.display = 'flex';
+        } else if (fuelCostRow) {
+            fuelCostRow.style.display = 'none';
         }
 
         // Display vehicle used if available
@@ -412,6 +443,42 @@
             return (liters).toFixed(2) + ' l';
         } else {
             return (liters).toFixed(1) + ' l';
+        }
+    }
+
+    function formatFuelCost(cost, price, fuelType) {
+        if (cost === undefined || cost === null) {
+            return '-';
+        }
+        
+        const costFormatted = Math.round(cost) + ' Ft';
+        
+        if (price !== undefined && price !== null && fuelType) {
+            const priceFormatted = Math.round(price) + ' Ft/l';
+            const fuelTypeDisplay = getFuelTypeDisplay(fuelType);
+            return `${costFormatted} <small class="text-muted">(${fuelTypeDisplay}: ${priceFormatted})</small>`;
+        }
+        
+        return costFormatted;
+    }
+
+    function getFuelTypeDisplay(fuelType) {
+        switch (fuelType?.toLowerCase()) {
+            case 'benzin':
+            case 'gasoline':
+            case 'petrol':
+                return 'Benzin';
+            case 'diesel':
+            case 'dízel':
+            case 'gazolaj':
+            case 'gázolaj':
+                return 'Dízel';
+            case 'lpg':
+                return 'LPG';
+            case 'cng':
+                return 'CNG';
+            default:
+                return fuelType || 'Benzin';
         }
     }
 

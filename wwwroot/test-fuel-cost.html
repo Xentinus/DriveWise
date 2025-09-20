@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RouteCard Test</title>
+    <style>
+        .route-detail-row { display: flex; margin: 10px 0; }
+        .route-detail-icon { margin-right: 10px; }
+        .route-detail-info { flex: 1; }
+        .route-detail-label { font-weight: bold; }
+        .route-detail-value { color: #666; }
+        .text-muted { color: #999; font-size: 0.9em; }
+    </style>
+</head>
+<body>
+    <h1>RouteCard Üzemanyagköltség Teszt</h1>
+    
+    <div id="fuelCostRow" style="display: none;">
+        <div class="route-detail-icon">💰</div>
+        <div class="route-detail-info">
+            <div class="route-detail-label">Üzemanyag költség</div>
+            <div class="route-detail-value" id="routeFuelCost">-</div>
+        </div>
+    </div>
+    
+    <button onclick="testFuelCost()">Teszt Üzemanyagköltség</button>
+    <button onclick="testWithLiveData()">Teszt Élő API Adatokkal</button>
+    
+    <script>
+        function formatFuelCost(cost, price, fuelType) {
+            if (cost === undefined || cost === null) {
+                return '-';
+            }
+            
+            const costFormatted = Math.round(cost) + ' Ft';
+            
+            if (price !== undefined && price !== null && fuelType) {
+                const priceFormatted = Math.round(price) + ' Ft/l';
+                const fuelTypeDisplay = getFuelTypeDisplay(fuelType);
+                return costFormatted + ' <small class="text-muted">(' + fuelTypeDisplay + ': ' + priceFormatted + ')</small>';
+            }
+            
+            return costFormatted;
+        }
+
+        function getFuelTypeDisplay(fuelType) {
+            switch (fuelType?.toLowerCase()) {
+                case 'benzin':
+                case 'gasoline':
+                case 'petrol':
+                    return 'Benzin';
+                case 'diesel':
+                case 'dízel':
+                case 'gazolaj':
+                case 'gázolaj':
+                    return 'Dízel';
+                case 'lpg':
+                    return 'LPG';
+                case 'cng':
+                    return 'CNG';
+                default:
+                    return fuelType || 'Benzin';
+            }
+        }
+        
+        function testFuelCost() {
+            // Use actual data from debug endpoint
+            const testData = {
+                fuelCost: 157.292940,
+                fuelPrice: 588,
+                fuelType: "benzin"
+            };
+            
+            console.log('Testing with data:', testData);
+            
+            const fuelCostEl = document.getElementById('routeFuelCost');
+            const fuelCostRow = document.getElementById('fuelCostRow');
+            
+            if (fuelCostEl && fuelCostRow && testData.fuelCost !== undefined && testData.fuelCost !== null) {
+                const costText = formatFuelCost(testData.fuelCost, testData.fuelPrice, testData.fuelType);
+                fuelCostEl.innerHTML = costText;
+                fuelCostRow.style.display = 'flex';
+                console.log('Display updated with:', costText);
+            } else {
+                console.log('Elements not found or data invalid:', {
+                    fuelCostEl: !!fuelCostEl,
+                    fuelCostRow: !!fuelCostRow,
+                    fuelCost: testData.fuelCost
+                });
+            }
+        }
+        
+        // Test with live data from API
+        async function testWithLiveData() {
+            try {
+                const response = await fetch('/api/debug/simulate-frontend-data');
+                const result = await response.json();
+                const routeData = result.data;
+                
+                console.log('Live data from API:', routeData);
+                
+                const fuelCostEl = document.getElementById('routeFuelCost');
+                const fuelCostRow = document.getElementById('fuelCostRow');
+                
+                if (fuelCostEl && fuelCostRow && routeData.fuelCost !== undefined && routeData.fuelCost !== null) {
+                    const costText = formatFuelCost(routeData.fuelCost, routeData.fuelPrice, routeData.fuelType);
+                    fuelCostEl.innerHTML = costText;
+                    fuelCostRow.style.display = 'flex';
+                    console.log('Live data display updated with:', costText);
+                } else {
+                    console.log('Live data: Elements not found or data invalid');
+                }
+            } catch (error) {
+                console.error('Error fetching live data:', error);
+            }
+        }
+    </script>
+</body>
+</html>

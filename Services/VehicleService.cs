@@ -13,7 +13,7 @@ namespace DriveWise.Services
                 Type = "default",
                 Brand = "",
                 Model = "",
-                FuelType = "petrol",
+                FuelType = "benzin",
                 Consumption = 7.0, // 7 L/100km default
                 Year = DateTime.Now.Year,
                 IsDefault = true

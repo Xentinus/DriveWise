@@ -9,13 +9,15 @@ namespace DriveWise.Services
         private readonly HttpClient _httpClient;
         private readonly IVehicleService _vehicleService;
         private readonly ILocationService _locationService;
+        private readonly IFuelPriceService _fuelPriceService;
         private const string OSRM_BASE_URL = "https://router.project-osrm.org/route/v1/driving";
 
-        public RoutingService(HttpClient httpClient, IVehicleService vehicleService, ILocationService locationService)
+        public RoutingService(HttpClient httpClient, IVehicleService vehicleService, ILocationService locationService, IFuelPriceService fuelPriceService)
         {
             _httpClient = httpClient;
             _vehicleService = vehicleService;
             _locationService = locationService;
+            _fuelPriceService = fuelPriceService;
             _httpClient.DefaultRequestHeaders.Add("User-Agent", "DriveWise/1.0");
         }
 
@@ -52,6 +54,22 @@ namespace DriveWise.Services
                     // Calculate fuel consumption
                     var effectiveVehicle = vehicle ?? _vehicleService.GetDefaultVehicle();
                     var fuelConsumption = _vehicleService.CalculateFuelConsumption(route.Distance, effectiveVehicle);
+                    
+                    // Calculate fuel cost
+                    decimal? fuelCost = null;
+                    decimal? fuelPrice = null;
+                    var fuelType = effectiveVehicle.FuelType?.ToLowerInvariant() ?? "benzin";
+                    
+                    if (fuelConsumption > 0)
+                    {
+                        fuelPrice = _fuelPriceService.GetFuelPrice(fuelType);
+                        if (fuelPrice.HasValue)
+                        {
+                            fuelCost = _fuelPriceService.CalculateFuelCost(fuelConsumption, fuelType);
+                        }
+                    }
+                    
+                    Console.WriteLine($"[RoutingService] Fuel calculation: Type={fuelType}, Consumption={fuelConsumption:F2}L, Price={fuelPrice:F0}Ft/L, Cost={fuelCost:F0}Ft");
                     
                     // Get elevation data for start and end points
                     double? startElevation = null;
@@ -93,6 +111,9 @@ namespace DriveWise.Services
                         StartElevation = startElevation,
                         EndElevation = endElevation,
                         ElevationDifference = elevationDifference,
+                        FuelCost = fuelCost,
+                        FuelType = fuelType,
+                        FuelPrice = fuelPrice,
                         Steps = route.Legs?.SelectMany(leg => leg.Steps?.Select(step => new RouteStep
                         {
                             Instruction = step.Maneuver?.Instruction ?? "Folytatás",

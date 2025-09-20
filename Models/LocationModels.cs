@@ -40,6 +40,9 @@ namespace DriveWise.Models
         public double? StartElevation { get; set; } // in meters above sea level
         public double? EndElevation { get; set; } // in meters above sea level
         public double? ElevationDifference { get; set; } // in meters (end - start)
+        public decimal? FuelCost { get; set; } // in Ft (Hungarian Forints)
+        public string? FuelType { get; set; } // fuel type used for calculation
+        public decimal? FuelPrice { get; set; } // Ft/liter price used for calculation
     }
 
     public class RouteGeometry

@@ -232,10 +232,18 @@
             startElevation: route.startElevation,
             endElevation: route.endElevation,
             elevationDifference: route.elevationDifference,
+            fuelCost: route.fuelCost,
+            fuelPrice: route.fuelPrice,
+            fuelType: route.fuelType,
             geometry: route.geometry
         };
         
         console.log('[navigation] Dispatching routeCalculated event with data:', routeData);
+        console.log('[navigation] Fuel cost data being sent:', {
+            fuelCost: routeData.fuelCost,
+            fuelPrice: routeData.fuelPrice,
+            fuelType: routeData.fuelType
+        });
         
         // Dispatch event to show route card
         window.dispatchEvent(new CustomEvent('routeCalculated', {
