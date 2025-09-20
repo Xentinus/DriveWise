@@ -23,35 +23,6 @@
         </div>
     </div>
 
-    <p class="settings-title">Mértékegység</p>
-    <div class="settings-item">
-        <div class="settings-label">Választás</div>
-        <div class="settings-value">
-            <select id="unitSelect" data-storage-key="unit" class="form-select form-select-sm" aria-label="Mértékegység">
-                <option value="0">Metrikus</option>
-                <option value="1">Angolszász</option>
-            </select>
-        </div>
-    </div>
-
-    <p class="settings-title">Pénznem</p>
-    <div class="settings-item">
-        <div class="settings-label">Valuta</div>
-        <div class="settings-value">
-            <select id="currencySelect" data-storage-key="currency" class="form-select form-select-sm" aria-label="Pénznem">
-                <option value="EUR">EUR — Euro</option>
-                <option value="GBP">GBP — British Pound</option>
-                <option value="CHF">CHF — Swiss Franc</option>
-                <option value="PLN">PLN — Polish Zloty</option>
-                <option value="HUF">HUF — Hungarian Forint</option>
-                <option value="CZK">CZK — Czech Koruna</option>
-                <option value="SEK">SEK — Swedish Krona</option>
-                <option value="NOK">NOK — Norwegian Krone</option>
-                <option value="DKK">DKK — Danish Krone</option>
-            </select>
-        </div>
-    </div>
-
     <p class="settings-title">Adatok kezelése</p>
     <div class="settings-item">
         <div class="settings-label">Összes adat törlése</div>
@@ -68,6 +39,14 @@
         <div class="settings-value">
             <a href="https://github.com/Xentinus" target="_blank" rel="noopener noreferrer" class="text-decoration-none">
                 <i class="bi bi-github"></i> Xentinus
+            </a>
+        </div>
+    </div>
+    <div class="settings-item">
+        <div class="settings-label">Üzemanyag adatok</div>
+        <div class="settings-value">
+            <a href="https://holtankoljak.hu/" target="_blank" rel="noopener noreferrer" class="text-decoration-none">
+                <i class="bi bi-fuel-pump"></i> holtankoljak.hu
             </a>
         </div>
     </div>
@@ -94,9 +73,7 @@
         
         // Define default values (removed notifications as it's handled by browser permission)
         const defaults = {
-            'theme': window.ThemeManager ? window.ThemeManager.getCurrentTheme() : 'light',
-            'unit': '0',  // Metrikus
-            'currency': 'HUF'
+            'theme': window.ThemeManager ? window.ThemeManager.getCurrentTheme() : 'light'
         };
         
         // Use the global StorageManager for form element initialization with defaults
@@ -108,7 +85,7 @@
         // Initialize data management functionality
         initDataManagement();
         
-        // Special event dispatching for theme and unit changes - with extension conflict protection
+        // Special event dispatching for theme changes - with extension conflict protection
         window.addEventListener('storageChanged', function(event) {
             try {
                 // Only handle events from our own StorageManager to avoid extension conflicts
@@ -118,30 +95,6 @@
                 }
                 
                 const { key, value } = event.detail;
-                
-                if (key === 'unit') {
-                    try {
-                        // Handle both string and pre-stringified values
-                        let unitValue = value;
-                        if (typeof value === 'string' && (value.startsWith('{') || value.startsWith('['))) {
-                            try {
-                                unitValue = JSON.parse(value);
-                            } catch (parseError) {
-                                console.warn('[settings] Could not parse unit value:', value);
-                                unitValue = value;
-                            }
-                        }
-                        
-                        // Create a serializable event detail for external listeners
-                        const unitEvent = new CustomEvent('unitChanged', { 
-                            detail: JSON.stringify({ unit: Number(unitValue) })
-                        });
-                        window.dispatchEvent(unitEvent);
-                        console.log('[settings] Dispatched unitChanged event for value:', unitValue);
-                    } catch (e) { 
-                        console.warn('[settings] dispatch unitChanged failed:', e); 
-                    }
-                }
                 
                 if (key === 'theme') {
                     try {

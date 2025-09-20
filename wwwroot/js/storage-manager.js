@@ -73,6 +73,10 @@ window.StorageManager = (function() {
             // Re-enable storage events after a brief delay
             setTimeout(() => {
                 suppressStorageEvents = false;
+                // Dispatch storage change event for theme specifically
+                if (key === 'theme') {
+                    StorageManager.dispatchStorageChange(key, value, 'set');
+                }
             }, 10);
             
             return true;

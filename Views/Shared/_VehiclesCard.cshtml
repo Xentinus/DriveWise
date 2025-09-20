@@ -125,12 +125,6 @@
         document.getElementById('backToVehiclesBtn').addEventListener('click', goBackToVehicles);
         document.getElementById('cancelVehicleBtn').addEventListener('click', goBackToVehicles);
         document.getElementById('saveVehicleBtn').addEventListener('click', saveVehicle);
-        
-        // Listen for unit changes to update consumption labels and refresh display
-        window.addEventListener('unitChanged', function() {
-            updateConsumptionUnits();
-            loadVehicles();
-        });
 
         // Listen for vehicle selection changes
         window.addEventListener('defaultVehicleChanged', function(event) {
@@ -138,22 +132,9 @@
             loadVehicles(); // Just reload the vehicle list to update badges
         });
         
-        // Initialize with current unit setting
-        updateConsumptionUnits();
-        
         // Auto-uppercase license plate input
         document.getElementById('vehicleLicensePlate').addEventListener('input', function(e) {
             e.target.value = e.target.value.toUpperCase();
-        });
-    }
-
-    function updateConsumptionUnits() {
-        const unit = StorageManager.get('unit', '0');
-        const isMetric = unit === '0';
-        const unitText = isMetric ? 'L/100km' : 'MPG';
-        
-        document.querySelectorAll('.consumption-unit').forEach(el => {
-            el.textContent = unitText;
         });
     }
 
@@ -228,17 +209,8 @@
     }
 
     function getConsumptionInfo(vehicle) {
-        const unit = StorageManager.get('unit', '0');
-        const isMetric = unit === '0';
-        const unitText = isMetric ? 'L/100km' : 'MPG';
-        
-        let consumption = parseFloat(vehicle.consumption);
-        if (!isMetric && vehicle.consumption) {
-            // Convert L/100km to MPG: MPG = 235.214 / L/100km
-            consumption = (235.214 / consumption).toFixed(1);
-        }
-        
-        return `${consumption} ${unitText}`;
+        const consumption = parseFloat(vehicle.consumption);
+        return `${consumption} L/100km`;
     }
 
     function getFuelTypeLabel(fuelType) {
