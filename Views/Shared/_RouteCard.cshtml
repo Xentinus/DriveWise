@@ -351,7 +351,7 @@
             routeData.startElevation !== undefined && routeData.startElevation !== null &&
             routeData.endElevation !== undefined && routeData.endElevation !== null) {
             
-            elevationInfoEl.textContent = formatElevationInfo(
+            elevationInfoEl.innerHTML = formatElevationInfo(
                 routeData.startElevation, 
                 routeData.endElevation, 
                 routeData.elevationDifference
@@ -437,18 +437,22 @@
         
         let diffIcon = '→';
         let diffText = '';
+        let diffColor = '';
         
         if (diff > 0) {
             diffIcon = '↗';
             diffText = '+' + diff;
+            diffColor = 'color: #dc3545;'; // Bootstrap danger red for elevation gain
         } else if (diff < 0) {
             diffIcon = '↘';
             diffText = diff.toString();
+            diffColor = 'color: #198754;'; // Bootstrap success green for elevation loss
         } else {
             diffText = '0';
+            diffColor = 'color: #6c757d;'; // Bootstrap secondary gray for no change
         }
         
-        return `${start}m → ${end}m (${diffText}m ${diffIcon})`;
+        return `${start}m → ${end}m (<span style="${diffColor}">${diffText}m ${diffIcon}</span>)`;
     }
     
     function updateUnifiedWidgetLayout(hasRoute) {
