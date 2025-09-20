@@ -12,6 +12,16 @@
         </div>
     </div>
 
+    <div class="settings-item">
+        <div class="settings-label">GPS adatok</div>
+        <div class="settings-value">
+            <label class="switch">
+                <input type="checkbox" id="gpsToggle" />
+                <span class="switch-slider" aria-hidden="true"></span>
+            </label>
+        </div>
+    </div>
+
     <p class="settings-title">Téma</p>
     <div class="settings-item">
         <div class="settings-label">Megjelenés</div>
@@ -70,6 +80,9 @@
         
         // Initialize notification permission handling
         initNotificationToggle();
+        
+        // Initialize GPS permission handling
+        initGpsToggle();
         
         // Define default values (removed notifications as it's handled by browser permission)
         const defaults = {
@@ -254,6 +267,138 @@
         notificationsToggle.checked = true;
         
         alert('Az értesítések letiltásához:\n\n1. Kattints a böngésző címsorában a lakat ikonra\n2. Válaszd az "Értesítések" opciót\n3. Állítsd "Letiltás" állapotba\n4. Frissítsd az oldalt');
+    }
+
+    function initGpsToggle() {
+        const gpsToggle = document.getElementById('gpsToggle');
+        
+        if (!gpsToggle) {
+            console.warn('[settings] GPS toggle not found');
+            return;
+        }
+
+        // Check if browser supports geolocation
+        if (!('geolocation' in navigator)) {
+            console.log('[settings] Browser does not support geolocation');
+            gpsToggle.disabled = true;
+            gpsToggle.checked = false;
+            return;
+        }
+
+        // Set initial state based on current permission
+        updateGpsToggleState();
+
+        // Handle toggle changes
+        gpsToggle.addEventListener('change', function() {
+            if (this.checked) {
+                // User wants to enable GPS
+                requestGpsPermission();
+            } else {
+                // User wants to disable GPS
+                showGpsDisableInfo();
+            }
+        });
+
+        // Listen for permission changes (some browsers support this)
+        if ('permissions' in navigator) {
+            navigator.permissions.query({name: 'geolocation'}).then(function(permissionStatus) {
+                permissionStatus.addEventListener('change', function() {
+                    console.log('[settings] GPS permission changed to:', this.state);
+                    updateGpsToggleState();
+                });
+            }).catch(function(error) {
+                console.log('[settings] GPS permission query not supported:', error);
+            });
+        }
+    }
+
+    function updateGpsToggleState() {
+        const gpsToggle = document.getElementById('gpsToggle');
+        
+        if (!gpsToggle || !('geolocation' in navigator)) {
+            return;
+        }
+
+        // Check for geolocation permission
+        if ('permissions' in navigator) {
+            navigator.permissions.query({name: 'geolocation'}).then(function(permissionStatus) {
+                console.log('[settings] Current GPS permission:', permissionStatus.state);
+
+                switch (permissionStatus.state) {
+                    case 'granted':
+                        gpsToggle.checked = true;
+                        gpsToggle.disabled = false;
+                        break;
+                    case 'denied':
+                        gpsToggle.checked = false;
+                        gpsToggle.disabled = true; // Can't request again if denied
+                        break;
+                    case 'prompt':
+                    default:
+                        gpsToggle.checked = false;
+                        gpsToggle.disabled = false;
+                        break;
+                }
+            }).catch(function(error) {
+                console.log('[settings] GPS permission query failed:', error);
+                // Fallback: assume permission can be requested
+                gpsToggle.checked = false;
+                gpsToggle.disabled = false;
+            });
+        } else {
+            // Fallback for browsers without permission API
+            gpsToggle.checked = false;
+            gpsToggle.disabled = false;
+        }
+    }
+
+    function requestGpsPermission() {
+        console.log('[settings] Requesting GPS permission');
+        
+        navigator.geolocation.getCurrentPosition(
+            function(position) {
+                console.log('[settings] GPS permission granted');
+                console.log('[settings] Current position:', position.coords.latitude, position.coords.longitude);
+                showGpsGrantedInfo();
+                updateGpsToggleState();
+            },
+            function(error) {
+                console.log('[settings] GPS permission denied or error:', error.message);
+                if (error.code === error.PERMISSION_DENIED) {
+                    showGpssDeniedInfo();
+                } else {
+                    showGpsErrorInfo(error.message);
+                }
+                updateGpsToggleState();
+            },
+            {
+                enableHighAccuracy: false,
+                timeout: 10000,
+                maximumAge: 600000 // 10 minutes
+            }
+        );
+    }
+
+    function showGpsGrantedInfo() {
+        // Could show a success message, but keeping it minimal
+        console.log('[settings] GPS access successfully enabled');
+    }
+
+    function showGpssDeniedInfo() {
+        alert('A GPS hozzáférés le van tiltva. Az engedélyezéshez:\n\n1. Kattints a böngésző címsorában a lakat ikonra\n2. Válaszd a "Hely" opciót\n3. Állítsd "Engedélyezés" állapotba\n4. Frissítsd az oldalt');
+    }
+
+    function showGpsErrorInfo(message) {
+        alert('GPS hiba történt: ' + message + '\n\nEllenőrizd, hogy a GPS be van-e kapcsolva az eszközön.');
+    }
+
+    function showGpsDisableInfo() {
+        const gpsToggle = document.getElementById('gpsToggle');
+        
+        // Reset the toggle since we can't programmatically disable
+        gpsToggle.checked = true;
+        
+        alert('A GPS letiltásához:\n\n1. Kattints a böngésző címsorában a lakat ikonra\n2. Válaszd a "Hely" opciót\n3. Állítsd "Letiltás" állapotba\n4. Frissítsd az oldalt');
     }
 
     function initDataManagement() {
