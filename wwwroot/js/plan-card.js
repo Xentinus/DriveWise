@@ -89,7 +89,13 @@ function initializePlanCard() {
             vehicles.forEach(vehicle => {
                 const option = document.createElement('option');
                 option.value = vehicle.id;
-                option.textContent = `${vehicle.name} (${vehicle.brand} ${vehicle.model})`;
+                
+                // Format: Name (Brand Model) [License Plate] or Name (Brand Model) if no license plate
+                let displayText = `${vehicle.name} (${vehicle.brand} ${vehicle.model})`;
+                if (vehicle.licensePlate && vehicle.licensePlate.trim() !== '') {
+                    displayText += ` [${vehicle.licensePlate}]`;
+                }
+                option.textContent = displayText;
                 
                 if (vehicle.isDefault) {
                     option.selected = true;

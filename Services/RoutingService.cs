@@ -8,12 +8,14 @@ namespace DriveWise.Services
     {
         private readonly HttpClient _httpClient;
         private readonly IVehicleService _vehicleService;
+        private readonly ILocationService _locationService;
         private const string OSRM_BASE_URL = "https://router.project-osrm.org/route/v1/driving";
 
-        public RoutingService(HttpClient httpClient, IVehicleService vehicleService)
+        public RoutingService(HttpClient httpClient, IVehicleService vehicleService, ILocationService locationService)
         {
             _httpClient = httpClient;
             _vehicleService = vehicleService;
+            _locationService = locationService;
             _httpClient.DefaultRequestHeaders.Add("User-Agent", "DriveWise/1.0");
         }
 
@@ -51,6 +53,36 @@ namespace DriveWise.Services
                     var effectiveVehicle = vehicle ?? _vehicleService.GetDefaultVehicle();
                     var fuelConsumption = _vehicleService.CalculateFuelConsumption(route.Distance, effectiveVehicle);
                     
+                    // Get elevation data for start and end points
+                    double? startElevation = null;
+                    double? endElevation = null;
+                    double? elevationDifference = null;
+                    
+                    try
+                    {
+                        var startLocationTask = _locationService.GetLocationDetailsAsync(fromLat, fromLon);
+                        var endLocationTask = _locationService.GetLocationDetailsAsync(toLat, toLon);
+                        
+                        await Task.WhenAll(startLocationTask, endLocationTask);
+                        
+                        var startLocation = await startLocationTask;
+                        var endLocation = await endLocationTask;
+                        
+                        startElevation = startLocation?.Elevation;
+                        endElevation = endLocation?.Elevation;
+                        
+                        if (startElevation.HasValue && endElevation.HasValue)
+                        {
+                            elevationDifference = endElevation.Value - startElevation.Value;
+                        }
+                        
+                        Console.WriteLine($"[RoutingService] Elevation data: Start={startElevation}m, End={endElevation}m, Difference={elevationDifference}m");
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine($"[RoutingService] Error fetching elevation data: {ex.Message}");
+                    }
+                    
                     return new RouteResult
                     {
                         Geometry = route.Geometry,
@@ -58,6 +90,9 @@ namespace DriveWise.Services
                         Duration = route.Duration,
                         FuelConsumption = fuelConsumption,
                         VehicleUsed = effectiveVehicle.Name ?? "Alapértelmezett jármű",
+                        StartElevation = startElevation,
+                        EndElevation = endElevation,
+                        ElevationDifference = elevationDifference,
                         Steps = route.Legs?.SelectMany(leg => leg.Steps?.Select(step => new RouteStep
                         {
                             Instruction = step.Maneuver?.Instruction ?? "Folytatás",

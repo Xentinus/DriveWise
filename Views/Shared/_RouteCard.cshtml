@@ -63,6 +63,16 @@
                     <div class="route-detail-value" id="routeVehicleUsed">-</div>
                 </div>
             </div>
+
+            <div class="route-detail-row" id="elevationRow" style="display: none;">
+                <div class="route-detail-icon">
+                    <i class="bi bi-triangle"></i>
+                </div>
+                <div class="route-detail-info">
+                    <div class="route-detail-label">Magasság</div>
+                    <div class="route-detail-value" id="routeElevationInfo">-</div>
+                </div>
+            </div>
         </div>
         
         <div class="route-actions">
@@ -332,6 +342,24 @@
         } else if (vehicleUsedRow) {
             vehicleUsedRow.style.display = 'none';
         }
+
+        // Display elevation data if available
+        const elevationInfoEl = document.getElementById('routeElevationInfo');
+        const elevationRow = document.getElementById('elevationRow');
+        
+        if (elevationInfoEl && elevationRow && 
+            routeData.startElevation !== undefined && routeData.startElevation !== null &&
+            routeData.endElevation !== undefined && routeData.endElevation !== null) {
+            
+            elevationInfoEl.textContent = formatElevationInfo(
+                routeData.startElevation, 
+                routeData.endElevation, 
+                routeData.elevationDifference
+            );
+            elevationRow.style.display = 'flex';
+        } else if (elevationRow) {
+            elevationRow.style.display = 'none';
+        }
     }
     
     function centerRouteOnMap() {
@@ -385,6 +413,42 @@
         } else {
             return (liters).toFixed(1) + ' l';
         }
+    }
+
+    function formatElevation(meters) {
+        return Math.round(meters) + ' m';
+    }
+
+    function formatElevationDifference(meters) {
+        const roundedMeters = Math.round(meters);
+        if (roundedMeters > 0) {
+            return '+' + roundedMeters + ' m ↗';
+        } else if (roundedMeters < 0) {
+            return roundedMeters + ' m ↘';
+        } else {
+            return '0 m →';
+        }
+    }
+
+    function formatElevationInfo(startElevation, endElevation, elevationDifference) {
+        const start = Math.round(startElevation);
+        const end = Math.round(endElevation);
+        const diff = Math.round(elevationDifference || (end - start));
+        
+        let diffIcon = '→';
+        let diffText = '';
+        
+        if (diff > 0) {
+            diffIcon = '↗';
+            diffText = '+' + diff;
+        } else if (diff < 0) {
+            diffIcon = '↘';
+            diffText = diff.toString();
+        } else {
+            diffText = '0';
+        }
+        
+        return `${start}m → ${end}m (${diffText}m ${diffIcon})`;
     }
     
     function updateUnifiedWidgetLayout(hasRoute) {

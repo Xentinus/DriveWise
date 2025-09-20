@@ -229,6 +229,9 @@
             duration: route.duration,
             fuelConsumption: route.fuelConsumption,
             vehicleUsed: route.vehicleUsed,
+            startElevation: route.startElevation,
+            endElevation: route.endElevation,
+            elevationDifference: route.elevationDifference,
             geometry: route.geometry
         };
         

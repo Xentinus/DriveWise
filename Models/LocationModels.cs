@@ -37,6 +37,9 @@ namespace DriveWise.Models
         public List<RouteStep> Steps { get; set; } = new List<RouteStep>();
         public double? FuelConsumption { get; set; } // in liters
         public string? VehicleUsed { get; set; } // vehicle name or "default"
+        public double? StartElevation { get; set; } // in meters above sea level
+        public double? EndElevation { get; set; } // in meters above sea level
+        public double? ElevationDifference { get; set; } // in meters (end - start)
     }
 
     public class RouteGeometry
