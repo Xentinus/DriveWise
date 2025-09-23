@@ -1,0 +1,12 @@
+services:
+  drivewise:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8800:8800"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_URLS=http://+:8800
+    restart: unless-stopped
+    container_name: drivewise-app

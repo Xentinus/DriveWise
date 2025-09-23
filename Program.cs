@@ -62,12 +62,21 @@ else
     
     foreach (var url in urls)
     {
-        var uri = new Uri(url.Trim());
+        var cleanUrl = url.Trim();
+        
+        // Handle special case for Docker-style URLs like "http://+:8800"
+        if (cleanUrl.Contains("://+:"))
+        {
+            availableUrls.Add(cleanUrl);
+            continue;
+        }
+        
+        var uri = new Uri(cleanUrl);
         var port = uri.Port;
         
         if (IsPortAvailable(port))
         {
-            availableUrls.Add(url.Trim());
+            availableUrls.Add(cleanUrl);
         }
         else
         {
