@@ -19,7 +19,17 @@ Ez a dokumentum leírja, hogyan futtathatod a DriveWise alkalmazást Docker kont
 ./stop-docker.sh
 ```
 
-### 2. Docker Compose használata
+### 2. Multi-platform build (AMD64 + ARM64)
+
+```bash
+# Build mindkét architektúrához (Desktop + Raspberry Pi)
+./build-multiarch.sh
+
+# Registry push verzió (opcionális)
+./build-registry.sh
+```
+
+### 4. Docker Compose használata
 
 ```bash
 # Alkalmazás építése és futtatása egy lépésben
@@ -32,7 +42,7 @@ docker-compose up --build -d
 docker-compose down
 ```
 
-### 3. Manuális Docker parancsok
+### 5. Manuális Docker parancsok
 
 ```bash
 # Docker image építése
@@ -42,10 +52,30 @@ docker build -t drivewise .
 docker run -p 8800:8800 --name drivewise-app drivewise
 ```
 
-### 4. Alkalmazás elérése
+### 6. Alkalmazás elérése
 
 Az alkalmazás a következő címen érhető el:
 - **http://localhost:8800**
+
+## Támogatott platformok
+
+### Desktop platformok (AMD64)
+- Intel/AMD processzoros Linux
+- Intel/AMD processzoros macOS
+- Windows (Docker Desktop-pal)
+
+### ARM64 platformok
+- Apple Silicon Mac (M1/M2/M3)
+- Raspberry Pi 4/5 (64-bit OS)
+- ARM64 Linux szerverek
+
+### Fájlok mérete
+- AMD64 image: ~98MB
+- ARM64 image: ~96MB (tar fájlban)
+
+## Raspberry Pi specifikus használat
+
+Lásd a részletes útmutatót: [`RASPBERRY_PI_INSTALL.md`](RASPBERRY_PI_INSTALL.md)
 
 ## Hasznos Docker parancsok
 

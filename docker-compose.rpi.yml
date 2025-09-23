@@ -1,0 +1,20 @@
+# Docker Compose for Raspberry Pi (ARM64)
+# Copy this file to your Raspberry Pi and run: docker-compose up -d
+
+services:
+  drivewise:
+    image: drivewise:latest-arm64  # Use the ARM64 image
+    ports:
+      - "8800:8800"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_URLS=http://+:8800
+    restart: unless-stopped
+    container_name: drivewise-rpi
+    # Optional: Add resource limits for Raspberry Pi
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+        reservations:
+          memory: 256M
