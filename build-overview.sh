@@ -29,6 +29,7 @@ echo ""
 echo "📚 Documentation:"
 echo "   • DOCKER_README.md         - General Docker usage"
 echo "   • RASPBERRY_PI_INSTALL.md  - Raspberry Pi specific guide"
+echo "   • NETWORK_REQUIREMENTS.md  - Network and API dependencies"
 echo ""
 
 echo "🎯 Quick start:"
@@ -38,3 +39,4 @@ echo "   For production:         ./build-registry.sh"
 echo ""
 
 echo "🌐 All versions accessible at: http://[host-ip]:8800"
+echo "🔗 External API access enabled for weather, fuel prices, and maps"

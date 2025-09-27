@@ -6,6 +6,11 @@ Ez a dokumentum leírja, hogyan futtathatod a DriveWise alkalmazást Docker kont
 
 - Docker telepítve van a gépedre
 - Docker Compose telepítve van (általában a Docker-rel együtt érkezik)
+- **Internetkapcsolat szükséges** - az alkalmazás külső API-kat használ:
+  - Üzemanyagárak (holtankoljak.hu)
+  - Időjárás adatok
+  - Térképes szolgáltatások
+  - Útvonaltervezés
 
 ## Futtatás Docker-rel
 
@@ -76,6 +81,11 @@ Az alkalmazás a következő címen érhető el:
 ## Raspberry Pi specifikus használat
 
 Lásd a részletes útmutatót: [`RASPBERRY_PI_INSTALL.md`](RASPBERRY_PI_INSTALL.md)
+
+## Hálózati követelmények
+
+Az alkalmazás külső API-kat használ, ezért internetkapcsolat szükséges.
+Részletes információk: [`NETWORK_REQUIREMENTS.md`](NETWORK_REQUIREMENTS.md)
 
 ## Hasznos Docker parancsok
 

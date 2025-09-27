@@ -10,3 +10,5 @@ services:
       - ASPNETCORE_URLS=http://+:8800
     restart: unless-stopped
     container_name: drivewise-app
+    # Ensure network access for external API calls
+    network_mode: "bridge"

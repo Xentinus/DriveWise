@@ -31,9 +31,10 @@ fi
 
 # Run the container
 echo "🚀 Starting DriveWise container on port 8800..."
-if docker run -d -p 8800:8800 --name drivewise-app drivewise; then
+if docker run -d -p 8800:8800 --network bridge --name drivewise-app drivewise; then
     echo "✅ DriveWise is now running!"
     echo "🌐 Open your browser and go to: http://localhost:8800"
+    echo "🔗 External API access enabled for weather, fuel prices, and maps"
     echo ""
     echo "Useful commands:"
     echo "  Stop container:    docker stop drivewise-app"

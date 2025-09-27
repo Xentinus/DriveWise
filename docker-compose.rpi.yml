@@ -11,6 +11,8 @@ services:
       - ASPNETCORE_URLS=http://+:8800
     restart: unless-stopped
     container_name: drivewise-rpi
+    # Ensure network access for external API calls
+    network_mode: "bridge"
     # Optional: Add resource limits for Raspberry Pi
     deploy:
       resources:

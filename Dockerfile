@@ -2,6 +2,8 @@
 FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS base
 WORKDIR /app
 EXPOSE 8800
+# Expose standard HTTP/HTTPS ports for outbound web API calls
+EXPOSE 80 443
 
 # Use the SDK image to build the application
 FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
