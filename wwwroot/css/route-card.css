@@ -1,3 +1,65 @@
+/* Route Card Skeleton Loading Styles */
+@keyframes skeleton-loading {
+    0% {
+        background-position: -200px 0;
+    }
+    100% {
+        background-position: calc(200px + 100%) 0;
+    }
+}
+
+.skeleton-loading {
+    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 200px 100%;
+    animation: skeleton-loading 1.5s infinite ease-in-out;
+    border-radius: 4px;
+}
+
+.route-card.loading .route-detail-value {
+    height: 20px;
+    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 200px 100%;
+    animation: skeleton-loading 1.5s infinite ease-in-out;
+    border-radius: 4px;
+    color: transparent;
+}
+
+.route-card.loading .route-detail-value::before {
+    content: "";
+    display: block;
+    width: 80%;
+    height: 100%;
+    background: transparent;
+}
+
+.route-card.loading .route-action-btn {
+    position: relative;
+    color: transparent;
+    pointer-events: none;
+}
+
+.route-card.loading .route-action-btn::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 70%;
+    height: 20px;
+    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 200px 100%;
+    animation: skeleton-loading 1.5s infinite ease-in-out;
+    border-radius: 4px;
+}
+
+.route-card.loading .route-detail-icon {
+    background: #f0f0f0;
+}
+
+.route-card.loading .route-detail-icon i {
+    color: transparent;
+}
+
 /* Route Card Styles */
 .route-card {
     position: fixed;

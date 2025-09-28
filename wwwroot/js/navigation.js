@@ -109,6 +109,12 @@
             setButtonLoading(button, true);
         }
         
+        // Dispatch route calculation started event to show loading skeleton
+        console.log('[navigation] Dispatching routeCalculationStarted event');
+        window.dispatchEvent(new CustomEvent('routeCalculationStarted', {
+            detail: JSON.stringify({ destination: destinationName })
+        }));
+        
         // Calculate route using our API
         const selectedVehicle = window.StorageManager ? window.StorageManager.getSelectedVehicle() : null;
         

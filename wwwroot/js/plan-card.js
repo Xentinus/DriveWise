@@ -283,7 +283,16 @@ function initializePlanCard() {
         try {
             console.log('[PlanCard] Planning route...');
             
-            // Show loading state
+            // Dispatch route calculation started event
+            console.log('[PlanCard] Dispatching routeCalculationStarted event');
+            window.dispatchEvent(new CustomEvent('routeCalculationStarted', {
+                detail: JSON.stringify({ 
+                    origin: selectedOrigin.displayName,
+                    destination: selectedDestination.displayName 
+                })
+            }));
+            
+            // Show loading state on button
             planRouteBtn.disabled = true;
             planRouteBtn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Tervezés...';
             

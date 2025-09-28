@@ -134,6 +134,11 @@
         }
         
         // Listen for route events
+        window.addEventListener('routeCalculationStarted', function(event) {
+            console.log('[route-card] routeCalculationStarted event received');
+            showLoadingRouteCard();
+        });
+        
         window.addEventListener('routeCalculated', function(event) {
             console.log('[route-card] routeCalculated event received:', event.detail);
             if (event.detail) {
@@ -171,6 +176,59 @@
         });
     }
     
+    function showLoadingRouteCard() {
+        console.log('[route-card] Showing route card loading state');
+        
+        const routeCard = document.getElementById('routeCard');
+        if (!routeCard) {
+            console.warn('[route-card] Route card element not found!');
+            return;
+        }
+        
+        // Set guard to prevent immediate hiding
+        isShowingRoute = true;
+        
+        // Clear any pending hide operation
+        if (showTimeout) {
+            clearTimeout(showTimeout);
+            showTimeout = null;
+        }
+        
+        // Ensure card is not in minimized state
+        if (isMinimized) {
+            restoreRouteCard();
+        }
+        
+        // Reset any existing classes and add loading state
+        routeCard.classList.remove('visible');
+        routeCard.classList.add('loading');
+        
+        // Set loading content
+        updateRouteInfoLoading();
+        
+        // Show the card
+        routeCard.style.display = 'block';
+        hasActiveRoute = true;
+        
+        // Add route-active class to unified-top-widget for mobile layout adjustment
+        updateUnifiedWidgetLayout(true);
+        
+        console.log('[route-card] Loading card display set to block, adding visible class...');
+        
+        // Add show class for animation
+        showTimeout = setTimeout(() => {
+            routeCard.classList.add('visible');
+            console.log('[route-card] Loading visible class added');
+            showTimeout = null;
+            
+            // Clear guard after animation completes
+            setTimeout(() => {
+                isShowingRoute = false;
+                console.log('[route-card] Loading animation complete, guard cleared');
+            }, 350);
+        }, 50);
+    }
+
     function showRouteCard(routeData) {
         console.log('[route-card] Showing route card with data:', routeData);
         
@@ -189,7 +247,10 @@
             showTimeout = null;
         }
         
-        // Update route information first
+        // Remove loading state
+        routeCard.classList.remove('loading');
+        
+        // Update route information with real data
         updateRouteInfo(routeData);
         
         // Ensure card is not in minimized state
@@ -296,6 +357,42 @@
         updateUnifiedWidgetLayout(true);
     }
     
+    function updateRouteInfoLoading() {
+        console.log('[route-card] Setting route info to loading state');
+        
+        // Show all rows during loading
+        const durationEl = document.getElementById('routeDuration');
+        const distanceEl = document.getElementById('routeDistance');
+        const fuelConsumptionEl = document.getElementById('routeFuelConsumption');
+        const fuelConsumptionRow = document.getElementById('fuelConsumptionRow');
+        const fuelCostEl = document.getElementById('routeFuelCost');
+        const fuelCostRow = document.getElementById('fuelCostRow');
+        const elevationInfoEl = document.getElementById('routeElevationInfo');
+        const elevationRow = document.getElementById('elevationRow');
+        
+        // Set loading text (will be animated by CSS)
+        if (durationEl) durationEl.textContent = 'Számítás...';
+        if (distanceEl) distanceEl.textContent = 'Számítás...';
+        
+        // Show fuel consumption row with loading text
+        if (fuelConsumptionEl && fuelConsumptionRow) {
+            fuelConsumptionEl.textContent = 'Számítás...';
+            fuelConsumptionRow.style.display = 'flex';
+        }
+        
+        // Show fuel cost row with loading text
+        if (fuelCostEl && fuelCostRow) {
+            fuelCostEl.textContent = 'Számítás...';
+            fuelCostRow.style.display = 'flex';
+        }
+        
+        // Show elevation row with loading text
+        if (elevationInfoEl && elevationRow) {
+            elevationInfoEl.textContent = 'Számítás...';
+            elevationRow.style.display = 'flex';
+        }
+    }
+
     function updateRouteInfo(routeData) {
         console.log('[route-card] updateRouteInfo called with data:', routeData);
         
@@ -544,6 +641,7 @@
     // Export functions for external use
     window.RouteCard = {
         show: showRouteCard,
+        showLoading: showLoadingRouteCard,
         hide: hideRouteCard,
         minimize: minimizeRouteCard,
         restore: restoreRouteCard,
