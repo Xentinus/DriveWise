@@ -117,8 +117,13 @@
         
         vehicleForm = document.getElementById('vehicleForm');
         
-        // Load vehicles on page load
-        loadVehicles();
+        // Show loading state initially
+        showLoadingVehicles();
+        
+        // Load vehicles after a short delay to show the loading state
+        setTimeout(() => {
+            loadVehicles();
+        }, 500);
         
         // Event listeners
         document.getElementById('addVehicleBtn').addEventListener('click', showAddVehicleForm);
@@ -144,6 +149,9 @@
         const emptyState = document.getElementById('emptyState');
         const defaultVehicle = StorageManager.getDefaultVehicle();
         
+        // Remove loading state
+        hideLoadingVehicles();
+        
         if (vehicles.length === 0) {
             vehiclesList.innerHTML = '';
             emptyState.style.display = 'block';
@@ -168,6 +176,58 @@
             const index = parseInt(btn.getAttribute('data-index'));
             btn.addEventListener('click', () => setDefaultVehicle(index));
         });
+    }
+
+    function showLoadingVehicles() {
+        console.log('[vehicles] Showing vehicles loading state');
+        const vehiclesList = document.getElementById('vehiclesList');
+        const emptyState = document.getElementById('emptyState');
+        const vehiclesCard = document.querySelector('.vehicles-card');
+        
+        // Hide empty state and show loading skeleton
+        emptyState.style.display = 'none';
+        vehiclesCard.classList.add('loading');
+        
+        // Create single skeleton loading item
+        vehiclesList.innerHTML = createSkeletonVehicleCard(0);
+    }
+
+    function hideLoadingVehicles() {
+        console.log('[vehicles] Hiding vehicles loading state');
+        const vehiclesCard = document.querySelector('.vehicles-card');
+        vehiclesCard.classList.remove('loading');
+    }
+
+    function createSkeletonVehicleCard(index) {
+        return `
+            <div class="vehicle-item border rounded p-3 mb-2">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div class="flex-grow-1">
+                        <div class="d-flex align-items-center mb-1">
+                            <h6 class="mb-0">Betöltés...</h6>
+                        </div>
+                        <div class="small text-muted">
+                            <div><strong>Márka:</strong> Betöltés...</div>
+                            <div><strong>Üzemanyag:</strong> Betöltés...</div>
+                            <div><strong>Évjárat:</strong> Betöltés...</div>
+                            <div><strong>Rendszám:</strong> Betöltés...</div>
+                            <div><strong>Fogyasztás:</strong> Betöltés...</div>
+                        </div>
+                    </div>
+                    <div class="d-flex gap-1">
+                        <button type="button" class="btn btn-outline-warning btn-sm" title="Alapértelmezetté tétel">
+                            <i class="bi bi-star"></i>
+                        </button>
+                        <button type="button" class="btn btn-outline-primary btn-sm" title="Szerkesztés">
+                            <i class="bi bi-pencil"></i>
+                        </button>
+                        <button type="button" class="btn btn-outline-danger btn-sm" title="Törlés">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        `;
     }
 
     function createVehicleCard(vehicle, index, defaultVehicle) {
@@ -273,8 +333,11 @@
         vehiclesCard.style.display = 'block';
         vehicleFormCard.style.display = 'none';
         
-        // Refresh vehicles list
-        loadVehicles();
+        // Show loading state then refresh vehicles list
+        showLoadingVehicles();
+        setTimeout(() => {
+            loadVehicles();
+        }, 200);
     }
 
     function deleteVehicle(index) {
@@ -336,16 +399,29 @@
         
         const index = parseInt(document.getElementById('vehicleIndex').value);
         
-        if (index >= 0) {
-            // Update existing vehicle
-            StorageManager.updateVehicle(index, vehicleData);
-        } else {
-            // Add new vehicle
-            StorageManager.saveVehicle(vehicleData);
-        }
+        // Show loading state
+        const saveBtn = document.getElementById('saveVehicleBtn');
+        const originalText = saveBtn.innerHTML;
+        saveBtn.disabled = true;
+        saveBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status"></span>Mentés...';
         
-        // Go back to vehicles list
-        goBackToVehicles();
+        // Simulate some processing time
+        setTimeout(() => {
+            if (index >= 0) {
+                // Update existing vehicle
+                StorageManager.updateVehicle(index, vehicleData);
+            } else {
+                // Add new vehicle
+                StorageManager.saveVehicle(vehicleData);
+            }
+            
+            // Reset button state
+            saveBtn.disabled = false;
+            saveBtn.innerHTML = originalText;
+            
+            // Go back to vehicles list
+            goBackToVehicles();
+        }, 300);
     }
 
     // Initialize when DOM is ready
@@ -354,5 +430,25 @@
     } else {
         init();
     }
+
+    // Export functions for external use
+    window.VehiclesCard = {
+        loadVehicles: loadVehicles,
+        showLoading: showLoadingVehicles,
+        hideLoading: hideLoadingVehicles,
+        refresh: function() {
+            showLoadingVehicles();
+            setTimeout(() => {
+                loadVehicles();
+            }, 300);
+        },
+        debug: function() {
+            console.log('[vehicles] Debug info:', {
+                vehiclesList: !!document.getElementById('vehiclesList'),
+                emptyState: !!document.getElementById('emptyState'),
+                isLoading: document.querySelector('.vehicles-card')?.classList.contains('loading')
+            });
+        }
+    };
 })();
 </script>

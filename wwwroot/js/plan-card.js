@@ -72,6 +72,9 @@ function initializePlanCard() {
     
     function loadVehicles() {
         try {
+            // Show loading state for vehicle select
+            showVehicleSelectLoading();
+            
             // Check if StorageManager is available
             if (typeof window.StorageManager === 'undefined') {
                 console.warn('[PlanCard] StorageManager not yet available, retrying...');
@@ -82,32 +85,61 @@ function initializePlanCard() {
             const vehicles = StorageManager.getVehicles();
             console.log('[PlanCard] Loaded vehicles:', vehicles);
             
-            // Clear existing options (keep default option)
-            vehicleSelect.innerHTML = '<option value="">Alapértelmezett jármű használata</option>';
-            
-            // Add vehicles to select
-            vehicles.forEach(vehicle => {
-                const option = document.createElement('option');
-                option.value = vehicle.id;
+            // Simulate loading delay to show skeleton
+            setTimeout(() => {
+                // Hide loading state
+                hideVehicleSelectLoading();
                 
-                // Format: Name (Brand Model) [License Plate] or Name (Brand Model) if no license plate
-                let displayText = `${vehicle.name} (${vehicle.brand} ${vehicle.model})`;
-                if (vehicle.licensePlate && vehicle.licensePlate.trim() !== '') {
-                    displayText += ` [${vehicle.licensePlate}]`;
-                }
-                option.textContent = displayText;
+                // Clear existing options (keep default option)
+                vehicleSelect.innerHTML = '<option value="">Alapértelmezett jármű használata</option>';
                 
-                if (vehicle.isDefault) {
-                    option.selected = true;
-                }
+                // Add vehicles to select
+                vehicles.forEach(vehicle => {
+                    const option = document.createElement('option');
+                    option.value = vehicle.id;
+                    
+                    // Format: Name (Brand Model) [License Plate] or Name (Brand Model) if no license plate
+                    let displayText = `${vehicle.name} (${vehicle.brand} ${vehicle.model})`;
+                    if (vehicle.licensePlate && vehicle.licensePlate.trim() !== '') {
+                        displayText += ` [${vehicle.licensePlate}]`;
+                    }
+                    option.textContent = displayText;
+                    
+                    if (vehicle.isDefault) {
+                        option.selected = true;
+                    }
+                    
+                    vehicleSelect.appendChild(option);
+                });
                 
-                vehicleSelect.appendChild(option);
-            });
-            
-            console.log('[PlanCard] Vehicle dropdown populated with', vehicles.length, 'vehicles');
+                console.log('[PlanCard] Vehicle dropdown populated with', vehicles.length, 'vehicles');
+            }, 300); // Short delay to show loading state
         } catch (error) {
             console.error('[PlanCard] Error loading vehicles:', error);
+            hideVehicleSelectLoading();
         }
+    }
+    
+    function showVehicleSelectLoading() {
+        console.log('[PlanCard] Showing vehicle select loading state');
+        const vehicleGroup = document.querySelector('.vehicle-selection-group');
+        if (vehicleGroup) {
+            vehicleGroup.classList.add('loading');
+        }
+        
+        // Set loading text in select
+        vehicleSelect.innerHTML = '<option value="">Járművek betöltése...</option>';
+        vehicleSelect.disabled = true;
+    }
+    
+    function hideVehicleSelectLoading() {
+        console.log('[PlanCard] Hiding vehicle select loading state');
+        const vehicleGroup = document.querySelector('.vehicle-selection-group');
+        if (vehicleGroup) {
+            vehicleGroup.classList.remove('loading');
+        }
+        
+        vehicleSelect.disabled = false;
     }
     
     function setupLocationInputs() {
@@ -370,12 +402,19 @@ function initializePlanCard() {
     // Export functions for external use and testing
     window.PlanCard = {
         loadVehicles: loadVehicles,
+        showVehicleSelectLoading: showVehicleSelectLoading,
+        hideVehicleSelectLoading: hideVehicleSelectLoading,
+        refreshVehicles: function() {
+            console.log('[PlanCard] Refreshing vehicles with loading state');
+            loadVehicles();
+        },
         debug: function() {
             console.log('[PlanCard] Debug info:');
             console.log('  Selected origin:', selectedOrigin);
             console.log('  Selected destination:', selectedDestination);
             console.log('  Button disabled:', planRouteBtn ? planRouteBtn.disabled : 'Button not found');
             console.log('  StorageManager available:', typeof window.StorageManager !== 'undefined');
+            console.log('  Vehicle select loading:', document.querySelector('.vehicle-selection-group')?.classList.contains('loading'));
             console.log('  Elements found:');
             console.log('    originInput:', !!originInput);
             console.log('    destinationInput:', !!destinationInput);
@@ -431,8 +470,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // Listen for vehicle changes to update dropdown
 document.addEventListener('vehiclesUpdated', function() {
-    console.log('[PlanCard] Vehicles updated, reloading dropdown');
-    if (window.PlanCard && window.PlanCard.loadVehicles) {
+    console.log('[PlanCard] Vehicles updated, reloading dropdown with loading state');
+    if (window.PlanCard && window.PlanCard.refreshVehicles) {
+        window.PlanCard.refreshVehicles();
+    } else if (window.PlanCard && window.PlanCard.loadVehicles) {
         window.PlanCard.loadVehicles();
     }
 });

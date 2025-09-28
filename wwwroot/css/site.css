@@ -1315,6 +1315,111 @@ h1, h2, h3, h4, h5, h6 {
     .settings-label { font-size: 0.95rem; }
 }
 
+/* General Skeleton Loading Styles */
+@keyframes skeleton-loading {
+    0% {
+        background-position: -200px 0;
+    }
+    100% {
+        background-position: calc(200px + 100%) 0;
+    }
+}
+
+.skeleton-loading {
+    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 200px 100%;
+    animation: skeleton-loading 1.5s infinite ease-in-out;
+    border-radius: 4px;
+}
+
+/* Dark theme skeleton loading */
+[data-theme="dark"] .skeleton-loading {
+    background: linear-gradient(90deg, #3a3a3a 25%, #4a4a4a 50%, #3a3a3a 75%);
+}
+
+/* Vehicles Card Skeleton Loading */
+.vehicles-card.loading .vehicle-item {
+    pointer-events: none;
+}
+
+.vehicles-card.loading .vehicle-item h6,
+.vehicles-card.loading .vehicle-item .small div {
+    position: relative;
+    color: transparent;
+}
+
+.vehicles-card.loading .vehicle-item h6::before,
+.vehicles-card.loading .vehicle-item .small div::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 200px 100%;
+    animation: skeleton-loading 1.5s infinite ease-in-out;
+    border-radius: 4px;
+}
+
+.vehicles-card.loading .vehicle-item h6::before {
+    width: 70%;
+    height: 18px;
+}
+
+.vehicles-card.loading .vehicle-item .small div::before {
+    width: 85%;
+    height: 14px;
+    margin-bottom: 2px;
+}
+
+.vehicles-card.loading .btn {
+    position: relative;
+    color: transparent;
+    pointer-events: none;
+}
+
+.vehicles-card.loading .btn::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 20px;
+    height: 20px;
+    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 200px 100%;
+    animation: skeleton-loading 1.5s infinite ease-in-out;
+    border-radius: 4px;
+}
+
+.vehicles-card.loading .badge {
+    color: transparent;
+    position: relative;
+}
+
+.vehicles-card.loading .badge::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 200px 100%;
+    animation: skeleton-loading 1.5s infinite ease-in-out;
+    border-radius: 12px;
+}
+
+/* Dark theme vehicles skeleton */
+[data-theme="dark"] .vehicles-card.loading .vehicle-item h6::before,
+[data-theme="dark"] .vehicles-card.loading .vehicle-item .small div::before,
+[data-theme="dark"] .vehicles-card.loading .btn::before,
+[data-theme="dark"] .vehicles-card.loading .badge::before {
+    background: linear-gradient(90deg, #3a3a3a 25%, #4a4a4a 50%, #3a3a3a 75%);
+    background-size: 200px 100%;
+}
+
 /* Vehicles card layout */
 .vehicles-card, .vehicle-form-card {
     background: var(--bg-card);

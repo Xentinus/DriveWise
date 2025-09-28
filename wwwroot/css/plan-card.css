@@ -157,6 +157,37 @@
     font-size: 0.85rem;
 }
 
+/* Vehicle Selection Skeleton Loading */
+.vehicle-selection-group.loading .form-select {
+    position: relative;
+    color: transparent;
+    pointer-events: none;
+}
+
+.vehicle-selection-group.loading .form-select::before {
+    content: "";
+    position: absolute;
+    top: 8px;
+    left: 12px;
+    right: 40px;
+    height: 20px;
+    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 200px 100%;
+    animation: skeleton-loading 1.5s infinite ease-in-out;
+    border-radius: 4px;
+    z-index: 1;
+}
+
+.vehicle-selection-group.loading .form-select option {
+    display: none;
+}
+
+/* Dark theme vehicle select skeleton */
+[data-theme="dark"] .vehicle-selection-group.loading .form-select::before {
+    background: linear-gradient(90deg, #3a3a3a 25%, #4a4a4a 50%, #3a3a3a 75%);
+    background-size: 200px 100%;
+}
+
 /* Route Planning Button */
 #planRouteBtn {
     border-radius: 8px;
