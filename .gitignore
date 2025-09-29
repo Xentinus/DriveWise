@@ -960,3 +960,7 @@ jspm_packages/
 
 # FuseBox cache
 .fusebox/
+
+# DriveWise specific - Local deployment scripts with sensitive information
+deploy-to-rpi.sh
+*.tar
