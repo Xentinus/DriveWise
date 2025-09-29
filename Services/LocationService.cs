@@ -21,7 +21,8 @@ namespace DriveWise.Services
             try
             {
                 var encodedQuery = Uri.EscapeDataString(query);
-                var url = $"{NOMINATIM_BASE_URL}/search?format=json&q={encodedQuery}&limit={limit}&countrycodes=HU&addressdetails=1&extratags=1&namedetails=1&accept-language=hu,en";
+                // Removed countrycodes=HU restriction to allow international searches
+                var url = $"{NOMINATIM_BASE_URL}/search?format=json&q={encodedQuery}&limit={limit}&addressdetails=1&extratags=1&namedetails=1&accept-language=hu,en";
                 
                 var response = await _httpClient.GetAsync(url);
                 
