@@ -2,7 +2,7 @@
 <html lang="hu">
 <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
     
     <!-- Enhanced Cache Control - Prevent All Caching -->
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate, max-age=0" />
@@ -327,6 +327,72 @@
                     script.src += '&v=' + timestamp;
                 }
             });
+        })();
+        
+        // Prevent zoom and scroll behavior
+        (function() {
+            // Prevent zoom with keyboard shortcuts
+            document.addEventListener('keydown', function(e) {
+                // Disable Ctrl+Plus, Ctrl+Minus, Ctrl+0 (zoom shortcuts)
+                if ((e.ctrlKey || e.metaKey) && (e.keyCode === 61 || e.keyCode === 107 || e.keyCode === 173 || e.keyCode === 109 || e.keyCode === 187 || e.keyCode === 189 || e.keyCode === 48)) {
+                    e.preventDefault();
+                    return false;
+                }
+            });
+            
+            // Prevent zoom with mouse wheel
+            document.addEventListener('wheel', function(e) {
+                if (e.ctrlKey || e.metaKey) {
+                    e.preventDefault();
+                    return false;
+                }
+            }, { passive: false });
+            
+            // Prevent zoom with touch gestures
+            document.addEventListener('touchstart', function(e) {
+                if (e.touches.length > 1) {
+                    e.preventDefault();
+                    return false;
+                }
+            }, { passive: false });
+            
+            document.addEventListener('touchmove', function(e) {
+                if (e.touches.length > 1) {
+                    e.preventDefault();
+                    return false;
+                }
+            }, { passive: false });
+            
+            // Prevent scroll behavior on body
+            document.addEventListener('scroll', function(e) {
+                window.scrollTo(0, 0);
+            }, { passive: false });
+            
+            document.addEventListener('touchmove', function(e) {
+                // Allow touch move only on map element and its children
+                if (!e.target.closest('#map') && !e.target.closest('.leaflet-container') && !e.target.closest('.search-results') && !e.target.closest('.modal')) {
+                    e.preventDefault();
+                    return false;
+                }
+            }, { passive: false });
+            
+            // Prevent context menu on long press
+            document.addEventListener('contextmenu', function(e) {
+                if (!e.target.closest('#map')) {
+                    e.preventDefault();
+                    return false;
+                }
+            });
+            
+            // Prevent double-tap zoom
+            let lastTouchEnd = 0;
+            document.addEventListener('touchend', function(e) {
+                const now = (new Date()).getTime();
+                if (now - lastTouchEnd <= 300) {
+                    e.preventDefault();
+                }
+                lastTouchEnd = now;
+            }, { passive: false });
         })();
     </script>
     
