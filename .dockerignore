@@ -1,0 +1,76 @@
+# Ignore version control files
+.git
+.gitignore
+
+# Ignore build outputs
+bin/
+obj/
+out/
+[Dd]ebug/
+[Rr]elease/
+[Bb]uild/
+publish/
+
+# Ignore temporary files
+*.tmp
+*.temp
+*~
+
+# Ignore IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Ignore test results
+TestResults/
+
+# Ignore documentation files
+*.md
+LICENSE
+
+# Ignore container related files
+Dockerfile*
+docker-compose*
+.dockerignore
+
+# Ignore Azure files
+.azure/
+
+# Ignore logs
+logs/
+*.log
+
+# Ignore environment files that might contain secrets
+.env
+.env.local
+.env.production
+.env.staging
+
+# Allow appsettings files with API keys to be included in Docker image
+# The build process needs these to include API keys in the production image
+!appsettings.json
+!appsettings.Production.json
+!appsettings.Development.json
+
+# But exclude the example file (it doesn't contain real API keys)
+appsettings.Example.json
+
+# Ignore dependencies
+node_modules/
+
+# Ignore OS files
+.DS_Store
+Thumbs.db
+
+# Keep appsettings files for API keys in production image
+# appsettings.json contains the actual API keys
+# appsettings.Example.json is just documentation
+!appsettings.json
+!appsettings.Production.json
+!appsettings.Development.json
+appsettings.Example.json
+
+# Ignore deployment scripts with sensitive info
+deploy-to-rpi.sh
+*.sh

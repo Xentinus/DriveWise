@@ -888,8 +888,7 @@ localhost.pem
 localhost.crt
 localhost.key
 
-# Docker files (if not needed in repo)
-.dockerignore
+
 # Dockerfile
 # docker-compose*.yml
 
