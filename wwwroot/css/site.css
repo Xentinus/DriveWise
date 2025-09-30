@@ -303,11 +303,7 @@
     }
     
     .unified-top-widget .zoom-controls {
-        padding: 1px;
-        flex-direction: row;
-        min-width: auto;
-        opacity: 1;
-        transition: opacity 0.3s ease;
+        display: none; /* Hide zoom controls on mobile */
     }
     
     .unified-top-widget .weather-controls {
@@ -317,18 +313,10 @@
         transition: opacity 0.3s ease;
     }
     
-    /* Hide zoom and weather controls when search is focused and route is active */
-    .unified-top-widget.route-active.search-focused .zoom-controls,
+    /* Hide weather controls when search is focused and route is active */
     .unified-top-widget.route-active.search-focused .weather-controls {
         opacity: 0;
         pointer-events: none;
-    }
-    
-    .unified-top-widget .zoom-controls .zoom-btn {
-        width: 26px;
-        height: 26px;
-        font-size: 14px;
-        margin: 0 1px;
     }
     
     .unified-top-widget .search-controls {
