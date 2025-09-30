@@ -600,49 +600,7 @@ document.addEventListener('DOMContentLoaded', function () {
         el.classList.add('active');
     }
     
-    // Custom zoom controls functionality
-    function setupCustomZoomControls() {
-        var zoomInBtn = document.getElementById('zoomIn');
-        var zoomOutBtn = document.getElementById('zoomOut');
-        
-        if (zoomInBtn) {
-            zoomInBtn.addEventListener('click', function() {
-                map.zoomIn();
-            });
-        }
-        
-        if (zoomOutBtn) {
-            zoomOutBtn.addEventListener('click', function() {
-                map.zoomOut();
-            });
-        }
-        
-        // Update button states based on zoom level
-        function updateZoomButtonStates() {
-            var currentZoom = map.getZoom();
-            var maxZoom = map.getMaxZoom();
-            var minZoom = map.getMinZoom();
-            
-            if (zoomInBtn) {
-                zoomInBtn.disabled = (currentZoom >= maxZoom);
-                zoomInBtn.style.opacity = (currentZoom >= maxZoom) ? '0.5' : '1';
-            }
-            
-            if (zoomOutBtn) {
-                zoomOutBtn.disabled = (currentZoom <= minZoom);
-                zoomOutBtn.style.opacity = (currentZoom <= minZoom) ? '0.5' : '1';
-            }
-        }
-        
-        // Listen to zoom changes
-        map.on('zoomend', updateZoomButtonStates);
-        
-        // Initial state
-        updateZoomButtonStates();
-    }
-    
-    // Initialize custom zoom controls
-    setupCustomZoomControls();
+
     
     // Debug function for long press testing
     window.testLongPress = function() {
