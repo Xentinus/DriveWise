@@ -6,7 +6,7 @@
         <div class="settings-label">Értesítések</div>
         <div class="settings-value">
             <label class="switch">
-                <input type="checkbox" id="notificationsToggle" />
+           <input type="checkbox" id="notificationsToggle" />
                 <span class="switch-slider" aria-hidden="true"></span>
             </label>
         </div>
@@ -122,16 +122,22 @@
                             }
                         }
                         
-                        // Notify ThemeManager about theme change
-                        if (window.ThemeManager) {
-                            window.ThemeManager.setTheme(themeValue);
+                        // Only notify ThemeManager if theme actually changed
+                        const currentTheme = window.ThemeManager ? window.ThemeManager.getCurrentTheme() : 'light';
+                        if (themeValue !== currentTheme) {
+                            // Notify ThemeManager about theme change
+                            if (window.ThemeManager) {
+                                window.ThemeManager.setTheme(themeValue);
+                            }
+                            // Create a serializable event detail for external listeners
+                            const themeEvent = new CustomEvent('themeChanged', { 
+                                detail: JSON.stringify({ theme: themeValue })
+                            });
+                            window.dispatchEvent(themeEvent);
+                            console.log('[settings] Dispatched themeChanged event for value:', themeValue);
+                        } else {
+                            console.log('[settings] Theme value unchanged, skipping theme change events');
                         }
-                        // Create a serializable event detail for external listeners
-                        const themeEvent = new CustomEvent('themeChanged', { 
-                            detail: JSON.stringify({ theme: themeValue })
-                        });
-                        window.dispatchEvent(themeEvent);
-                        console.log('[settings] Dispatched themeChanged event for value:', themeValue);
                     } catch (e) { 
                         console.warn('[settings] dispatch themeChanged failed:', e); 
                     }
@@ -488,9 +494,15 @@
             const themeSelect = document.getElementById('themeSelect');
             if (themeSelect && currentTheme) {
                 themeSelect.value = currentTheme;
-                // Also update the storage to ensure consistency
-                StorageManager.set('theme', currentTheme);
-                console.log('[settings] synced current theme:', currentTheme);
+                
+                // Only update storage if it's different to avoid unnecessary events
+                const storedTheme = StorageManager.get('theme');
+                if (storedTheme !== currentTheme) {
+                    StorageManager.set('theme', currentTheme);
+                    console.log('[settings] synced current theme:', currentTheme);
+                } else {
+                    console.log('[settings] theme already synced:', currentTheme);
+                }
             }
         }
     }

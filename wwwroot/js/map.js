@@ -1,9 +1,13 @@
 // Initialize map when DOM is ready to ensure container size is correct
 document.addEventListener('DOMContentLoaded', function () {
+    console.log('[map] DOM loaded, initializing map...');
+    
     // Default to a Europe-wide view (no specific city) so users see the continent on load
     var map = L.map('map', {
         zoomControl: false // Disable default zoom controls
     }).setView([52.0, 10.0], 5); // Europe center, slightly closer (zoom +1)
+    
+    console.log('[map] Leaflet map created');
     
     // Make map globally available for search functionality
     window.map = map;
@@ -19,26 +23,31 @@ document.addEventListener('DOMContentLoaded', function () {
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
     });
 
-    // Current active layer
-    var currentLayer = lightLayer;
+    // Current active layer - start with null to force initial load
+    var currentLayer = null;
 
     // Function to switch map theme
     function switchMapTheme(theme) {
         console.log('[map] Switching to theme:', theme);
         
+        // Check if we're already using the correct theme layer
+        let targetLayer = theme === 'dark' ? darkLayer : lightLayer;
+        
+        if (currentLayer === targetLayer && map.hasLayer(currentLayer)) {
+            console.log('[map] Already using correct theme layer, skipping switch');
+            return;
+        }
+        
         // Remove current layer
-        if (map.hasLayer(currentLayer)) {
+        if (currentLayer && map.hasLayer(currentLayer)) {
             map.removeLayer(currentLayer);
         }
         
         // Add new layer based on theme
-        if (theme === 'dark') {
-            currentLayer = darkLayer;
-        } else {
-            currentLayer = lightLayer;
-        }
-        
+        currentLayer = targetLayer;
         currentLayer.addTo(map);
+        
+        console.log('[map] Theme switched to:', theme);
     }
 
     // Listen for theme changes
@@ -58,6 +67,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Apply initial theme based on current document theme or default to light
     var initialTheme = document.documentElement.getAttribute('data-theme') || 'light';
+    console.log('[map] Applying initial theme:', initialTheme);
     switchMapTheme(initialTheme);
 
     // Variable to store current position marker

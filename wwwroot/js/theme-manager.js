@@ -41,6 +41,14 @@
     }
 
     function applyTheme(theme) {
+        const currentTheme = document.documentElement.getAttribute('data-theme');
+        
+        // Skip if already applied
+        if (currentTheme === theme) {
+            console.log('[theme] Theme already applied:', theme);
+            return;
+        }
+        
         console.log('[theme] Applying theme:', theme);
         
         // Apply to document root
@@ -64,6 +72,10 @@
         }
     }
 
+    function getCurrentTheme() {
+        return document.documentElement.getAttribute('data-theme') || DEFAULT_THEME;
+    }
+
     function handleThemeChanged(event) {
         if (event.detail) {
             let themeData;
@@ -71,7 +83,13 @@
                 // Handle both object and string details
                 themeData = typeof event.detail === 'string' ? JSON.parse(event.detail) : event.detail;
                 if (themeData.theme) {
-                    applyTheme(themeData.theme);
+                    const currentTheme = getCurrentTheme();
+                    // Only apply if actually different
+                    if (themeData.theme !== currentTheme) {
+                        applyTheme(themeData.theme);
+                    } else {
+                        console.log('[theme] Ignored redundant theme change to:', themeData.theme);
+                    }
                 }
             } catch (e) {
                 console.warn('[theme] Failed to parse theme change event', e);
@@ -87,16 +105,14 @@
 
     // Public API
     window.ThemeManager = {
-        getCurrentTheme: function() {
-            return document.documentElement.getAttribute('data-theme') || DEFAULT_THEME;
-        },
+        getCurrentTheme: getCurrentTheme,
         setTheme: function(theme) {
             if (theme === 'light' || theme === 'dark') {
                 applyTheme(theme);
             }
         },
         toggleTheme: function() {
-            const current = this.getCurrentTheme();
+            const current = getCurrentTheme();
             const newTheme = current === 'light' ? 'dark' : 'light';
             this.setTheme(newTheme);
         }
