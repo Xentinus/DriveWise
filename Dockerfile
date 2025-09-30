@@ -26,6 +26,10 @@ FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
 
+# Copy appsettings.json files if they exist and contain API keys
+# This will override the published versions with actual API keys
+COPY appsettings*.json ./
+
 # Set the environment variables for Docker
 ENV ASPNETCORE_ENVIRONMENT=Production
 ENV ASPNETCORE_URLS=http://+:8800
