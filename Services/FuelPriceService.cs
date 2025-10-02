@@ -114,22 +114,36 @@ namespace DriveWise.Services
                     prices["diesel"] = dieselPrice;
                 }
 
-                // Try to parse from the main price display area
+                // Try to parse from the main price display area - look for average prices specifically
                 if (prices.Count == 0)
                 {
-                    // Look for average prices in the main display
-                    var avgPriceMatches = Regex.Matches(html, @"<span class=""ar"">(\d+(?:\.\d+)?)</span>", RegexOptions.IgnoreCase);
-                    
-                    // The structure usually shows benzin first, then diesel
-                    if (avgPriceMatches.Count >= 1 && decimal.TryParse(avgPriceMatches[0].Groups[1].Value, out var firstPrice))
+                    // Look for "Átlag - Ft/l" pattern for benzin (95-ös benzin)
+                    var benzinAvgMatch = Regex.Match(html, @"95-benzin-e10\.png[^>]*>.*?Átlag\s*-\s*Ft/l(\d+(?:\.\d+)?)", RegexOptions.IgnoreCase | RegexOptions.Singleline);
+                    if (benzinAvgMatch.Success && decimal.TryParse(benzinAvgMatch.Groups[1].Value, out var benzinAvgPrice))
                     {
-                        prices["benzin"] = firstPrice;
+                        prices["benzin"] = benzinAvgPrice;
                     }
                     
-                    if (avgPriceMatches.Count >= 2 && decimal.TryParse(avgPriceMatches[1].Groups[1].Value, out var secondPrice))
+                    // Look for "Átlag - Ft/l" pattern for diesel (gázolaj)
+                    var dieselAvgMatch = Regex.Match(html, @"gazolaj\.png[^>]*>.*?Átlag\s*-\s*Ft/l(\d+(?:\.\d+)?)", RegexOptions.IgnoreCase | RegexOptions.Singleline);
+                    if (dieselAvgMatch.Success && decimal.TryParse(dieselAvgMatch.Groups[1].Value, out var dieselAvgPrice))
                     {
-                        prices["diesel"] = secondPrice;
+                        prices["diesel"] = dieselAvgPrice;
                     }
+                }
+
+                // Try to parse LPG average price
+                var lpgAvgMatch = Regex.Match(html, @"lpg[^>]*\.png[^>]*>.*?Átlag\s*-\s*Ft/l(\d+(?:\.\d+)?)", RegexOptions.IgnoreCase | RegexOptions.Singleline);
+                if (lpgAvgMatch.Success && decimal.TryParse(lpgAvgMatch.Groups[1].Value, out var lpgAvgPrice))
+                {
+                    prices["lpg"] = lpgAvgPrice;
+                }
+
+                // Try to parse CNG average price
+                var cngAvgMatch = Regex.Match(html, @"cng[^>]*\.png[^>]*>.*?Átlag\s*-\s*Ft/(?:l|kg)(\d+(?:\.\d+)?)", RegexOptions.IgnoreCase | RegexOptions.Singleline);
+                if (cngAvgMatch.Success && decimal.TryParse(cngAvgMatch.Groups[1].Value, out var cngAvgPrice))
+                {
+                    prices["cng"] = cngAvgPrice;
                 }
 
                 // Use fallback values if still no prices found (current Hungarian market prices)
