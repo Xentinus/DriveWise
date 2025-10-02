@@ -115,6 +115,23 @@
             detail: JSON.stringify({ destination: destinationName })
         }));
         
+        // Debug: Check if route card is listening
+        setTimeout(() => {
+            console.log('[navigation] Checking if route card received the event...');
+            if (window.RouteCard) {
+                console.log('[navigation] RouteCard is available, checking if loading state is visible');
+                const routeCard = document.getElementById('routeCard');
+                if (routeCard) {
+                    console.log('[navigation] Route card display:', routeCard.style.display);
+                    console.log('[navigation] Route card classes:', routeCard.className);
+                } else {
+                    console.log('[navigation] Route card element not found!');
+                }
+            } else {
+                console.log('[navigation] RouteCard not available!');
+            }
+        }, 100);
+        
         // Calculate route using our API
         const selectedVehicle = window.StorageManager ? window.StorageManager.getSelectedVehicle() : null;
         
@@ -241,6 +258,7 @@
             fuelCost: route.fuelCost,
             fuelPrice: route.fuelPrice,
             fuelType: route.fuelType,
+            shareableLink: route.shareableLink,
             geometry: route.geometry
         };
         

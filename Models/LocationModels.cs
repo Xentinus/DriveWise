@@ -43,6 +43,7 @@ namespace DriveWise.Models
         public decimal? FuelCost { get; set; } // in Ft (Hungarian Forints)
         public string? FuelType { get; set; } // fuel type used for calculation
         public decimal? FuelPrice { get; set; } // Ft/liter price used for calculation
+        public string? ShareableLink { get; set; } // encrypted shareable link for this route
     }
 
     public class RouteGeometry

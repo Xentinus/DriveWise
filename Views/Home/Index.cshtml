@@ -1,12 +1,18 @@
-﻿<!DOCTYPE html>
 @{
     ViewData["Title"] = "Home";
 }
 
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="utf-8" />
+</head>
+<body>
+
 <!-- Warning message displayed when JavaScript is disabled -->
 <noscript>
     <div class="alert alert-danger d-flex align-items-center position-fixed w-100 h-100" style="top: 0; left: 0; z-index: 9999; background-color: rgba(220, 53, 69, 0.95);">
-        <div class="container text-center">
+        <div class="container text-center">Megos
             <div class="row justify-content-center">
                 <div class="col-md-8">
                     <i class="bi bi-exclamation-triangle-fill" style="font-size: 4rem; color: white; margin-bottom: 1rem;"></i>
@@ -36,8 +42,8 @@
     <!-- This content will be shown only when JavaScript is enabled -->
     <div class="d-none">
         <!-- Hidden content that confirms JavaScript is working -->
-        <h1>DriveWise Map App</h1>
-        <p>JavaScript enabled - application ready.</p>
+        <h1>DriveWise Térkép Alkalmazás</h1>
+        <p>JavaScript engedélyezve - alkalmazás kész.</p>
     </div>
 </div>
 
@@ -49,6 +55,25 @@
         if (jsContent) {
             jsContent.style.display = 'block';
         }
+        
+        // Handle shared route error if any
+        @if (!string.IsNullOrEmpty(ViewBag.SharedRouteError as string))
+        {
+            <text>
+            console.error('[index] Shared route error: @ViewBag.SharedRouteError');
+            
+            // Show error to user
+            setTimeout(() => {
+                if (window.RouteCard && window.RouteCard.showToast) {
+                    window.RouteCard.showToast('@ViewBag.SharedRouteError', 'error');
+                } else if (window.SharedRouteHandler && window.SharedRouteHandler.showToast) {
+                    window.SharedRouteHandler.showToast('@ViewBag.SharedRouteError', 'error');
+                } else {
+                    alert('@ViewBag.SharedRouteError');
+                }
+            }, 1000);
+            </text>
+        }
     });
     
     // Alternative immediate execution (in case DOM is already loaded)
@@ -57,3 +82,6 @@
         jsContent.style.display = 'block';
     }
 </script>
+
+</body>
+</html>

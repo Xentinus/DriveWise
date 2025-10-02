@@ -58,6 +58,7 @@
     transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     font-family: 'Nunito', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     border: 1px solid #e0e0e0;
+    pointer-events: auto; /* Ensure the card can receive events */
 }
 
 .route-card.visible {
@@ -234,6 +235,12 @@
     color: #d32f2f;
 }
 
+.route-share-btn:hover {
+    background: #f3e5f5;
+    border-color: #9c27b0;
+    color: #9c27b0;
+}
+
 /* Minimized Handle - styled like unified-top-widget */
 .route-card-handle {
     position: absolute;
@@ -341,17 +348,10 @@
     color: #FF5722;
 }
 
-[data-theme="dark"] .route-card-handle {
-    background: #2A2A2A;
-    border-color: #555555;
-}
-
-[data-theme="dark"] .route-card-handle:hover {
-    background: #333333;
-}
-
-[data-theme="dark"] .route-card-handle i {
-    color: #4FC3F7;
+[data-theme="dark"] .route-share-btn:hover {
+    background: #4A148C;
+    border-color: #E1BEE7;
+    color: #E1BEE7;
 }
 
 /* Responsive Design */

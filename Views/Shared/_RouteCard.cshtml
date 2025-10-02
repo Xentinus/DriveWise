@@ -70,6 +70,10 @@
                 <i class="bi bi-arrows-fullscreen"></i>
                 Útvonal középre
             </button>
+            <button type="button" class="route-action-btn route-share-btn" id="routeShareBtn" style="display: none;">
+                <i class="bi bi-share"></i>
+                Megosztás
+            </button>
             <button type="button" class="route-action-btn route-clear-btn" id="routeClearBtn">
                 <i class="bi bi-trash"></i>
                 Útvonal törlése
@@ -91,6 +95,7 @@
     let hasActiveRoute = false;
     let showTimeout = null;
     let isShowingRoute = false; // Guard variable
+    let currentShareableLink = null; // Store the current shareable link
     
     function init() {
         console.log('[route-card] Route card initialized');
@@ -100,6 +105,7 @@
         const handle = document.getElementById('routeCardHandle');
         const centerBtn = document.getElementById('routeCenterBtn');
         const clearBtn = document.getElementById('routeClearBtn');
+        const shareBtn = document.getElementById('routeShareBtn');
         
         if (!routeCard) {
             console.warn('[route-card] Route card element not found');
@@ -123,6 +129,13 @@
         if (centerBtn) {
             centerBtn.addEventListener('click', function() {
                 centerRouteOnMap();
+            });
+        }
+        
+        // Share route functionality
+        if (shareBtn) {
+            shareBtn.addEventListener('click', function() {
+                shareRoute();
             });
         }
         
@@ -402,6 +415,7 @@
         const fuelConsumptionRow = document.getElementById('fuelConsumptionRow');
         const fuelCostEl = document.getElementById('routeFuelCost');
         const fuelCostRow = document.getElementById('fuelCostRow');
+        const shareBtn = document.getElementById('routeShareBtn');
         
         console.log('[route-card] Fuel cost data:', {
             fuelCost: routeData.fuelCost,
@@ -410,6 +424,19 @@
             fuelCostEl: !!fuelCostEl,
             fuelCostRow: !!fuelCostRow
         });
+        
+        // Store shareable link
+        currentShareableLink = routeData.shareableLink;
+        console.log('[route-card] Shareable link stored:', currentShareableLink);
+        
+        // Show/hide share button based on link availability
+        if (shareBtn) {
+            if (currentShareableLink) {
+                shareBtn.style.display = 'inline-flex';
+            } else {
+                shareBtn.style.display = 'none';
+            }
+        }
         
         if (durationEl && routeData.duration !== undefined) {
             durationEl.textContent = formatDuration(routeData.duration);
@@ -466,6 +493,9 @@
     function clearRoute() {
         console.log('[route-card] Clearing route from card');
         
+        // Clear the stored shareable link
+        currentShareableLink = null;
+        
         // Call NavigationManager.clearRoute() to actually remove route and markers from map
         if (window.NavigationManager && window.NavigationManager.clearRoute) {
             window.NavigationManager.clearRoute();
@@ -479,6 +509,104 @@
         }
     }
     
+    function shareRoute() {
+        console.log('[route-card] Sharing route');
+        
+        if (!currentShareableLink) {
+            console.warn('[route-card] No shareable link available');
+            showToast('Nincs elérhető megosztható link', 'error');
+            return;
+        }
+        
+        // Copy to clipboard
+        if (navigator.clipboard && window.isSecureContext) {
+            navigator.clipboard.writeText(currentShareableLink).then(function() {
+                console.log('[route-card] Link copied to clipboard successfully');
+                showToast('Link vágólapra másolva!', 'success');
+            }).catch(function(err) {
+                console.error('[route-card] Failed to copy link to clipboard:', err);
+                fallbackCopyToClipboard(currentShareableLink);
+            });
+        } else {
+            // Fallback for older browsers or non-secure contexts
+            fallbackCopyToClipboard(currentShareableLink);
+        }
+    }
+    
+    function fallbackCopyToClipboard(text) {
+        try {
+            // Create a temporary textarea element
+            const textArea = document.createElement('textarea');
+            textArea.value = text;
+            textArea.style.position = 'fixed';
+            textArea.style.left = '-999999px';
+            textArea.style.top = '-999999px';
+            document.body.appendChild(textArea);
+            textArea.focus();
+            textArea.select();
+            
+            const successful = document.execCommand('copy');
+            document.body.removeChild(textArea);
+            
+            if (successful) {
+                console.log('[route-card] Link copied to clipboard via fallback method');
+                showToast('Link vágólapra másolva!', 'success');
+            } else {
+                console.error('[route-card] Fallback clipboard copy failed');
+                showToast('Nem sikerült a vágólapra másolás', 'error');
+            }
+        } catch (err) {
+            console.error('[route-card] Fallback clipboard copy error:', err);
+            showToast('Nem sikerült a vágólapra másolás', 'error');
+        }
+    }
+    
+    function showToast(message, type = 'info') {
+        // Create a simple toast notification
+        const toast = document.createElement('div');
+        toast.className = `toast-notification toast-${type}`;
+        toast.style.cssText = `
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: ${type === 'success' ? '#28a745' : type === 'error' ? '#dc3545' : '#007bff'};
+            color: white;
+            padding: 12px 20px;
+            border-radius: 6px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            z-index: 10000;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-size: 14px;
+            font-weight: 500;
+            opacity: 0;
+            transform: translateX(100%);
+            transition: all 0.3s ease;
+            max-width: 300px;
+            word-wrap: break-word;
+        `;
+        toast.textContent = message;
+        
+        document.body.appendChild(toast);
+        
+        // Animate in
+        requestAnimationFrame(() => {
+            toast.style.opacity = '1';
+            toast.style.transform = 'translateX(0)';
+        });
+        
+        // Auto remove after 3 seconds
+        setTimeout(() => {
+            toast.style.opacity = '0';
+            toast.style.transform = 'translateX(100%)';
+            setTimeout(() => {
+                if (toast.parentNode) {
+                    document.body.removeChild(toast);
+                }
+            }, 300);
+        }, 3000);
+    }
+    
+    // Formatting functions
     function formatDistance(meters) {
         if (meters < 1000) {
             return Math.round(meters) + ' m';
@@ -647,6 +775,7 @@
         restore: restoreRouteCard,
         isVisible: function() { return hasActiveRoute; },
         isMinimized: function() { return isMinimized; },
+        showToast: showToast,
         debug: function() {
             console.log('[route-card] Debug info:', {
                 hasActiveRoute: hasActiveRoute,
@@ -657,5 +786,4 @@
             });
         }
     };
-})();
-</script>
+})();</script>

@@ -1,9 +1,14 @@
 using System.Net;
 using System.Net.Sockets;
+using System.Text;
 using DriveWise.Services;
 using DriveWise.BackgroundServices;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// Set UTF-8 encoding as default
+Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+Console.OutputEncoding = Encoding.UTF8;
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
@@ -35,8 +40,20 @@ builder.Services.AddScoped<IVehicleService, VehicleService>();
 // Register fuel price service as singleton to maintain price cache
 builder.Services.AddSingleton<IFuelPriceService, FuelPriceService>();
 
+// Register route share service
+builder.Services.AddScoped<IRouteShareService, RouteShareService>();
+
 // Register background service for fuel price updates
 builder.Services.AddHostedService<FuelPriceBackgroundService>();
+
+// Configure request localization for Hungarian
+builder.Services.Configure<RequestLocalizationOptions>(options =>
+{
+    var supportedCultures = new[] { "hu-HU", "en-US" };
+    options.SetDefaultCulture("hu-HU")
+           .AddSupportedCultures(supportedCultures)
+           .AddSupportedUICultures(supportedCultures);
+});
 
 // Check if URLs are already configured via launch settings
 var configuredUrls = builder.Configuration["urls"] ?? Environment.GetEnvironmentVariable("ASPNETCORE_URLS");
@@ -49,10 +66,10 @@ if (string.IsNullOrEmpty(configuredUrls))
     
     builder.WebHost.UseUrls($"http://0.0.0.0:{httpPort}", $"https://0.0.0.0:{httpsPort}");
     
-    Console.WriteLine($"Application will be available at:");
+    Console.WriteLine($"Alkalmazás elérhető lesz:");
     Console.WriteLine($"HTTP:  http://0.0.0.0:{httpPort}");
     Console.WriteLine($"HTTPS: https://0.0.0.0:{httpsPort}");
-    Console.WriteLine($"From other devices use your IP address (e.g., http://10.0.0.12:{httpPort})");
+    Console.WriteLine($"Más eszközökről használja az IP címét (pl. http://10.0.0.12:{httpPort})");
 }
 else
 {
@@ -84,16 +101,19 @@ else
             var newPort = GetAvailablePort(port);
             var newUrl = $"{uri.Scheme}://{uri.Host}:{newPort}";
             availableUrls.Add(newUrl);
-            Console.WriteLine($"Port {port} is busy, using {newPort} instead");
+            Console.WriteLine($"Port {port} foglalt, {newPort} használata helyette");
         }
     }
     
     var finalUrls = string.Join(";", availableUrls);
     builder.WebHost.UseUrls(finalUrls.Split(';'));
-    Console.WriteLine($"Using URLs: {finalUrls}");
+    Console.WriteLine($"URL-ek használata: {finalUrls}");
 }
 
 var app = builder.Build();
+
+// Use request localization
+app.UseRequestLocalization();
 
 // Selective cache control middleware
 app.Use(async (context, next) =>
