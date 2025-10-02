@@ -1,14 +1,13 @@
-/* Weather Widget Styles - Integrated into Unified Widget */
-.weather-widget-content {
-    /* Remove fixed positioning since it's now part of unified widget */
+/* Info Widget Styles - Weather & Fuel Prices */
+.info-widget-content {
     position: relative;
     z-index: auto;
     pointer-events: auto;
     font-family: 'Nunito', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
 }
 
-.weather-container {
-    /* No background/border/shadow since parent .weather-controls handles this */
+.widget-container {
+    /* No background/border/shadow since parent .info-widget handles this */
     background: transparent;
     border: none;
     border-radius: 0;
@@ -19,7 +18,7 @@
     font-family: inherit;
 }
 
-.weather-container:hover {
+.widget-container:hover {
     box-shadow: none;
     transform: none;
 }
@@ -64,7 +63,7 @@
     font-family: inherit;
 }
 
-.weather-loading {
+.widget-loading {
     display: flex;
     align-items: center;
     gap: 8px;
@@ -73,13 +72,13 @@
     font-family: inherit;
 }
 
-.weather-loading .spinner-border {
+.widget-loading .spinner-border {
     width: 1rem;
     height: 1rem;
     border-width: 2px;
 }
 
-.weather-error {
+.widget-error {
     color: #dc3545;
     font-size: 0.8rem;
     text-align: center;
@@ -87,13 +86,54 @@
     font-family: inherit;
 }
 
-/* Weather controls container - initially hidden */
-.weather-controls {
-    display: none; /* Hidden by default */
+/* Fuel prices styling */
+.fuel-prices {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin-top: 8px;
+    font-family: inherit;
 }
 
-/* Show weather controls when widget is visible */
-.weather-controls.visible {
+.fuel-price-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.85rem;
+    line-height: 1.2;
+}
+
+.fuel-icon {
+    font-size: 0.9rem;
+    line-height: 1;
+}
+
+.benzin-icon {
+    color: #28a745; /* Green for gasoline */
+}
+
+.diesel-icon {
+    color: #ffc107; /* Amber for diesel */
+}
+
+.fuel-label {
+    font-weight: 500;
+    color: var(--text-muted);
+    min-width: 35px;
+}
+
+.fuel-value {
+    font-weight: 600;
+    color: var(--text-default);
+}
+
+/* Info widget container - always visible */
+.info-widget {
+    display: block; /* Always visible */
+}
+
+/* Show info widget when visible */
+.info-widget.visible {
     display: block;
 }
 
@@ -108,15 +148,15 @@
 .weather-icon.fog,
 .weather-icon.haze { color: #adb5bd; }
 
-/* Dark theme weather widget - adapted for unified widget */
-[data-theme="dark"] .weather-container {
+/* Dark theme info widget */
+[data-theme="dark"] .widget-container {
     /* No separate styling needed since parent handles dark theme */
     background: transparent;
     border-color: transparent;
     box-shadow: none;
 }
 
-[data-theme="dark"] .weather-container:hover {
+[data-theme="dark"] .widget-container:hover {
     box-shadow: none;
 }
 
@@ -129,8 +169,24 @@
     color: #B0B0B0;
 }
 
-[data-theme="dark"] .weather-loading {
+[data-theme="dark"] .widget-loading {
     color: #B0B0B0;
+}
+
+[data-theme="dark"] .fuel-label {
+    color: #B0B0B0;
+}
+
+[data-theme="dark"] .fuel-value {
+    color: #E0E0E0;
+}
+
+[data-theme="dark"] .benzin-icon {
+    color: #4caf50; /* Brighter green for dark mode */
+}
+
+[data-theme="dark"] .diesel-icon {
+    color: #ffb74d; /* Brighter amber for dark mode */
 }
 
 /* Mobile responsive adjustments - adapted for unified widget */
@@ -146,6 +202,24 @@
     .weather-temp {
         font-size: 0.9rem;
     }
+    
+    .fuel-prices {
+        gap: 3px;
+        margin-top: 6px;
+    }
+    
+    .fuel-price-item {
+        font-size: 0.75rem;
+        gap: 4px;
+    }
+    
+    .fuel-icon {
+        font-size: 0.8rem;
+    }
+    
+    .fuel-label {
+        min-width: 30px;
+    }
 }
 
 /* Extra small screens */
@@ -156,5 +230,17 @@
     
     .weather-icon {
         font-size: 1rem;
+    }
+    
+    .fuel-price-item {
+        font-size: 0.7rem;
+    }
+    
+    .fuel-icon {
+        font-size: 0.75rem;
+    }
+    
+    .fuel-label {
+        min-width: 28px;
     }
 }

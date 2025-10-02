@@ -12,53 +12,53 @@ class WeatherWidget {
 
     init() {
         this.createWidget();
-        this.hideWidget(); // Initially hidden
+        this.showWidget(); // Always show widget
+        this.fetchFuelPrices(); // Fetch fuel prices once on load
         this.getCurrentLocation();
     }
 
     createWidget() {
-        // Find the existing weather widget container in the unified widget
-        const weatherContainer = document.getElementById('weatherWidget');
-        if (!weatherContainer) {
-            console.error('Weather widget container not found');
+        // Find the existing info widget container
+        const infoContainer = document.getElementById('infoWidget');
+        if (!infoContainer) {
+            console.error('Info widget container not found');
             return;
         }
         
-        weatherContainer.innerHTML = `
-            <div class="weather-container">
-                <div class="weather-loading">
+        infoContainer.innerHTML = `
+            <div class="widget-container">
+                <div class="widget-loading">
                     <div class="spinner-border" role="status">
-                        <span class="visually-hidden">Helyszín keresése...</span>
+                        <span class="visually-hidden">Adatok betöltése...</span>
                     </div>
-                    <span>GPS...</span>
+                    <span>Betöltés...</span>
                 </div>
             </div>
         `;
         
-        this.widgetElement = weatherContainer;
-        this.weatherControlsElement = document.querySelector('.weather-controls');
+        this.widgetElement = infoContainer;
+        this.infoWidgetElement = document.querySelector('.info-widget');
     }
 
     hideWidget() {
-        if (this.weatherControlsElement) {
-            this.weatherControlsElement.classList.remove('visible');
-            this.weatherControlsElement.style.display = 'none';
+        if (this.infoWidgetElement) {
+            this.infoWidgetElement.classList.remove('visible');
+            this.infoWidgetElement.style.display = 'none';
             this.isVisible = false;
         }
     }
 
     showWidget() {
-        if (this.weatherControlsElement) {
-            this.weatherControlsElement.style.display = 'block';
-            this.weatherControlsElement.classList.add('visible');
+        if (this.infoWidgetElement) {
+            this.infoWidgetElement.style.display = 'block';
+            this.infoWidgetElement.classList.add('visible');
             this.isVisible = true;
         }
     }
 
     getCurrentLocation() {
         if (!navigator.geolocation) {
-            console.log('GPS not supported - weather widget will remain hidden');
-            this.hideWidget();
+            console.log('GPS not supported - showing fuel prices only');
             return;
         }
 
@@ -68,7 +68,6 @@ class WeatherWidget {
                     lat: position.coords.latitude,
                     lng: position.coords.longitude
                 };
-                this.showWidget();
                 this.fetchWeather(this.currentPosition.lat, this.currentPosition.lng);
                 
                 // Start the update interval only after successful GPS
@@ -82,9 +81,8 @@ class WeatherWidget {
                 }, this.updateIntervalMs);
             },
             (error) => {
-                console.log('GPS error - weather widget will remain hidden:', error);
-                this.hideWidget();
-                // Clear any existing position and interval
+                console.log('GPS error - showing fuel prices only:', error);
+                // Don't hide widget, just show fuel prices without weather
                 this.currentPosition = null;
                 if (this.updateInterval) {
                     clearInterval(this.updateInterval);
@@ -103,42 +101,94 @@ class WeatherWidget {
         if (!this.isVisible) return;
 
         try {
-            const response = await fetch(`/api/weather?lat=${lat}&lon=${lng}`);
+            // Fetch weather data
+            const weatherResponse = await fetch(`/api/weather?lat=${lat}&lon=${lng}`);
             
-            if (!response.ok) {
-                throw new Error(`HTTP ${response.status}`);
+            if (!weatherResponse.ok) {
+                throw new Error(`HTTP ${weatherResponse.status}`);
             }
             
-            const weatherData = await response.json();
+            const weatherData = await weatherResponse.json();
             
             // Only update if we got valid weather data
             if (weatherData && weatherData.temperature !== undefined) {
                 this.weatherData = weatherData;
                 this.updateWidget();
             } else {
-                // Hide widget if no valid data
-                this.hideWidget();
+                // Show fuel prices even without weather data
+                console.log('No weather data available, showing fuel prices only');
             }
             
         } catch (error) {
             console.error('Időjárás API hiba:', error);
-            // Hide widget on API error instead of showing error message
-            this.hideWidget();
+            // Keep widget visible with fuel prices only
+            console.log('Weather API error, showing fuel prices only');
+        }
+    }
+    
+    async fetchFuelPrices() {
+        try {
+            const fuelResponse = await fetch('/api/FuelPrice');
+            if (fuelResponse.ok) {
+                this.fuelPrices = await fuelResponse.json();
+                this.updateWidget();
+            }
+        } catch (error) {
+            console.log('Üzemanyagár lekérési hiba:', error);
         }
     }
 
     updateWidget() {
-        if (!this.weatherData || !this.isVisible) return;
-
-        const container = this.widgetElement.querySelector('.weather-container');
-        const iconClass = this.getWeatherIcon(this.weatherData.condition);
+        if (!this.isVisible) return;
         
-        container.innerHTML = `
-            <div class="weather-main">
-                <i class="bi ${iconClass} weather-icon ${this.weatherData.condition.toLowerCase()}"></i>
-                <div class="weather-temp">${Math.round(this.weatherData.temperature)}°C</div>
-            </div>
-        `;
+        const container = this.widgetElement.querySelector('.widget-container');
+        if (!container) return;
+        
+        // Build weather HTML if available
+        let weatherHtml = '';
+        if (this.weatherData) {
+            const iconClass = this.getWeatherIcon(this.weatherData.condition);
+            weatherHtml = `
+                <div class="weather-main">
+                    <i class="bi ${iconClass} weather-icon ${this.weatherData.condition.toLowerCase()}"></i>
+                    <div class="weather-temp">${Math.round(this.weatherData.temperature)}°C</div>
+                </div>
+            `;
+        }
+        
+        // Build fuel prices HTML if available
+        let fuelPriceHtml = '';
+        if (this.fuelPrices && (this.fuelPrices.prices || this.fuelPrices.Prices)) {
+            const prices = this.fuelPrices.prices || this.fuelPrices.Prices;
+            const benzinPrice = prices.benzin || prices.Benzin;
+            const dieselPrice = prices.diesel || prices.Diesel;
+            
+            if (benzinPrice || dieselPrice) {
+                fuelPriceHtml = '<div class="fuel-prices">';
+                if (benzinPrice) {
+                    fuelPriceHtml += `<div class="fuel-price-item"><i class="bi bi-fuel-pump-fill fuel-icon benzin-icon"></i><span class="fuel-label">95:</span> <span class="fuel-value">${Math.round(benzinPrice)} Ft/l</span></div>`;
+                }
+                if (dieselPrice) {
+                    fuelPriceHtml += `<div class="fuel-price-item"><i class="bi bi-fuel-pump-fill fuel-icon diesel-icon"></i><span class="fuel-label">Dízel:</span> <span class="fuel-value">${Math.round(dieselPrice)} Ft/l</span></div>`;
+                }
+                fuelPriceHtml += '</div>';
+            }
+        }
+        
+        // Always update - show fuel prices even without weather
+        if (weatherHtml || fuelPriceHtml) {
+            container.innerHTML = weatherHtml + fuelPriceHtml;
+        } else {
+            // Show loading state if nothing is available yet
+            container.innerHTML = `
+                <div class="widget-loading">
+                    <div class="spinner-border" role="status">
+                        <span class="visually-hidden">Betöltés...</span>
+                    </div>
+                    <span>Adatok betöltése...</span>
+                </div>
+            `;
+        }
     }
 
     getWeatherIcon(condition) {

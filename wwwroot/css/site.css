@@ -100,8 +100,8 @@
     }
 }
 
-/* Weather Widget - Positioned below unified-top-widget */
-.weather-controls {
+/* Info Widget - Weather & Fuel Prices - Positioned below unified-top-widget */
+.info-widget {
     position: fixed;
     top: 80px; /* Reduced gap - closer to unified widget */
     left: 12px;
@@ -117,7 +117,7 @@
     transition: all 0.3s ease;
 }
 
-.weather-controls:hover {
+.info-widget:hover {
     box-shadow: 0 12px 30px rgba(10,20,30,0.12);
 }
 
@@ -172,14 +172,14 @@
 }
 
 /* Dark theme for weather widget */
-[data-theme="dark"] .weather-controls {
-    background: #2A2A2A;
-    border-color: #444444;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+[data-theme="dark"] .info-widget {
+    background: rgba(30, 30, 30, 0.92);
+    border-color: rgba(255, 255, 255, 0.12);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.4);
 }
 
-[data-theme="dark"] .weather-controls:hover {
-    box-shadow: 0 12px 30px rgba(0,0,0,0.4);
+[data-theme="dark"] .info-widget:hover {
+    box-shadow: 0 12px 30px rgba(0,0,0,0.5);
 }
 
 /* Dark theme for unified widget */
@@ -205,7 +205,7 @@
         min-width: 280px;
     }
     
-    .weather-controls {
+    .info-widget {
         top: 72px; /* Reduced gap on tablet */
         left: 8px;
         padding: 3px 5px;
@@ -224,7 +224,7 @@
         min-width: auto; /* Remove min-width on mobile */
     }
     
-    .weather-controls {
+    .info-widget {
         top: 60px; /* Reduced gap on mobile */
         left: 4px;
         padding: 3px 4px;
@@ -247,15 +247,15 @@
     
 
     
-    .unified-top-widget .weather-controls {
+    .unified-top-widget .info-widget {
         min-width: 100px;
         padding: 2px 4px;
         opacity: 1;
         transition: opacity 0.3s ease;
     }
     
-    /* Hide weather controls when search is focused and route is active */
-    .unified-top-widget.route-active.search-focused .weather-controls {
+    /* Hide info widget when search is focused and route is active */
+    .unified-top-widget.route-active.search-focused .info-widget {
         opacity: 0;
         pointer-events: none;
     }
