@@ -514,7 +514,11 @@
         
         if (!currentShareableLink) {
             console.warn('[route-card] No shareable link available');
-            showToast('Nincs elérhető megosztható link', 'error');
+            if (window.Toast) {
+                window.Toast.error('Nincs elérhető megosztható link');
+            } else {
+                showToast('Nincs elérhető megosztható link', 'error');
+            }
             return;
         }
         
@@ -522,7 +526,11 @@
         if (navigator.clipboard && window.isSecureContext) {
             navigator.clipboard.writeText(currentShareableLink).then(function() {
                 console.log('[route-card] Link copied to clipboard successfully');
-                showToast('Link vágólapra másolva!', 'success');
+                if (window.Toast) {
+                    window.Toast.success('Link vágólapra másolva!');
+                } else {
+                    showToast('Link vágólapra másolva!', 'success');
+                }
             }).catch(function(err) {
                 console.error('[route-card] Failed to copy link to clipboard:', err);
                 fallbackCopyToClipboard(currentShareableLink);
@@ -550,14 +558,26 @@
             
             if (successful) {
                 console.log('[route-card] Link copied to clipboard via fallback method');
-                showToast('Link vágólapra másolva!', 'success');
+                if (window.Toast) {
+                    window.Toast.success('Link vágólapra másolva!');
+                } else {
+                    showToast('Link vágólapra másolva!', 'success');
+                }
             } else {
                 console.error('[route-card] Fallback clipboard copy failed');
-                showToast('Nem sikerült a vágólapra másolás', 'error');
+                if (window.Toast) {
+                    window.Toast.error('Nem sikerült a vágólapra másolás');
+                } else {
+                    showToast('Nem sikerült a vágólapra másolás', 'error');
+                }
             }
         } catch (err) {
             console.error('[route-card] Fallback clipboard copy error:', err);
-            showToast('Nem sikerült a vágólapra másolás', 'error');
+            if (window.Toast) {
+                window.Toast.error('Nem sikerült a vágólapra másolás');
+            } else {
+                showToast('Nem sikerült a vágólapra másolás', 'error');
+            }
         }
     }
     

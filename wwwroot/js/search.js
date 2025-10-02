@@ -168,6 +168,9 @@ document.addEventListener('DOMContentLoaded', function() {
         .catch(function(error) {
             console.error('Search error:', error);
             showSearchError();
+            if (window.Toast) {
+                window.Toast.error('Hiba történt a keresés során');
+            }
         });
     }
     
@@ -518,13 +521,21 @@ document.addEventListener('DOMContentLoaded', function() {
             window.NavigationManager.navigateToLocation(lat, lng, locationName)
                 .then(function() {
                     console.log('[search] Navigation started successfully');
+                    if (window.Toast) {
+                        window.Toast.success('Navigáció elindítva');
+                    }
                 })
                 .catch(function(error) {
                     console.error('[search] Navigation failed:', error);
+                    if (window.Toast) {
+                        window.Toast.error('Navigáció sikertelen');
+                    }
                 });
         } else {
             console.error('[search] NavigationManager not available');
-            alert('A navigációs szolgáltatás nem érhető el. Kérjük, frissítse az oldalt.');
+            if (window.Toast) {
+                window.Toast.error('A navigációs szolgáltatás nem érhető el. Kérjük, frissítse az oldalt.');
+            }
         }
     };
 });

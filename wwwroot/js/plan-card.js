@@ -384,12 +384,16 @@ function initializePlanCard() {
                 }
             } else {
                 console.warn('[PlanCard] NavigationManager not available');
-                alert('NavigationManager nem elérhető');
+                if (window.Toast) {
+                    window.Toast.error('NavigationManager nem elérhető');
+                }
             }
             
         } catch (error) {
             console.error('[PlanCard] Error planning route:', error);
-            alert('Hiba történt az útvonal tervezése során. Kérjük, próbálja újra.');
+            if (window.Toast) {
+                window.Toast.error('Hiba történt az útvonal tervezése során. Kérjük, próbálja újra.');
+            }
         } finally {
             // Reset button state
             planRouteBtn.disabled = false;

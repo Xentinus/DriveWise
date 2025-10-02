@@ -29,6 +29,10 @@
         console.log('PWA successfully installed');
         deferredPrompt = null;
         
+        if (window.Toast) {
+            window.Toast.success('DriveWise sikeresen telepítve!');
+        }
+        
         // Optional: Save installation status
         if (window.StorageManager) {
             window.StorageManager.set('pwa-installed', 'true');
@@ -56,7 +60,7 @@
             window.addEventListener('beforeunload', (e) => {
                 // Optional: Add warning when closing standalone app
                 // e.preventDefault();
-                // return e.returnValue = "Biztosan be szeretn�d z�rni a DriveWise alkalmaz�st?";
+                // return e.returnValue = "Biztosan be szeretn�d z�rni a DriveWise alkalmaz�st?";
             });
         }
 
@@ -93,8 +97,14 @@
             
             if (!isOnline) {
                 console.log('[PWA] App is offline - limited functionality');
+                if (window.Toast) {
+                    window.Toast.warning('Offline mód - korlátozott funkcionalitás');
+                }
             } else {
                 console.log('[PWA] App is online');
+                if (window.Toast && document.body.classList.contains('app-offline')) {
+                    window.Toast.success('Kapcsolat helyreállt');
+                }
             }
         }
 

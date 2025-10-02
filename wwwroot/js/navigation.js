@@ -340,8 +340,11 @@
     
     // Function to show navigation error
     function showNavigationError(message) {
-        // You can customize this to show a nicer error dialog
-        alert(message);
+        if (window.Toast) {
+            window.Toast.error(message);
+        } else {
+            alert(message);
+        }
     }
     
     // Function to escape HTML
