@@ -876,6 +876,13 @@ coveragereport/
 .env.test
 .env.production
 
+# DriveWise shell scripts - keep only the unified script
+*.sh
+!drivewise.sh
+
+# Docker build artifacts
+*.tar
+
 # Database files
 *.sqlite
 *.sqlite3

@@ -628,4 +628,300 @@ Ha problémába ütközöl vagy kérdésed van:
 
 ---
 
+## 🔧 DriveWise Egységesített Management Script
+
+### Áttekintés
+
+A DriveWise projektet egy egységesített `drivewise.sh` scripttel kezelheted, amely minden Docker és deployment műveletet egy helyen tartalmaz interaktív menüvel.
+
+### 🚀 Gyors Kezdés
+
+#### 1. Környezet Beállítása
+
+Először másold le a `.env.example` fájlt `.env` néven és töltsd ki a saját adataiddal:
+
+```bash
+cp .env.example .env
+nano .env  # vagy bármilyen szövegszerkesztő
+```
+
+A `.env` fájlban állítsd be:
+- `RPI_HOST`: Raspberry Pi IP címe
+- `RPI_USER`: Raspberry Pi felhasználónév
+- `RPI_PASSWORD`: Raspberry Pi jelszó
+- `IMAGE_NAME`: Docker image neve (alapértelmezett: drivewise)
+- `CONTAINER_NAME`: Docker container neve
+- `CONTAINER_PORT`: Alkalmazás portja (alapértelmezett: 8800)
+- `REGISTRY`: Docker registry (opcionális)
+
+#### 2. Script Futtatása
+
+```bash
+./drivewise.sh
+```
+
+### 📋 Elérhető Funkciók
+
+Az interaktív menü 10 opcióval rendelkezik:
+
+#### 1. 🏗️ Build local (AMD64)
+Helyi AMD64 Docker image készítése desktop használatra (macOS Intel/AMD, Linux x86).
+
+```bash
+# Automatikus build
+./drivewise.sh
+# Válaszd: 1
+```
+
+#### 2. 🚀 Run local
+Helyi Docker container indítása. Ha nincs image, automatikusan buildelődik.
+- Port: `http://localhost:8800` (vagy amit beállítottál)
+- Automatikusan leállítja és újraindítja, ha már fut
+
+```bash
+# Gyors indítás
+./drivewise.sh
+# Válaszd: 2
+```
+
+#### 3. 🛑 Stop local
+Helyi container leállítása és eltávolítása.
+
+#### 4. 📦 Build multi-arch
+Multi-architektúra build (AMD64 + ARM64):
+- **AMD64**: helyi használatra betöltődik
+- **ARM64**: `.tar` fájlba exportálódik Raspberry Pi-re való átmásoláshoz
+
+```bash
+# Multi-platform build
+./drivewise.sh
+# Válaszd: 4
+```
+
+#### 5. 🌐 Build & push to registry
+Build és push Docker registry-be (Docker Hub, GitHub Container Registry, stb.)
+- Multi-architektúra támogatás
+- Automatikus verzió címkézés
+
+#### 6. 🍓 Deploy to Raspberry Pi
+**Teljes automatikus telepítés Raspberry Pi-re:**
+
+1. ARM64 image buildelése
+2. SSH kapcsolat tesztelése
+3. Image feltöltése Pi-re
+4. Régi containerek és image-ek törlése
+5. Új container indítása
+6. Health check és log ellenőrzés
+
+**A deploy során:**
+- Automatikusan települ a `sshpass` ha hiányzik (Homebrew-val)
+- Hálózati tesztek futnak
+- HTTP endpoint ellenőrzés
+- Részletes hibajelzések
+
+```bash
+# Egyetlen parancs az egész deployment-hez!
+./drivewise.sh
+# Válaszd: 6
+```
+
+#### 7. 📋 View logs
+Logok megtekintése:
+- Helyi container
+- Raspberry Pi container
+
+#### 8. 🔍 Check status
+Státusz ellenőrzés:
+- Helyi container állapota
+- Raspberry Pi container állapota
+
+#### 9. 🧹 Clean up
+Takarítási opciók:
+- Csak helyi
+- Csak Raspberry Pi
+- Mindkettő
+- Mélyreható tisztítás (image-ekkel együtt)
+
+#### 0. ❌ Exit
+Kilépés a scriptből.
+
+### 🔧 Előfeltételek
+
+#### Helyi Gép (macOS/Linux)
+
+```bash
+# Docker Desktop telepítése
+# https://www.docker.com/products/docker-desktop
+
+# Homebrew (macOS) - sshpass telepítéséhez
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+
+# sshpass - automatikusan települ, de manuálisan is lehet:
+brew install hudochenkov/sshpass/sshpass
+```
+
+#### Raspberry Pi
+
+```bash
+# Docker telepítése
+curl -fsSL https://get.docker.com -o get-docker.sh
+sudo sh get-docker.sh
+sudo usermod -aG docker $USER
+
+# SSH engedélyezése
+sudo systemctl enable ssh
+sudo systemctl start ssh
+```
+
+### 📝 Példa Használat
+
+#### Első Alkalommal - Teljes Setup
+
+```bash
+# 1. .env fájl létrehozása
+cp .env.example .env
+nano .env
+
+# 2. Script futtatása
+./drivewise.sh
+
+# 3. Válaszd a "6" opciót (Deploy to Raspberry Pi)
+# A script mindent elvégez automatikusan!
+```
+
+#### Helyi Fejlesztés
+
+```bash
+./drivewise.sh
+
+# Válaszd:
+# 1 - Build local
+# 2 - Run local
+# 7 - Logok megtekintése
+```
+
+#### Frissítés Raspberry Pi-n
+
+```bash
+./drivewise.sh
+
+# Válaszd:
+# 6 - Deploy to Raspberry Pi
+# Automatikusan buildelődik és települ az új verzió
+```
+
+### 🔐 Biztonság
+
+- A `.env` fájl **NINCS** commitolva a git-be
+- Csak a `.env.example` van verziókezelve
+- Soha ne oszd meg a `.env` fájlt vagy commitold git-be!
+
+### 🐛 Hibaelhárítás
+
+#### SSH kapcsolat hiba
+
+```bash
+# Teszteld manuálisan:
+ssh user@raspberry-pi-ip
+
+# Ellenőrizd:
+# - Helyes IP cím
+# - SSH fut a Pi-n
+# - Helyes felhasználónév/jelszó
+```
+
+#### Docker nem fut
+
+```bash
+# Ellenőrizd, hogy a Docker Desktop fut-e
+docker info
+
+# Ha nem, indítsd el a Docker Desktop alkalmazást
+```
+
+#### Port már használatban
+
+```bash
+# Ellenőrizd, mi használja a portot:
+lsof -i :8800
+
+# Állítsd le az ütköző szolgáltatást vagy változtasd meg a portot a .env-ben
+```
+
+#### ARM64 build hiba
+
+```bash
+# Buildx builder újralétrehozása:
+docker buildx rm drivewise-multiarch
+docker buildx create --name drivewise-multiarch --platform linux/amd64,linux/arm64 --use
+```
+
+### 📚 További Információk
+
+#### Hasznos Docker parancsok
+
+```bash
+# Container logok
+docker logs -f drivewise-app
+
+# Container shell
+docker exec -it drivewise-app /bin/bash
+
+# Image lista
+docker images | grep drivewise
+
+# Container újraindítás
+docker restart drivewise-app
+```
+
+#### Raspberry Pi távoli parancsok
+
+```bash
+# SSH kapcsolat a .env adataival
+ssh user@raspberry-pi-ip
+
+# Docker status Pi-n
+ssh user@raspberry-pi-ip 'docker ps'
+
+# Logok Pi-ről
+ssh user@raspberry-pi-ip 'docker logs drivewise-app'
+```
+
+### 🎯 Tippek
+
+1. **Első futtatás**: Mindig az "1" vagy "6" opcióval kezdj (build vagy deploy)
+2. **Fejlesztés közben**: Használd a helyi build és run opciókat (1-2)
+3. **Éles környezet**: Deploy to Pi (6) automatikusan mindent elintéz
+4. **Logok**: Használd a "7" opciót problémák diagnosztizálásához
+5. **Takarítás**: A "9" opció szabad helyet biztosít
+
+### 🔄 Migráció Régi Scriptekről
+
+Ha korábban használtad az egyedi scripteket (`run-docker.sh`, `deploy-to-rpi.sh`, stb.), most már mind egyben vannak:
+
+| Régi Script | Új Menüpont |
+|-------------|-------------|
+| `run-docker.sh` | 1 (Build local) + 2 (Run local) |
+| `stop-docker.sh` | 3 (Stop local) |
+| `build-multiarch.sh` | 4 (Build multi-arch) |
+| `build-registry.sh` | 5 (Build & push to registry) |
+| `deploy-to-rpi.sh` | 6 (Deploy to Raspberry Pi) |
+| *új* | 7 (View logs) |
+| *új* | 8 (Check status) |
+| *új* | 9 (Clean up) |
+
+### ✨ Új Funkciók a Régi Scriptekhez Képest
+
+1. ✅ **Interaktív menü** - könnyű navigáció
+2. ✅ **Színes output** - könnyebb olvashatóság
+3. ✅ **Egységes konfiguráció** - minden egy `.env` fájlban
+4. ✅ **Log viewer** - helyi és távoli logok
+5. ✅ **Status checker** - gyors állapot ellenőrzés
+6. ✅ **Cleanup opciók** - rugalmas takarítás
+7. ✅ **Hibakezelés** - részletes hibaüzenetek
+8. ✅ **Automatikus prerequisite check** - Docker, sshpass stb.
+9. ✅ **Biztonság** - nincs jelszó a git-ben
+
+---
+
 **DriveWise** - *Okos utazás, optimális költségekkel.* 🚗✨
