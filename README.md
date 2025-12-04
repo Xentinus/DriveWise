@@ -2,65 +2,81 @@
 
 ![DriveWise Logo](.github/logo.png)
 
-**DriveWise** - Intelligens útvonaltervező alkalmazás üzemanyagköltség-optimalizálással, valós idejű időjárás adatokkal és fejlett jármű-menedzsmenttel.
+**DriveWise** - Intelligent route planning application with fuel cost optimization, real-time weather data, and advanced vehicle management.
 
-## 🚗 Funkciók
+> **Note:** This project was created for testing purposes and is not under active development. The application features a Hungarian user interface and integrates Hungarian fuel price data, designed specifically for the Hungarian market.
 
-- **🗺️ Intelligens útvonaltervezés** - Optimális útvonalak számítása valós forgalmi adatokkal
-- **⛽ Üzemanyagköltség-kalkulátor** - Valós idejű üzemanyagárak és fogyasztási számítások
-- **🌤️ Időjárás integráció** - Aktuális időjárási viszonyok az útvonal mentén
-- **🚙 Jármű-menedzsment** - Többféle jármű profil kezelése egyedi fogyasztási adatokkal
-- **📱 Progressive Web App (PWA)** - Mobilbarát felület offline támogatással
-- **🎨 Sötét/világos téma** - Automatikus és manuális témaváltás
-- **📍 GPS alapú helymeghatározás** - Automatikus kiindulópont felismerés
+## 🚗 Features
 
-## 🛠️ Technológiai stack
+- **🗺️ Intelligent Route Planning** - Calculate optimal routes with real-time traffic data
+- **⛽ Fuel Cost Calculator** - Real-time fuel prices and consumption calculations
+- **🌤️ Weather Integration** - Current weather conditions along the route
+- **🚙 Vehicle Management** - Manage multiple vehicle profiles with custom consumption data
+- **📱 Progressive Web App (PWA)** - Mobile-friendly interface with offline support
+- **🎨 Dark/Light Theme** - Automatic and manual theme switching
+- **📍 GPS-based Location** - Automatic starting point detection
+
+## 📸 Screenshots
+
+### Route Planning
+![Route Planning](.github/route.jpeg)
+*Plan routes between two points with detailed information including elevation difference, travel cost, fuel calculation, and more. The example shows a 190km route with 2h 46min travel time, 11.6L fuel consumption, and total cost of 6817 Ft.*
+
+### Vehicle Management
+![Vehicle Management](.github/edit.jpeg)
+*Manage your vehicles with custom settings including brand, model, fuel type, and consumption rates (e.g., 7.5 L/100km).*
+
+### Location Information
+![Location Information](.github/tag.jpeg)
+*Tap any location to view detailed information including address, coordinates, and elevation. You can also navigate to that point from your current GPS location.*
+
+## 🛠️ Technology Stack
 
 - **Backend**: ASP.NET Core 9.0 (C#)
 - **Frontend**: HTML5, CSS3, JavaScript (Vanilla)
-- **API-k**: OpenWeatherMap, OSRM (útvonaltervezés), holtankoljak.hu (üzemanyagárak)
-- **Konténerizáció**: Docker & Docker Compose
-- **Platformok**: Windows, macOS, Linux, Raspberry Pi (ARM64)
+- **APIs**: OpenWeatherMap, OSRM (route planning), holtankoljak.hu (fuel prices)
+- **Containerization**: Docker & Docker Compose
+- **Platforms**: Windows, macOS, Linux, Raspberry Pi (ARM64)
 
-## 🚀 Gyors indítás
+## 🚀 Quick Start
 
-### Docker használatával (ajánlott)
+### Using Docker (Recommended)
 
-1. **Repository klónozása**
+1. **Clone the repository**
    ```bash
    git clone https://github.com/Xentinus/DriveWise.git
    cd DriveWise
    ```
 
-2. **Alkalmazás futtatása**
+2. **Run the application**
    ```bash
    ./run-docker.sh
    ```
 
-3. **Böngészőben megnyitás**
+3. **Open in browser**
    ```
    http://localhost:8800
    ```
 
-### Fejlesztői környezet
+### Development Environment
 
-1. **Előfeltételek**
+1. **Prerequisites**
    - .NET 9.0 SDK
-   - OpenWeatherMap API kulcs (opcionális, demo módhoz nem szükséges)
+   - OpenWeatherMap API key (optional, not required for demo mode)
 
-2. **Projekt futtatása**
+2. **Run the project**
    ```bash
    dotnet restore
    dotnet run
    ```
 
-## ⚙️ Konfiguráció
+## ⚙️ Configuration
 
-### Időjárás API beállítása
+### Weather API Setup
 
-1. Szerezz egy ingyenes API kulcsot az [OpenWeatherMap](https://openweathermap.org/api) oldalról
-2. Másold le az `appsettings.Example.json` fájlt `appsettings.json` néven
-3. Frissítsd az API kulcsot:
+1. Get a free API key from [OpenWeatherMap](https://openweathermap.org/api)
+2. Copy `appsettings.Example.json` to `appsettings.json`
+3. Update the API key:
 
 ```json
 {
@@ -70,140 +86,140 @@
 }
 ```
 
-**Megjegyzés**: API kulcs nélkül az alkalmazás mock adatokat használ.
+**Note**: Without an API key, the application will use mock data.
 
-## 🐳 Docker telepítési opciók
+## 🐳 Docker Deployment Options
 
-### Egyszerű futtatás
+### Simple Run
 ```bash
-# Alkalmazás indítása
+# Start application
 ./run-docker.sh
 
-# Alkalmazás leállítása
+# Stop application
 ./stop-docker.sh
 ```
 
 ### Docker Compose
 ```bash
-# Háttérben futtatás
+# Run in background
 docker-compose up -d --build
 
-# Leállítás
+# Stop
 docker-compose down
 ```
 
-### Multi-platform build
+### Multi-platform Build
 ```bash
-# AMD64 + ARM64 build egyidejűleg
+# Build for AMD64 + ARM64 simultaneously
 ./build-multiarch.sh
 ```
 
-## 🍓 Raspberry Pi telepítés
+## 🍓 Raspberry Pi Deployment
 
-A DriveWise natívan támogatja a Raspberry Pi platformot.
+DriveWise natively supports the Raspberry Pi platform.
 
-### Előfeltételek
+### Prerequisites
 
-#### Raspberry Pi követelmények:
-- **Raspberry Pi 4 vagy újabb** (min. 2GB RAM ajánlott)
-- **Raspberry Pi OS 64-bit** telepítve
-- **Docker telepítve** a Raspberry Pi-on
+#### Raspberry Pi Requirements:
+- **Raspberry Pi 4 or newer** (min. 2GB RAM recommended)
+- **Raspberry Pi OS 64-bit** installed
+- **Docker installed** on the Raspberry Pi
 
-#### Docker telepítése Raspberry Pi-ra:
+#### Installing Docker on Raspberry Pi:
 
 ```bash
-# System frissítése
+# Update system
 sudo apt update && sudo apt upgrade -y
 
-# Docker telepítése
+# Install Docker
 curl -fsSL https://get.docker.com -o get-docker.sh
 sudo sh get-docker.sh
 
-# Docker Compose telepítése
+# Install Docker Compose
 sudo apt install -y docker-compose
 
-# Felhasználó hozzáadása a docker csoporthoz
+# Add user to docker group
 sudo usermod -aG docker $USER
 
-# Újraindítás szükséges a csoport változtatáshoz
+# Reboot required for group changes
 sudo reboot
 ```
 
-### DriveWise telepítése Raspberry Pi-ra
+### Installing DriveWise on Raspberry Pi
 
-#### Módszer 1: ARM64 image fájl átvitele
+#### Method 1: Transfer ARM64 Image File
 
-1. **ARM64 image létrehozása** (fejlesztői gépen):
+1. **Create ARM64 image** (on development machine):
    ```bash
    ./build-multiarch.sh
    ```
 
-2. **Fájl átvitele** Raspberry Pi-ra:
+2. **Transfer file** to Raspberry Pi:
    ```bash
-   # A fejlesztői gépen
+   # On development machine
    scp drivewise-arm64-*.tar pi@your-pi-ip:~/
    ```
 
-3. **Image betöltése** a Raspberry Pi-n:
+3. **Load image** on Raspberry Pi:
    ```bash
-   # A Raspberry Pi-n
+   # On the Raspberry Pi
    docker load < drivewise-arm64-*.tar
    ```
 
-4. **Docker-compose fájl átvitele**:
+4. **Transfer docker-compose file**:
    ```bash
-   # A fejlesztői gépen
+   # On development machine
    scp docker-compose.rpi.yml pi@your-pi-ip:~/docker-compose.yml
    ```
 
-5. **Alkalmazás indítása** a Raspberry Pi-n:
+5. **Start application** on Raspberry Pi:
    ```bash
-   # A Raspberry Pi-n
+   # On the Raspberry Pi
    docker-compose up -d
    ```
 
-#### Módszer 2: Registry használata (ha van)
+#### Method 2: Using Registry (if available)
 
-Ha feltöltötted a registry-be a `build-registry.sh` scripttel:
+If you've uploaded to a registry using the `build-registry.sh` script:
 
 ```bash
-# A Raspberry Pi-n
+# On the Raspberry Pi
 docker pull yourusername/drivewise:latest
 docker run -p 8800:8800 --name drivewise-rpi -d yourusername/drivewise:latest
 ```
 
-### Elérhetőség
+### Access
 
-Az alkalmazás elérhető lesz a Raspberry Pi IP címén:
+The application will be available at the Raspberry Pi's IP address:
 - **http://[raspberry-pi-ip]:8800**
 
-Például: `http://192.168.1.100:8800`
+For example: `http://192.168.1.100:8800`
 
-### Hasznos parancsok Raspberry Pi-n
+### Useful Commands on Raspberry Pi
 
 ```bash
-# Konténer állapotának ellenőrzése
+# Check container status
 docker ps
 
-# Logok megtekintése
+# View logs
 docker logs drivewise-rpi
 
-# Konténer újraindítása
+# Restart container
 docker restart drivewise-rpi
 
-# Konténer leállítása
+# Stop container
 docker stop drivewise-rpi
 
-# System erőforrások ellenőrzése
+# Check system resources
 htop
 free -h
 df -h
 
-# Hálózat ellenőrzése
+# Check network
 ip addr show
 ```
 
-### Teljesítmény optimalizálás
+### Performance Optimization
 
 #### Raspberry Pi 4 (4GB+ RAM):
 ```yaml
@@ -225,11 +241,11 @@ deploy:
       memory: 256M
 ```
 
-### Raspberry Pi hibaelhárítás
+### Raspberry Pi Troubleshooting
 
-#### Memória problémák:
+#### Memory Issues:
 ```bash
-# Swap fájl növelése
+# Increase swap file
 sudo dphys-swapfile swapoff
 sudo nano /etc/dphys-swapfile
 # CONF_SWAPSIZE=1024
@@ -237,51 +253,49 @@ sudo dphys-swapfile setup
 sudo dphys-swapfile swapon
 ```
 
-#### Hálózati problémák:
+#### Network Issues:
 ```bash
-# Tűzfal ellenőrzése
+# Check firewall
 sudo ufw status
 sudo ufw allow 8800
 
-# Port ellenőrzése
+# Check port
 sudo netstat -tulpn | grep 8800
 ```
 
-#### Docker problémák:
+#### Docker Issues:
 ```bash
-# Docker szolgáltatás újraindítása
+# Restart Docker service
 sudo systemctl restart docker
 
-# Docker log szint csökkentése
+# Reduce Docker log level
 sudo nano /etc/docker/daemon.json
 # {"log-level": "warn"}
 sudo systemctl restart docker
 ```
 
-### Automatikus indítás
+### Auto-start
 
-A `restart: unless-stopped` beállítás biztosítja, hogy az alkalmazás automatikusan elinduljon a Raspberry Pi újraindításakor.
+The `restart: unless-stopped` setting ensures the application automatically starts when the Raspberry Pi reboots.
 
-### Biztonsági javaslatok
+### Security Recommendations
 
-1. **Változtasd meg az alapértelmezett jelszót** a Raspberry Pi-n
-2. **Engedélyezd az SSH kulcs autentikációt**
-3. **Tűzfal konfigurálása**:
+1. **Change the default password** on the Raspberry Pi
+2. **Enable SSH key authentication**
+3. **Configure firewall**:
    ```bash
    sudo ufw enable
    sudo ufw allow ssh
    sudo ufw allow 8800
    ```
-4. **Rendszeres frissítések**:
+4. **Regular updates**:
    ```bash
    sudo apt update && sudo apt upgrade -y
    ```
 
+## 🌐 API Endpoints
 
-
-## 🌐 API végpontok
-
-### Útvonaltervezés
+### Route Planning
 ```http
 POST /api/routing/route
 Content-Type: application/json
@@ -292,198 +306,198 @@ Content-Type: application/json
   "toLat": 47.5,
   "toLon": 19.05,
   "vehicle": {
-    "name": "Autó",
+    "name": "Car",
     "fuelType": "benzin",
     "consumption": 7.0
   }
 }
 ```
 
-### Üzemanyagárak
+### Fuel Prices
 ```http
 GET /api/fuelprice
 GET /api/fuelprice/benzin
 POST /api/fuelprice/calculate-cost
 ```
 
-### Időjárás
+### Weather
 ```http
 GET /api/weather?lat=47.4979&lon=19.0402
 ```
 
-### Helyek keresése
+### Location Search
 ```http
 GET /api/location/search?query=Budapest
 GET /api/location/details?lat=47.4979&lon=19.0402
 ```
 
-## 📁 Projekt felépítés
+## 📁 Project Structure
 
 ```
 DriveWise/
-├── Controllers/          # API kontrollerek
+├── Controllers/          # API controllers
 │   ├── FuelPriceController.cs
 │   ├── RoutingController.cs
 │   ├── WeatherController.cs
 │   └── LocationController.cs
-├── Services/            # Üzleti logika szolgáltatások
+├── Services/            # Business logic services
 │   ├── FuelPriceService.cs
 │   ├── RoutingService.cs
 │   ├── WeatherService.cs
 │   └── VehicleService.cs
-├── Models/              # Adatmodellek
+├── Models/              # Data models
 │   ├── Vehicle.cs
 │   ├── WeatherData.cs
 │   └── LocationModels.cs
-├── BackgroundServices/  # Háttérszolgáltatások
+├── BackgroundServices/  # Background services
 │   └── FuelPriceBackgroundService.cs
-├── Views/               # Frontend nézetek
+├── Views/               # Frontend views
 │   └── Home/
-├── wwwroot/            # Statikus fájlok
+├── wwwroot/            # Static files
 │   ├── css/
 │   ├── js/
 │   └── manifest.json
-└── Docker/             # Konténerizációs fájlok
+└── Docker/             # Containerization files
 ```
 
-## 🔧 Fejlesztői parancsok
+## 🔧 Developer Commands
 
 ```bash
-# Projekt build
+# Build project
 dotnet build
 
-# Tesztek futtatása
+# Run tests
 dotnet test
 
-# Publikálás
+# Publish
 dotnet publish
 
-# Watch mód (automatikus újraindítás)
+# Watch mode (automatic restart)
 dotnet watch run
 ```
 
-### VS Code feladatok
+### VS Code Tasks
 ```bash
-# Build task futtatása
+# Run build task
 Ctrl+Shift+P → "Tasks: Run Task" → "build"
 
-# Watch mód indítása
+# Start watch mode
 Ctrl+Shift+P → "Tasks: Run Task" → "watch"
 ```
 
-## 🌍 Hálózati követelmények
+## 🌍 Network Requirements
 
-### Külső API Függőségek
+### External API Dependencies
 
-A DriveWise alkalmazás számos külső webes szolgáltatást használ, ezért internetkapcsolat és bizonyos portokhoz való hozzáférés szükséges.
+DriveWise uses several external web services, so an internet connection and access to certain ports are required.
 
-#### Szükséges Kimenő Kapcsolatok
+#### Required Outgoing Connections
 
-**HTTP/HTTPS Portok**
-- **Port 80** (HTTP) - Alapvető webes API hívások
-- **Port 443** (HTTPS) - Titkosított API hívások
-- **Port 8800** - Alkalmazás elérése (konfigurálható)
+**HTTP/HTTPS Ports**
+- **Port 80** (HTTP) - Basic web API calls
+- **Port 443** (HTTPS) - Encrypted API calls
+- **Port 8800** - Application access (configurable)
 
-#### Használt Külső Szolgáltatások
+#### External Services Used
 
-1. **Üzemanyagárak** - `holtankoljak.hu`
-   - Protokoll: HTTPS (443)
-   - Frissítési gyakoriság: Automatikus háttérszolgáltatás
-   - Cél: Aktuális üzemanyagárak lekérdezése
+1. **Fuel Prices** - `holtankoljak.hu`
+   - Protocol: HTTPS (443)
+   - Update Frequency: Automatic background service
+   - Purpose: Fetching current fuel prices
 
-2. **Időjárás API** - `api.openweathermap.org`
-   - Protokoll: HTTPS (443)
-   - Használat: Útvonal tervezéskor időjárási adatok
-   - Típus: REST API
+2. **Weather API** - `api.openweathermap.org`
+   - Protocol: HTTPS (443)
+   - Usage: Weather data during route planning
+   - Type: REST API
 
-3. **Helymeghatározó Szolgáltatások**
-   - Protokoll: HTTPS (443)
-   - Használat: Címek geocoding-ja, helyek keresése
-   - Típus: RESTful API
+3. **Location Services**
+   - Protocol: HTTPS (443)
+   - Usage: Geocoding addresses, location search
+   - Type: RESTful API
 
-4. **Útvonaltervező API** - `router.project-osrm.org`
-   - Protokoll: HTTPS (443)
-   - Használat: Optimális útvonalak számítása
-   - Típus: Routing API
+4. **Route Planning API** - `router.project-osrm.org`
+   - Protocol: HTTPS (443)
+   - Usage: Calculating optimal routes
+   - Type: Routing API
 
-### Docker Hálózati Konfiguráció
+### Docker Network Configuration
 
-#### Alapértelmezett Beállítások
-Docker konténerek alapértelmezetten hozzáférnek az internethez, de explicit módon biztosítjuk:
+#### Default Settings
+Docker containers have internet access by default, but we explicitly ensure:
 
 ```yaml
 # docker-compose.yml
 services:
   drivewise:
-    network_mode: "bridge"  # Alapértelmezett bridge hálózat
+    network_mode: "bridge"  # Default bridge network
 ```
 
-#### Docker Run Parancs
+#### Docker Run Command
 ```bash
 docker run -d -p 8800:8800 --network bridge --name drivewise-app drivewise
 ```
 
-### Tűzfal Beállítások
+### Firewall Settings
 
 #### Linux/Raspberry Pi
 ```bash
-# UFW tűzfal beállítása
+# UFW firewall configuration
 sudo ufw allow out 80/tcp
 sudo ufw allow out 443/tcp
 sudo ufw allow in 8800/tcp
 
-# Vagy iptables
+# Or iptables
 sudo iptables -A OUTPUT -p tcp --dport 80 -j ACCEPT
 sudo iptables -A OUTPUT -p tcp --dport 443 -j ACCEPT
 sudo iptables -A INPUT -p tcp --dport 8800 -j ACCEPT
 ```
 
 #### Windows/macOS
-Docker Desktop automatikusan kezeli a kimenő kapcsolatokat.
+Docker Desktop automatically manages outgoing connections.
 
-### Hálózati Diagnosztika
+### Network Diagnostics
 
-#### Konténer Hálózati Tesztelése
+#### Testing Container Network
 ```bash
-# Konténerbe belépés
+# Enter container
 docker exec -it drivewise-app /bin/bash
 
-# DNS feloldás tesztelése
+# Test DNS resolution
 nslookup holtankoljak.hu
 
-# HTTP kapcsolat tesztelése
+# Test HTTP connection
 curl -I https://holtankoljak.hu
 
-# Hálózati interfészek
+# Network interfaces
 ip addr show
 
-# Útvonalak ellenőrzése
+# Check routes
 ip route
 ```
 
-#### Alkalmazás Logok Ellenőrzése
+#### Check Application Logs
 ```bash
-# HTTP hívások nyomon követése
+# Monitor HTTP calls
 docker logs -f drivewise-app | grep -i "http"
 
-# API hívások keresése
+# Search for API calls
 docker logs drivewise-app | grep -E "(holtankoljak|weather|routing)"
 ```
 
-### Hálózati hibaelhárítás
+### Network Troubleshooting
 
-#### Gyakori Problémák
+#### Common Issues
 
-1. **API hívások sikertelenül**
+1. **API calls failing**
    ```bash
-   # Ellenőrizd a DNS-t
+   # Check DNS
    docker exec drivewise-app nslookup google.com
-   
-   # Ellenőrizd a kimenő kapcsolatokat
+
+   # Check outgoing connections
    docker exec drivewise-app curl -I https://httpbin.org/get
    ```
 
-2. **Proxy környezetben**
+2. **In proxy environment**
    ```yaml
    # docker-compose.yml
    environment:
@@ -492,34 +506,34 @@ docker logs drivewise-app | grep -E "(holtankoljak|weather|routing)"
      - NO_PROXY=localhost,127.0.0.1
    ```
 
-3. **Vállalati tűzfal**
-   - Engedélyezd a kimenő HTTPS forgalmat
-   - Whitelist-eld a használt domaineket
-   - SSL-bumping esetén gondoskodj a tanúsítványokról
+3. **Corporate firewall**
+   - Enable outgoing HTTPS traffic
+   - Whitelist used domains
+   - Handle certificates for SSL-bumping
 
-#### Log Szintek
+#### Log Levels
 ```bash
-# Részletes HTTP logok engedélyezése
+# Enable detailed HTTP logs
 docker run -e Logging__LogLevel__Default=Debug drivewise
 ```
 
-### Biztonsági Megfontolások
+### Security Considerations
 
-1. **Minimális jogosultságok**
-   - Csak szükséges portok nyitása
-   - Konténer nem-root userként futtatása
+1. **Minimal privileges**
+   - Only open necessary ports
+   - Run container as non-root user
 
-2. **Hálózati szegmentáció**
-   - Külön Docker network használata
-   - Database és cache elkülönítése
+2. **Network segmentation**
+   - Use separate Docker network
+   - Isolate database and cache
 
 3. **Monitoring**
-   - Kimenő kapcsolatok figyelése
-   - Abnormális forgalom detektálása
+   - Monitor outgoing connections
+   - Detect abnormal traffic
 
-### Raspberry Pi Hálózati Specifikus
+### Raspberry Pi Network Specific
 
-#### Korlátozott erőforrások
+#### Limited Resources
 ```yaml
 # docker-compose.rpi.yml
 services:
@@ -530,398 +544,370 @@ services:
       nofile: 65536
 ```
 
-#### Hálózati optimalizálás
+#### Network Optimization
 ```bash
-# Raspberry Pi-n
+# On Raspberry Pi
 echo 'net.core.rmem_max = 16777216' >> /etc/sysctl.conf
 echo 'net.core.wmem_max = 16777216' >> /etc/sysctl.conf
 sudo sysctl -p
 ```
 
+## 🐛 Troubleshooting
 
+### Common Issues
 
-## 🐛 Hibaelhárítás
-
-### Gyakori problémák
-
-**Port már használatban van**
+**Port already in use**
 ```bash
-# Port módosítása a docker-compose.yml fájlban
+# Change port in docker-compose.yml
 ports:
-  - "8801:8800"  # 8800 helyett 8801
+  - "8801:8800"  # Use 8801 instead of 8800
 ```
 
-**API hibák**
+**API Errors**
 ```bash
-# Alkalmazás logok megtekintése
+# View application logs
 docker logs -f drivewise-app
 
-# Vagy docker-compose esetén
+# Or with docker-compose
 docker-compose logs -f
 ```
 
-**Üzemanyagár API nem elérhető**
-- Az alkalmazás automatikusan fallback adatokat használ
-- A háttérszolgáltatás 30 percenként próbálkozik újra
+**Fuel price API unavailable**
+- Application automatically uses fallback data
+- Background service retries every 30 minutes
 
-### Debug módok
+### Debug Modes
 
 ```bash
-# Fuel price teszt
+# Fuel price test
 curl http://localhost:8800/api/debug/test-fuel
 
-# Útvonal teszt
+# Route test
 curl http://localhost:8800/api/debug/test-route
 
-# Frontend szimuláció
+# Frontend simulation
 curl http://localhost:8800/api/debug/simulate-frontend-data
 ```
 
-## 📱 PWA funkciók
+## 📱 PWA Features
 
-- **Offline működés**: Service Worker cache-eléssel
-- **Installálható**: "Add to Home Screen" támogatás
-- **Reszponzív**: Mobil-first design
-- **App-szerű élmény**: Natív alkalmazás feeling
+- **Offline functionality**: Service Worker caching
+- **Installable**: "Add to Home Screen" support
+- **Responsive**: Mobile-first design
+- **App-like experience**: Native application feel
 
-## 🎨 Testreszabhatóság
+## 🎨 Customization
 
-### Témák
-- Automatikus sötét/világos mód
-- Rendszer téma követése
-- Kézi témaváltás lehetőség
+### Themes
+- Automatic dark/light mode
+- System theme following
+- Manual theme switching option
 
-### Járművek
-- Egyedi fogyasztási profilok
-- Különböző üzemanyagtípusok
-- Városi/országúti/vegyes útvonal kalkulációk
+### Vehicles
+- Custom consumption profiles
+- Different fuel types
+- City/highway/mixed route calculations
 
-## 📄 Licenc
+## 📄 License
 
-Ez a projekt a [MIT Licenc](LICENSE) alatt áll.
-
-## 🤝 Közreműködés
-
-1. Fork-old a repositoryt
-2. Készíts egy feature branch-et (`git checkout -b feature/AmazingFeature`)
-3. Commit-old a változásokat (`git commit -m 'Add some AmazingFeature'`)
-4. Push-old a branch-et (`git push origin feature/AmazingFeature`)
-5. Nyiss egy Pull Request-et
-
-## 📞 Támogatás
-
-Ha problémába ütközöl vagy kérdésed van:
-
-1. Ellenőrizd a [hibaelhárítási útmutatót](#-hibaelhárítás)
-2. Nézd át a meglévő [Issues](https://github.com/Xentinus/DriveWise/issues) listát
-3. Nyiss egy új Issue-t részletes leírással
-
-## 🔄 Changelog
-
-### v1.0.0
-- ✅ Alapvető útvonaltervezés
-- ✅ Üzemanyagköltség kalkuláció
-- ✅ Időjárás integráció
-- ✅ PWA támogatás
-- ✅ Docker konténerizáció
-- ✅ Raspberry Pi ARM64 támogatás
+This project is licensed under the [MIT License](LICENSE).
 
 ---
 
-## 🔧 DriveWise Egységesített Management Script
+## 🔧 DriveWise Unified Management Script
 
-### Áttekintés
+### Overview
 
-A DriveWise projektet egy egységesített `drivewise.sh` scripttel kezelheted, amely minden Docker és deployment műveletet egy helyen tartalmaz interaktív menüvel.
+The DriveWise project can be managed with a unified `drivewise.sh` script that contains all Docker and deployment operations in one place with an interactive menu.
 
-### 🚀 Gyors Kezdés
+### 🚀 Quick Start
 
-#### 1. Környezet Beállítása
+#### 1. Environment Setup
 
-Először másold le a `.env.example` fájlt `.env` néven és töltsd ki a saját adataiddal:
+First, copy the `.env.example` file to `.env` and fill in your data:
 
 ```bash
 cp .env.example .env
-nano .env  # vagy bármilyen szövegszerkesztő
+nano .env  # or any text editor
 ```
 
-A `.env` fájlban állítsd be:
-- `RPI_HOST`: Raspberry Pi IP címe
-- `RPI_USER`: Raspberry Pi felhasználónév
-- `RPI_PASSWORD`: Raspberry Pi jelszó
-- `IMAGE_NAME`: Docker image neve (alapértelmezett: drivewise)
-- `CONTAINER_NAME`: Docker container neve
-- `CONTAINER_PORT`: Alkalmazás portja (alapértelmezett: 8800)
-- `REGISTRY`: Docker registry (opcionális)
+In the `.env` file, configure:
+- `RPI_HOST`: Raspberry Pi IP address
+- `RPI_USER`: Raspberry Pi username
+- `RPI_PASSWORD`: Raspberry Pi password
+- `IMAGE_NAME`: Docker image name (default: drivewise)
+- `CONTAINER_NAME`: Docker container name
+- `CONTAINER_PORT`: Application port (default: 8800)
+- `REGISTRY`: Docker registry (optional)
 
-#### 2. Script Futtatása
+#### 2. Run Script
 
 ```bash
 ./drivewise.sh
 ```
 
-### 📋 Elérhető Funkciók
+### 📋 Available Functions
 
-Az interaktív menü 10 opcióval rendelkezik:
+The interactive menu has 10 options:
 
 #### 1. 🏗️ Build local (AMD64)
-Helyi AMD64 Docker image készítése desktop használatra (macOS Intel/AMD, Linux x86).
+Build local AMD64 Docker image for desktop use (macOS Intel/AMD, Linux x86).
 
 ```bash
-# Automatikus build
+# Automatic build
 ./drivewise.sh
-# Válaszd: 1
+# Choose: 1
 ```
 
 #### 2. 🚀 Run local
-Helyi Docker container indítása. Ha nincs image, automatikusan buildelődik.
-- Port: `http://localhost:8800` (vagy amit beállítottál)
-- Automatikusan leállítja és újraindítja, ha már fut
+Start local Docker container. If no image exists, it builds automatically.
+- Port: `http://localhost:8800` (or configured port)
+- Automatically stops and restarts if already running
 
 ```bash
-# Gyors indítás
+# Quick start
 ./drivewise.sh
-# Válaszd: 2
+# Choose: 2
 ```
 
 #### 3. 🛑 Stop local
-Helyi container leállítása és eltávolítása.
+Stop and remove local container.
 
 #### 4. 📦 Build multi-arch
-Multi-architektúra build (AMD64 + ARM64):
-- **AMD64**: helyi használatra betöltődik
-- **ARM64**: `.tar` fájlba exportálódik Raspberry Pi-re való átmásoláshoz
+Multi-architecture build (AMD64 + ARM64):
+- **AMD64**: Loads locally for use
+- **ARM64**: Exports to `.tar` file for copying to Raspberry Pi
 
 ```bash
 # Multi-platform build
 ./drivewise.sh
-# Válaszd: 4
+# Choose: 4
 ```
 
 #### 5. 🌐 Build & push to registry
-Build és push Docker registry-be (Docker Hub, GitHub Container Registry, stb.)
-- Multi-architektúra támogatás
-- Automatikus verzió címkézés
+Build and push to Docker registry (Docker Hub, GitHub Container Registry, etc.)
+- Multi-architecture support
+- Automatic version tagging
 
 #### 6. 🍓 Deploy to Raspberry Pi
-**Teljes automatikus telepítés Raspberry Pi-re:**
+**Fully automated Raspberry Pi deployment:**
 
-1. ARM64 image buildelése
-2. SSH kapcsolat tesztelése
-3. Image feltöltése Pi-re
-4. Régi containerek és image-ek törlése
-5. Új container indítása
-6. Health check és log ellenőrzés
+1. Build ARM64 image
+2. Test SSH connection
+3. Upload image to Pi
+4. Remove old containers and images
+5. Start new container
+6. Health check and log verification
 
-**A deploy során:**
-- Automatikusan települ a `sshpass` ha hiányzik (Homebrew-val)
-- Hálózati tesztek futnak
-- HTTP endpoint ellenőrzés
-- Részletes hibajelzések
+**During deployment:**
+- Automatically installs `sshpass` if missing (via Homebrew)
+- Runs network tests
+- HTTP endpoint verification
+- Detailed error messages
 
 ```bash
-# Egyetlen parancs az egész deployment-hez!
+# Single command for entire deployment!
 ./drivewise.sh
-# Válaszd: 6
+# Choose: 6
 ```
 
 #### 7. 📋 View logs
-Logok megtekintése:
-- Helyi container
+View logs:
+- Local container
 - Raspberry Pi container
 
 #### 8. 🔍 Check status
-Státusz ellenőrzés:
-- Helyi container állapota
-- Raspberry Pi container állapota
+Status check:
+- Local container status
+- Raspberry Pi container status
 
 #### 9. 🧹 Clean up
-Takarítási opciók:
-- Csak helyi
-- Csak Raspberry Pi
-- Mindkettő
-- Mélyreható tisztítás (image-ekkel együtt)
+Cleanup options:
+- Local only
+- Raspberry Pi only
+- Both
+- Deep clean (including images)
 
 #### 0. ❌ Exit
-Kilépés a scriptből.
+Exit script.
 
-### 🔧 Előfeltételek
+### 🔧 Prerequisites
 
-#### Helyi Gép (macOS/Linux)
+#### Local Machine (macOS/Linux)
 
 ```bash
-# Docker Desktop telepítése
+# Install Docker Desktop
 # https://www.docker.com/products/docker-desktop
 
-# Homebrew (macOS) - sshpass telepítéséhez
+# Homebrew (macOS) - for sshpass installation
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
-# sshpass - automatikusan települ, de manuálisan is lehet:
+# sshpass - installs automatically, but can also install manually:
 brew install hudochenkov/sshpass/sshpass
 ```
 
 #### Raspberry Pi
 
 ```bash
-# Docker telepítése
+# Install Docker
 curl -fsSL https://get.docker.com -o get-docker.sh
 sudo sh get-docker.sh
 sudo usermod -aG docker $USER
 
-# SSH engedélyezése
+# Enable SSH
 sudo systemctl enable ssh
 sudo systemctl start ssh
 ```
 
-### 📝 Példa Használat
+### 📝 Usage Examples
 
-#### Első Alkalommal - Teljes Setup
+#### First Time - Full Setup
 
 ```bash
-# 1. .env fájl létrehozása
+# 1. Create .env file
 cp .env.example .env
 nano .env
 
-# 2. Script futtatása
+# 2. Run script
 ./drivewise.sh
 
-# 3. Válaszd a "6" opciót (Deploy to Raspberry Pi)
-# A script mindent elvégez automatikusan!
+# 3. Choose option "6" (Deploy to Raspberry Pi)
+# The script does everything automatically!
 ```
 
-#### Helyi Fejlesztés
+#### Local Development
 
 ```bash
 ./drivewise.sh
 
-# Válaszd:
+# Choose:
 # 1 - Build local
 # 2 - Run local
-# 7 - Logok megtekintése
+# 7 - View logs
 ```
 
-#### Frissítés Raspberry Pi-n
+#### Update on Raspberry Pi
 
 ```bash
 ./drivewise.sh
 
-# Válaszd:
+# Choose:
 # 6 - Deploy to Raspberry Pi
-# Automatikusan buildelődik és települ az új verzió
+# New version automatically builds and deploys
 ```
 
-### 🔐 Biztonság
+### 🔐 Security
 
-- A `.env` fájl **NINCS** commitolva a git-be
-- Csak a `.env.example` van verziókezelve
-- Soha ne oszd meg a `.env` fájlt vagy commitold git-be!
+- The `.env` file is **NOT** committed to git
+- Only `.env.example` is version controlled
+- Never share the `.env` file or commit it to git!
 
-### 🐛 Hibaelhárítás
+### 🐛 Troubleshooting
 
-#### SSH kapcsolat hiba
+#### SSH Connection Error
 
 ```bash
-# Teszteld manuálisan:
+# Test manually:
 ssh user@raspberry-pi-ip
 
-# Ellenőrizd:
-# - Helyes IP cím
-# - SSH fut a Pi-n
-# - Helyes felhasználónév/jelszó
+# Check:
+# - Correct IP address
+# - SSH running on Pi
+# - Correct username/password
 ```
 
-#### Docker nem fut
+#### Docker Not Running
 
 ```bash
-# Ellenőrizd, hogy a Docker Desktop fut-e
+# Check if Docker Desktop is running
 docker info
 
-# Ha nem, indítsd el a Docker Desktop alkalmazást
+# If not, start Docker Desktop application
 ```
 
-#### Port már használatban
+#### Port Already in Use
 
 ```bash
-# Ellenőrizd, mi használja a portot:
+# Check what's using the port:
 lsof -i :8800
 
-# Állítsd le az ütköző szolgáltatást vagy változtasd meg a portot a .env-ben
+# Stop conflicting service or change port in .env
 ```
 
-#### ARM64 build hiba
+#### ARM64 Build Error
 
 ```bash
-# Buildx builder újralétrehozása:
+# Recreate buildx builder:
 docker buildx rm drivewise-multiarch
 docker buildx create --name drivewise-multiarch --platform linux/amd64,linux/arm64 --use
 ```
 
-### 📚 További Információk
+### 📚 Additional Information
 
-#### Hasznos Docker parancsok
+#### Useful Docker Commands
 
 ```bash
-# Container logok
+# Container logs
 docker logs -f drivewise-app
 
 # Container shell
 docker exec -it drivewise-app /bin/bash
 
-# Image lista
+# Image list
 docker images | grep drivewise
 
-# Container újraindítás
+# Restart container
 docker restart drivewise-app
 ```
 
-#### Raspberry Pi távoli parancsok
+#### Raspberry Pi Remote Commands
 
 ```bash
-# SSH kapcsolat a .env adataival
+# SSH connection with .env data
 ssh user@raspberry-pi-ip
 
-# Docker status Pi-n
+# Docker status on Pi
 ssh user@raspberry-pi-ip 'docker ps'
 
-# Logok Pi-ről
+# Logs from Pi
 ssh user@raspberry-pi-ip 'docker logs drivewise-app'
 ```
 
-### 🎯 Tippek
+### 🎯 Tips
 
-1. **Első futtatás**: Mindig az "1" vagy "6" opcióval kezdj (build vagy deploy)
-2. **Fejlesztés közben**: Használd a helyi build és run opciókat (1-2)
-3. **Éles környezet**: Deploy to Pi (6) automatikusan mindent elintéz
-4. **Logok**: Használd a "7" opciót problémák diagnosztizálásához
-5. **Takarítás**: A "9" opció szabad helyet biztosít
+1. **First run**: Always start with option "1" or "6" (build or deploy)
+2. **During development**: Use local build and run options (1-2)
+3. **Production environment**: Deploy to Pi (6) automatically handles everything
+4. **Logs**: Use option "7" to diagnose problems
+5. **Cleanup**: Option "9" frees up space
 
-### 🔄 Migráció Régi Scriptekről
+### 🔄 Migration from Old Scripts
 
-Ha korábban használtad az egyedi scripteket (`run-docker.sh`, `deploy-to-rpi.sh`, stb.), most már mind egyben vannak:
+If you previously used individual scripts (`run-docker.sh`, `deploy-to-rpi.sh`, etc.), they're now all in one:
 
-| Régi Script | Új Menüpont |
+| Old Script | New Menu Option |
 |-------------|-------------|
 | `run-docker.sh` | 1 (Build local) + 2 (Run local) |
 | `stop-docker.sh` | 3 (Stop local) |
 | `build-multiarch.sh` | 4 (Build multi-arch) |
 | `build-registry.sh` | 5 (Build & push to registry) |
 | `deploy-to-rpi.sh` | 6 (Deploy to Raspberry Pi) |
-| *új* | 7 (View logs) |
-| *új* | 8 (Check status) |
-| *új* | 9 (Clean up) |
+| *new* | 7 (View logs) |
+| *new* | 8 (Check status) |
+| *new* | 9 (Clean up) |
 
-### ✨ Új Funkciók a Régi Scriptekhez Képest
+### ✨ New Features Compared to Old Scripts
 
-1. ✅ **Interaktív menü** - könnyű navigáció
-2. ✅ **Színes output** - könnyebb olvashatóság
-3. ✅ **Egységes konfiguráció** - minden egy `.env` fájlban
-4. ✅ **Log viewer** - helyi és távoli logok
-5. ✅ **Status checker** - gyors állapot ellenőrzés
-6. ✅ **Cleanup opciók** - rugalmas takarítás
-7. ✅ **Hibakezelés** - részletes hibaüzenetek
-8. ✅ **Automatikus prerequisite check** - Docker, sshpass stb.
-9. ✅ **Biztonság** - nincs jelszó a git-ben
+1. ✅ **Interactive menu** - easy navigation
+2. ✅ **Colored output** - easier readability
+3. ✅ **Unified configuration** - everything in one `.env` file
+4. ✅ **Log viewer** - local and remote logs
+5. ✅ **Status checker** - quick status check
+6. ✅ **Cleanup options** - flexible cleanup
+7. ✅ **Error handling** - detailed error messages
+8. ✅ **Automatic prerequisite check** - Docker, sshpass, etc.
+9. ✅ **Security** - no passwords in git
 
 ---
 
-**DriveWise** - *Okos utazás, optimális költségekkel.* 🚗✨
+**DriveWise** - *Smart travel, optimal costs.* 🚗✨
